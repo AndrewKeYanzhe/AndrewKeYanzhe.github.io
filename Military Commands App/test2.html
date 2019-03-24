@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+    <script>
+        class malayCommand {
+            constructor(malayWord, engDef, audioName){
+                this.malayWord = malayWord;
+                this.engDef = engDef;
+                this.audioName = audioName;
+
+                this.sound = new Audio();
+                this.sound.src = this.audioName             
+            }
+        }
+
+        const senangDiri = new malayCommand("Senang Diri", "At ease", "bleep.mp3");
+        console.log(senangDiri.audioName);
+        console.log(senangDiri.engDef);
+        console.log(senangDiri.malayWord);
+        
+        function newQuestion(){
+            senangDiri.sound.play()
+        }
+    </script>
+    <body>        
+        <a href="#" onclick="newQuestion()">senangDiri</a>
+        <div style="background-color:lightblue; visibility: hidden">
+            <h3>This is a heading</h3>
+            <p>This is a paragraph.</p>
+        </div>        
+    </body>
+</html>
