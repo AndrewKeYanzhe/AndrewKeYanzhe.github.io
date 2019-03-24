@@ -77,6 +77,13 @@ var loadSoundButton = function(event){
     console.log("current var chosen is ".concat(chosen));
     console.log(chosen);
 };
+function loadSoundCheckButton(event){
+    //vocab, soundDiv, options
+    vocab = event.target.buttonParam[0];
+    soundDiv = event.target.buttonParam[1];
+    options = event.target.buttonParam[2];
+    checkSoundMCQ(vocab, soundDiv, options);
+}
 function loadSoundMCQ(vocab){
     var chosen;
     console.log("initial var chosen is ".concat(chosen));
@@ -100,8 +107,10 @@ function loadSoundMCQ(vocab){
     soundDiv.getElementsByClassName("sound1")[0].addEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound1")[0].buttonParam = [options, 1]
     soundDiv.getElementsByClassName("sound2")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound2")[0].buttonParam = [options, 2]
-    soundDiv.getElementsByClassName("check")[0].addEventListener("click", function(){checkSoundMCQ(vocab, soundDiv, options)});
+    soundDiv.getElementsByClassName("sound2")[0].buttonParam = [options, 2];
+    soundDiv.getElementsByClassName("check")[0].addEventListener("click", loadSoundCheckButton);
+    soundDiv.getElementsByClassName("check")[0].buttonParam = [vocab, soundDiv, options];
+    
     //console.log(soundDiv.getElementsByClassName("sound1")[0]);
     
 }
@@ -110,6 +119,7 @@ function unloadSoundMCQ(soundDiv, options){
     soundDiv.getElementsByClassName("sound0")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound1")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound2")[0].removeEventListener("click", loadSoundButton);
+    soundDiv.getElementsByClassName("check")[0].removeEventListener("click", loadSoundCheckButton);
 }
 function checkSoundMCQ(vocab, soundDiv, options){
     unloadSoundMCQ(soundDiv, options);  
