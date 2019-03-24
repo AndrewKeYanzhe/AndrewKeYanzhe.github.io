@@ -61,16 +61,25 @@ function newPage(){
     loadSoundMCQ(senangDiri);
 }
 var loadSoundButton = function(event){
-    //options, chosen, index
+    console.log("loading soundbutton sound and setting var chosen");
+    //options, index
     options = event.target.buttonParam[0]
-    chosen = event.target.buttonParam[1]
-    index = event.target.buttonParam[2]
+    index = event.target.buttonParam[1]
+    
+    //pause all sounds
+    var sounds = document.getElementsByTagName('audio');
+    for(i=0; i<sounds.length; i++) sounds[i].pause();
+    
     options[index].sound.play();
-    chosen = options[0];
+    chosen = options[index];
+    
+    //diagnosis 
+    console.log("current var chosen is ".concat(chosen));
+    console.log(chosen);
 };
 function loadSoundMCQ(vocab){
-    var chosen = vocab;
-    
+    var chosen;
+    console.log("initial var chosen is ".concat(chosen));
     //show page
     soundDiv = document.getElementById("soundMCQ");
     soundDiv.style.display = 'block';
@@ -82,17 +91,17 @@ function loadSoundMCQ(vocab){
     var incorrectSound1 = incorrectSoundList[0];
     var incorrectSound2 = incorrectSoundList[1];
     var options = shuffle([vocab, incorrectSound1, incorrectSound2]);
-    console.log(options);
+    //console.log(options);
         
     //load data
     soundDiv.getElementsByTagName("h1")[0].innerHTML = vocab.engDef;
     soundDiv.getElementsByClassName("sound0")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound0")[0].buttonParam = [options, chosen, 0]
+    soundDiv.getElementsByClassName("sound0")[0].buttonParam = [options, 0]
     soundDiv.getElementsByClassName("sound1")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound1")[0].buttonParam = [options, chosen, 1]
+    soundDiv.getElementsByClassName("sound1")[0].buttonParam = [options, 1]
     soundDiv.getElementsByClassName("sound2")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound2")[0].buttonParam = [options, chosen, 2]
-    soundDiv.getElementsByClassName("check")[0].addEventListener("click", function(){checkSoundMCQ(chosen, vocab, soundDiv, options)});
+    soundDiv.getElementsByClassName("sound2")[0].buttonParam = [options, 2]
+    soundDiv.getElementsByClassName("check")[0].addEventListener("click", function(){checkSoundMCQ(vocab, soundDiv, options)});
     //console.log(soundDiv.getElementsByClassName("sound1")[0]);
     
 }
@@ -102,13 +111,26 @@ function unloadSoundMCQ(soundDiv, options){
     soundDiv.getElementsByClassName("sound1")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound2")[0].removeEventListener("click", loadSoundButton);
 }
-function checkSoundMCQ(chosen, vocab, soundDiv, options){
-    unloadSoundMCQ(soundDiv, options);
+function checkSoundMCQ(vocab, soundDiv, options){
+    unloadSoundMCQ(soundDiv, options);  
+    
+    
+    console.log("running soundMCQ check");
+    
+    console.log("correct answer is");
+    console.log(vocab);
+    
+    console.log("chosen answer is");
+    console.log(chosen);
+    
+    console.log("chosen phrase is ".concat(chosen.malayWord));
+    console.log("correct phrase is ".concat(vocab.malayWord));
     if (chosen == vocab){
         correctBeep.play();
         
         newPage();
     } else {
+        alert("answer wrong. next page will show the correct answer with english definition");
         loadDictionary(vocab);
         soundDiv.style.display = 'none';
     }
@@ -136,7 +158,7 @@ function dictionaryDone(dictDiv){
 }
 
 window.onload = function(){       
-    loadDictionary(senangDiri);
+    loadSoundMCQ(senangDiri);
 }
 //show that classes are initiated with properly with test attributes
 //console.log(senangDiri.audioName);
