@@ -166,9 +166,16 @@ function dictionaryDone(dictDiv){
     //console.log(progress);
     dictDiv.style.display = 'none';    
 }
+function loadDefMCQ(vocab){
+    defMCQ = document.getElementById("defMCQ");
+    
+    defMCQ.style.display = 'block';
+    
+    //dictDiv.getElementsByClassName("def0")[0].innerHTML = 
+}
 
 window.onload = function(){       
-    loadSoundMCQ(senangDiri);
+    loadDefMCQ(senangDiri);
 }
 //show that classes are initiated with properly with test attributes
 //console.log(senangDiri.audioName);
