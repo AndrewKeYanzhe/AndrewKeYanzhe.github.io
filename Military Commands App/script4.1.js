@@ -41,7 +41,7 @@ function hidePages(){
 }
 function newPage(){
     console.log("newPage"); 
-    loadDefMCQ(senangDiri);
+    loadDefMCQ(sedia);
 }
 
 var loadSoundButton = function(event){
@@ -154,6 +154,10 @@ function dictionaryDone(dictDiv){
     dictDiv.style.display = 'none';    
 }
 
+var loadSoundPromptForDefMCQ = function(event){
+    vocab = event.target.buttonParam[0];
+    vocab.sound.play();
+}
 var checkDefMCQ = function(event){
     
     //options, index, ,vocab
@@ -196,7 +200,8 @@ function loadDefMCQ(vocab){
     console.log(options);
     
     //attach sound to audio button
-    defMCQDiv.getElementsByTagName("h1")[0].addEventListener("click", function(){vocab.sound.play()});
+    defMCQDiv.getElementsByTagName("h1")[0].addEventListener("click", loadSoundPromptForDefMCQ);
+    defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
     
     //display choices   
     var i;
