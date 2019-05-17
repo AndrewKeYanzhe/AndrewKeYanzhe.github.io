@@ -205,7 +205,7 @@ function loadDefMCQ(vocab){
     var incorrectDef2 = incorrectDefList[1];
     var incorrectDef3 = incorrectDefList[2];
     var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
-    console.log(options);
+    //console.log(options);
     
     //attach sound to audio button
     defMCQDiv.getElementsByTagName("h1")[0].addEventListener("click", loadSoundPromptForDefMCQ);
@@ -252,7 +252,7 @@ function loadMalayWordMCQ(vocab){
     //var chosen tracks the option selected by the user
     var chosen;    
     var options = generateOptions(vocab);
-    console.log(options); 
+    //console.log(options); 
     
     //display choices and prompt  
     var i;
@@ -272,10 +272,6 @@ function loadMalayWordMCQ(vocab){
 function loadRandomPage(){
     var i = Math.floor(Math.random() * 4);
     var j = Math.floor(Math.random() * 4);
-    
-    console.log(i);
-    console.log(j);
-    
 
     switch(i){
         case 0:
@@ -294,9 +290,9 @@ function loadRandomPage(){
 }
 
 window.onload = function(){
-    loadSoundMCQ(sedia);
     //loadSoundMCQ(sedia);
-    //loadRandomPage();
+    //loadSoundMCQ(sedia);
+    loadRandomPage();
     //loadMalayWordMCQ(senangDiri);
     //loadDictionary(senangDiri);
 }
