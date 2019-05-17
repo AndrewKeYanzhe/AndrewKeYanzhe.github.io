@@ -41,23 +41,7 @@ function hidePages(){
 }
 function newPage(){
     console.log("newPage"); 
-    var i = Math.floor(Math.random() * 4);
-    var j = Math.floor(Math.random() * 4);
-
-    switch(i){
-        case 0:
-            loadDictionary(vocabList[j]);
-            break;
-        case 1:
-            loadSoundMCQ(vocabList[j]);
-            break;
-        case 2:
-            loadDefMCQ(vocabList[j]);
-            break;
-        case 3:
-            loadMalayWordMCQ(vocabList[j]);
-            break;
-    }
+    loadRandomPage();
 }
 
 function generateOptions(vocab){
@@ -293,7 +277,7 @@ function loadMalayWordMCQ(vocab){
     }
 }
 
-window.onload = function(){
+function loadRandomPage(){
     var i = Math.floor(Math.random() * 4);
     var j = Math.floor(Math.random() * 4);
     
@@ -315,6 +299,11 @@ window.onload = function(){
             loadMalayWordMCQ(vocabList[j]);
             break;
     }
+}
+
+window.onload = function(){
+    //loadSoundMCQ(sedia);
+    loadRandomPage();
     //loadMalayWordMCQ(senangDiri);
     //loadDictionary(senangDiri);
 }
