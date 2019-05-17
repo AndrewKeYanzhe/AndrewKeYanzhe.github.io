@@ -120,25 +120,17 @@ function unloadSoundMCQ(soundDiv){
     soundDiv.getElementsByClassName("check")[0].removeEventListener("click", loadSoundCheckButton);
 }
 function checkSoundMCQ(vocab, soundDiv, options){
-    unloadSoundMCQ(soundDiv);    
-    
-    console.log("running soundMCQ check");
-    
-    console.log("correct answer is");
-    console.log(vocab);
-    
-    console.log("chosen answer is");
-    console.log(chosen);
-    
-    console.log("chosen phrase is ".concat(chosen.malayWord));
-    console.log("correct phrase is ".concat(vocab.malayWord));
-    if (chosen == vocab){
+    if (typeof chosen == "undefined"){
+        alert("Please select an option");
+    } else if (chosen == vocab){
         correctBeep.play();
+        unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         newPage();
     } else {
         alert("answer wrong. next page will show the correct answer with english definition");
         loadDictionary(vocab);
+        unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
     }
     
@@ -302,8 +294,9 @@ function loadRandomPage(){
 }
 
 window.onload = function(){
+    loadSoundMCQ(sedia);
     //loadSoundMCQ(sedia);
-    loadRandomPage();
+    //loadRandomPage();
     //loadMalayWordMCQ(senangDiri);
     //loadDictionary(senangDiri);
 }
