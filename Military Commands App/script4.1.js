@@ -289,6 +289,45 @@ function loadMalayWordMCQ(vocab){
     }
 }
 
+function loadDefMCQMalayPrompt(vocab){
+    //vocab is the correct answer
+    
+    //var chosen tracks the option selected by the user
+    var chosen;
+    
+    //show page
+    defMCQDiv = document.getElementById("defMCQMalayPrompt");    
+    defMCQDiv.style.display = 'block';
+        
+    //creating options list
+    var incorrectDefList = vocabList.filter(item => item !== vocab);
+    incorrectDefList = shuffle(incorrectDefList);
+    var incorrectDef1 = incorrectDefList[0];
+    var incorrectDef2 = incorrectDefList[1];
+    var incorrectDef3 = incorrectDefList[2];
+    var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
+    //console.log(options);
+    
+    //display malay word prompt
+    defMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
+    //defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
+    
+    //display choices   
+    var i;
+    for (i = 0; i < 4; i++){
+        defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
+    }
+    
+    //make buttons set var chosen
+    var j;
+    for (j = 0; j < 4; j++){
+        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
+        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
+    }
+    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
+
+}
+
 function loadRandomPage(){
     var i = Math.floor(Math.random() * 4);
     var j = Math.floor(Math.random() * 4);
@@ -311,10 +350,11 @@ function loadRandomPage(){
 
 window.onload = function(){
     //loadSoundMCQ(sedia);
-    loadSoundMCQ(sedia);
+//    loadSoundMCQ(sedia);
     //loadRandomPage();
     //loadMalayWordMCQ(senangDiri);
     //loadDictionary(senangDiri);
+    loadDefMCQMalayPrompt(sedia);
 }
 //show that classes are initiated with properly with test attributes
 //console.log(senangDiri.audioName);
