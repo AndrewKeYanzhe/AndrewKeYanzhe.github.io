@@ -27,7 +27,8 @@ class malayCommand {
 const senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a");
 const sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a");
 const berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a");
-const dariKiriCepatJalan = new malayCommand("Dari kiri, cepat jalan", "Towards the commander's left, quick march", "Audio/dariKiriCJ.m4a");
+//const dariKiriCepatJalan = new malayCommand("Dari kiri, cepat jalan", "Towards the commander's left, quick march", "Audio/dariKiriCJ.m4a");
+const dariKiriCepatJalan = new malayCommand("Dari kiri, cepat jalan", "March, Commander on right", "Audio/dariKiriCJ.m4a");
 var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
 //console.log(vocabList);
 //console.log(vocabList.includes(senangDiri));

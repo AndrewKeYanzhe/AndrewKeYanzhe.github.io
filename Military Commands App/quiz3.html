@@ -1,58 +1,78 @@
 <!--Written by Andrew Ke Yanzhe 2019-->
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="style2.css">
+        <meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<meta name="description" content="" />
+		<meta name="keywords" content="" />
+        <link rel="stylesheet" type="text/css" href="assets/css/main.css">
     </head>
     <script src="library.js"></script>
     <script src="script4.1.js"></script>
-    <body>
-        <div id="dictionary" style="display: none">
-            <h1>Malay Command</h1>
-            <p>English Definition</p>
-            <a href="#" class="pronounciation">Audio</a>
-            <br>
-            <a href="#"  class="continue">Continue</a>
+    <body class="is-preload">
+        <div id="wrapper">
+            
+                
+            <div id="dictionary" style="display: none">
+                <h1>Malay Command</h1>
+                <p>English Definition</p>
+                <a href="#" class="pronounciation">Audio</a>
+                <br>
+                <a href="#"  class="continue">Continue</a>
+            </div>
+            <div id="soundMCQ" style="display: none">
+                <h1>English Definition</h1>
+                <p>Select the audio that matches the command</p>
+                <a href="#" class="sound0">Option 1</a>
+                <a href="#" class="sound1">Option 2</a>
+                <a href="#" class="sound2">Option 3</a>
+                <br>
+                <a href="#" class="check">Check</a>
+            </div>
+            <div id="defMCQSoundPrompt" style="display: none">
+                <h1>Audio (Click here)</h1>
+                <p>Select the definition that matches the audio</p>
+                <a href="#" class="def0">Option 1</a>
+                <br>
+                <a href="#" class="def1">Option 2</a>
+                <br>
+                <a href="#" class="def2">Option 3</a>
+                <br>
+                <a href="#" class="def3">Option 4</a>
+            </div>
+            <section id="defMCQMalayPrompt" style="display: none">
+
+                <header>
+                    <h1>Malay Word</h1>
+                    <p>Select the definition that matches the audio</p>
+                </header>
+                <div class="content">
+                    <ul class="actions">
+                        
+                        <li><a href="#" class="def0 button large">Option 1</a></li>
+                        
+                        
+                        <li><a href="#" class="def1 button large">Option 2</a></li>
+                        
+                        <li><a href="#" class="def2 button large">Option 3</a></li>
+                        
+                        <li><a href="#" class="def3 button large">Option 4</a></li>
+                    </ul>
+                </div>
+
+            </section>
+            <div id="malayWordMCQ" style="display: none">
+                <h1>English Definition</h1>
+                <a href="#" class="malay0">Option 1</a>
+                <br>
+                <a href="#" class="malay1">Option 2</a>
+                <br>
+                <a href="#" class="malay2">Option 3</a>
+                <br>
+                <a href="#" class="malay3">Option 4</a>
+            </div>
+                
+            
         </div>
-        <div id="soundMCQ" style="display: none">
-            <h1>English Definition</h1>
-            <p>Select the audio that matches the command</p>
-            <a href="#" class="sound0">Option 1</a>
-            <a href="#" class="sound1">Option 2</a>
-            <a href="#" class="sound2">Option 3</a>
-            <br>
-            <a href="#" class="check">Check</a>
-        </div>
-        <div id="defMCQSoundPrompt" style="display: none">
-            <h1>Audio (Click here)</h1>
-            <p>Select the definition that matches the audio</p>
-            <a href="#" class="def0">Option 1</a>
-            <br>
-            <a href="#" class="def1">Option 2</a>
-            <br>
-            <a href="#" class="def2">Option 3</a>
-            <br>
-            <a href="#" class="def3">Option 4</a>
-        </div>
-        <div id="defMCQMalayPrompt" style="display: none">
-            <h1>Malay Word</h1>
-            <p>Select the definition that matches the audio</p>
-            <a href="#" class="def0">Option 1</a>
-            <br>
-            <a href="#" class="def1">Option 2</a>
-            <br>
-            <a href="#" class="def2">Option 3</a>
-            <br>
-            <a href="#" class="def3">Option 4</a>
-        </div>
-        <div id="malayWordMCQ" style="display: none">
-            <h1>English Definition</h1>
-            <a href="#" class="malay0">Option 1</a>
-            <br>
-            <a href="#" class="malay1">Option 2</a>
-            <br>
-            <a href="#" class="malay2">Option 3</a>
-            <br>
-            <a href="#" class="malay3">Option 4</a>
-        </div>        
     </body>
 </html>
