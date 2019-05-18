@@ -4,6 +4,7 @@
 //constants
 var correctBeep = new Audio();
 correctBeep.src = "Audio/bleep.mp3";
+correctBeep.preload = 'auto';
 
 //Global variables
 var progress = {
