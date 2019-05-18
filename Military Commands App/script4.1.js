@@ -171,7 +171,7 @@ function loadDictionary(vocab){
     });
     //load data
     dictDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
-    dictDiv.getElementsByTagName("p")[0].innerHTML = vocab.engDef;
+    dictDiv.getElementsByTagName("h2")[0].innerHTML = vocab.engDef;
     dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
     dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
     
@@ -353,9 +353,9 @@ window.onload = function(){
     //loadSoundMCQ(sedia);
 //    loadSoundMCQ(sedia);
     //loadRandomPage();
-    //loadMalayWordMCQ(senangDiri);
-    //loadDictionary(senangDiri);
-    loadDefMCQMalayPrompt(sedia);
+    //loadDefMCQMalayPrompt(senangDiri);
+    loadDictionary(senangDiri);
+    //loadDictionary(sedia);
 }
 //show that classes are initiated with properly with test attributes
 //console.log(senangDiri.audioName);

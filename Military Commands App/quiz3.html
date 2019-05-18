@@ -10,17 +10,26 @@
     <script src="library.js"></script>
     <script src="script4.1.js"></script>
     <body class="is-preload">
-        <div id="wrapper">
-            
-                
-            <div id="dictionary" style="display: none">
-                <h1>Malay Command</h1>
-                <p>English Definition</p>
-                <a href="#" class="pronounciation">Audio</a>
-                <br>
-                <a href="#"  class="continue">Continue</a>
-            </div>
-            <div id="soundMCQ" style="display: none">
+        <div id="wrapper">           
+            <section id="dictionary" style="display: none">
+                <header>
+                    <br>
+                    <h1>Malay Command</h1>                    
+                </header>
+                <div class="content">
+                    <ul style="list-style: none; padding:0 0 0 0;">
+                        <li style="float: left;padding-left: 0rem; vertical-align: middle"><h3 style="margin: 0 0 0 0;">Definition</h3></li>
+                        <li style="float: left; padding-left: 1rem;"><button class="pronounciation button small" style="background: url(images/audioIcon.svg); background-repeat: no-repeat; background-position: center; box-shadow: inset 0 0 0 0px #2ee4bb; display: float; width: 24px; height: 24px"></button></li>
+                    </ul>
+                    <br>
+                    <h2>English Definition</h2>                      
+                    <br>
+                    <ul class="actions">
+                        <li><a href="#"  class="continue button primary large">Continue</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section id="soundMCQ" style="display: none">
                 <h1>English Definition</h1>
                 <p>Select the audio that matches the command</p>
                 <a href="#" class="sound0">Option 1</a>
@@ -28,8 +37,8 @@
                 <a href="#" class="sound2">Option 3</a>
                 <br>
                 <a href="#" class="check">Check</a>
-            </div>
-            <div id="defMCQSoundPrompt" style="display: none">
+            </section>
+            <section id="defMCQSoundPrompt" style="display: none">
                 <h1>Audio (Click here)</h1>
                 <p>Select the definition that matches the audio</p>
                 <a href="#" class="def0">Option 1</a>
@@ -39,29 +48,22 @@
                 <a href="#" class="def2">Option 3</a>
                 <br>
                 <a href="#" class="def3">Option 4</a>
-            </div>
+            </section>
             <section id="defMCQMalayPrompt" style="display: none">
-
                 <header>
                     <h1>Malay Word</h1>
-                    <p>Select the definition that matches the audio</p>
+                    <p>Select the definition that matches the malay command</p>
                 </header>
                 <div class="content">
                     <ul class="actions">
-                        
-                        <li><a href="#" class="def0 button large">Option 1</a></li>
-                        
-                        
+                        <li><a href="#" class="def0 button large">Option 1</a></li>                  
                         <li><a href="#" class="def1 button large">Option 2</a></li>
-                        
                         <li><a href="#" class="def2 button large">Option 3</a></li>
-                        
                         <li><a href="#" class="def3 button large">Option 4</a></li>
                     </ul>
                 </div>
-
             </section>
-            <div id="malayWordMCQ" style="display: none">
+            <section id="malayWordMCQ" style="display: none">
                 <h1>English Definition</h1>
                 <a href="#" class="malay0">Option 1</a>
                 <br>
@@ -70,7 +72,7 @@
                 <a href="#" class="malay2">Option 3</a>
                 <br>
                 <a href="#" class="malay3">Option 4</a>
-            </div>
+            </section>
                 
             
         </div>
