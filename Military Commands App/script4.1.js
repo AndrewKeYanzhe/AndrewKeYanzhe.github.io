@@ -43,8 +43,9 @@ function hidePages(){
     });
 }
 function newPage(){
-    console.log("newPage"); 
-    loadRandomPage();
+    console.log(">>>>>>>newPage>>>>>>>"); 
+    //loadRandomPage();
+    loadDefMCQMalayPrompt(options[Math.floor(Math.random() * 4)]);
 }
 
 function generateOptions(vocab){
@@ -259,9 +260,10 @@ var checkMalayWordMCQ = function(event){
         malayWordMCQDiv.style.display = 'none';
         newPage();
     } else {
+        malayWordMCQDiv.style.display = 'none';
         alert("answer wrong. next page will show the correct answer with english definition");
         loadDictionary(vocab);
-        malayWordMCQDiv.style.display = 'none';
+        
     }
 }
 function loadMalayWordMCQ(vocab){
@@ -291,15 +293,16 @@ function loadMalayWordMCQ(vocab){
 }
 
 function loadDefMCQMalayPrompt(vocab){
-    //vocab is the correct answer
-    
+    //vocab is the correct answer    
     //var chosen tracks the option selected by the user
     var chosen;
     
     //show page
     defMCQDiv = document.getElementById("defMCQMalayPrompt");    
     defMCQDiv.style.display = 'block';
-        
+    
+ 
+    
     //creating options list
     var incorrectDefList = vocabList.filter(item => item !== vocab);
     incorrectDefList = shuffle(incorrectDefList);
@@ -330,8 +333,10 @@ function loadDefMCQMalayPrompt(vocab){
 }
 
 function loadRandomPage(){
-    var i = Math.floor(Math.random() * 4);
+    var i = Math.floor(Math.random() * 5);
     var j = Math.floor(Math.random() * 4);
+    console.log(i);
+    console.log(j);
 
     switch(i){
         case 0:
@@ -344,13 +349,15 @@ function loadRandomPage(){
             loadDefMCQSoundPrompt(vocabList[j]);
             break;
         case 3:
-            loadMalayWordMCQ(vocabList[j]);
+            loadDefMCQMalayPrompt(vocabList[j]);
             break;
+        case 4:
+            loadMalayWordMCQ(vocabList[j]);
     }
 }
 
 window.onload = function(){
-    loadSoundMCQ(sedia);
+    loadDefMCQMalayPrompt(sedia);
 //    loadSoundMCQ(sedia);
     //loadRandomPage();
     //loadDefMCQMalayPrompt(senangDiri);
