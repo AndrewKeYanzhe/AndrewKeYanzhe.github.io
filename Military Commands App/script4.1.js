@@ -350,11 +350,11 @@ function loadRandomPage(){
 }
 
 window.onload = function(){
-    //loadSoundMCQ(sedia);
+    loadSoundMCQ(sedia);
 //    loadSoundMCQ(sedia);
     //loadRandomPage();
     //loadDefMCQMalayPrompt(senangDiri);
-    loadDictionary(senangDiri);
+    //loadDefMCQMalayPrompt(senangDiri);
     //loadDictionary(sedia);
 }
 //show that classes are initiated with properly with test attributes
