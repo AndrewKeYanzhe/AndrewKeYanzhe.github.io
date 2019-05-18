@@ -32,6 +32,7 @@ var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
 //console.log(vocabList);
 //console.log(vocabList.includes(senangDiri));
 
+
 function hidePages(){
     //console.log(document.getElementsByTagName("div"));
     Array.from(document.getElementsByTagName("div")).forEach(function(element){
@@ -57,22 +58,44 @@ function generateOptions(vocab){
     return options;
 }
 
+//function checkAudioPlaying(index){
+//    //numOfAudioPlaying = 0;
+//    
+//    console.log(soundDiv.getElementsByTagName("a"));
+//    
+//    var arrayLength = soundDiv.getElementsByTagName("a").length;
+//    for (var i = 0; i < arrayLength; i++) {
+//        buttonToCheck = soundDiv.getElementsByTagName("a")[i];
+//        console.log(buttonToCheck);
+//        //Do something
+//        if (buttonToCheck.buttonParam[1] != index && buttonToCheck.buttonParam[2] == true){
+//            return true;
+//        } 
+//    }
+//    return false;
+//    //soundDiv.getElementsByClassName("check")[0].buttonParam
+//}
 var loadSoundButton = function(event){
-    console.log("loading soundbutton sound and setting var chosen");
+    //console.log("loading soundbutton sound and setting var chosen");
     //options, index
     options = event.target.buttonParam[0];
     index = event.target.buttonParam[1];
     
-    //pause all sounds
-    var sounds = document.getElementsByTagName('audio');
-    for(i=0; i<sounds.length; i++) sounds[i].pause();
+//    event.target.buttonParam[2] = true;
     
+    
+//    var i = 0;
+//    while (checkAudioPlaying(index) == false && i == 0){
+//        options[index].sound.play();
+//        i++;
+//    }
+//    event.target.buttonParam[2] = false;
     options[index].sound.play();
     chosen = options[index];
     
     //diagnosis 
-    console.log("current var chosen is ".concat(chosen));
-    console.log(chosen);
+    //console.log("current var chosen is ".concat(chosen));
+    //console.log(chosen);
 };
 function loadSoundCheckButton(event){
     //vocab, soundDiv, options
@@ -100,13 +123,13 @@ function loadSoundMCQ(vocab){
     soundDiv.getElementsByTagName("h1")[0].innerHTML = vocab.engDef;
     
     //make buttons play sound and also set var chosen
-    soundDiv.getElementsByClassName("sound0")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound0")[0].buttonParam = [options, 0];
-    soundDiv.getElementsByClassName("sound1")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound1")[0].buttonParam = [options, 1];
-    soundDiv.getElementsByClassName("sound2")[0].addEventListener("click", loadSoundButton);
-    soundDiv.getElementsByClassName("sound2")[0].buttonParam = [options, 2];
+    var i;
+    for (i = 0; i < 3; i++){
+        soundDiv.getElementsByClassName("sound".concat(String(i)))[0].addEventListener("click", loadSoundButton);
+        soundDiv.getElementsByClassName("sound".concat(String(i)))[0].buttonParam = [options, i];
+    }
     soundDiv.getElementsByClassName("check")[0].addEventListener("click", loadSoundCheckButton);
+    
     soundDiv.getElementsByClassName("check")[0].buttonParam = [vocab, soundDiv, options];
     
     //console.log(soundDiv.getElementsByClassName("sound1")[0]);
@@ -188,14 +211,14 @@ var checkDefMCQ = function(event){
         defMCQDiv.style.display = 'none';
     }
 };
-function loadDefMCQ(vocab){
+function loadDefMCQSoundPrompt(vocab){
     //vocab is the correct answer
     
     //var chosen tracks the option selected by the user
     var chosen;
     
     //show page
-    defMCQDiv = document.getElementById("defMCQ");    
+    defMCQDiv = document.getElementById("defMCQSoundPrompt");    
     defMCQDiv.style.display = 'block';
         
     //creating options list
@@ -281,7 +304,7 @@ function loadRandomPage(){
             loadSoundMCQ(vocabList[j]);
             break;
         case 2:
-            loadDefMCQ(vocabList[j]);
+            loadDefMCQSoundPrompt(vocabList[j]);
             break;
         case 3:
             loadMalayWordMCQ(vocabList[j]);
@@ -291,8 +314,8 @@ function loadRandomPage(){
 
 window.onload = function(){
     //loadSoundMCQ(sedia);
-    //loadSoundMCQ(sedia);
-    loadRandomPage();
+    loadSoundMCQ(sedia);
+    //loadRandomPage();
     //loadMalayWordMCQ(senangDiri);
     //loadDictionary(senangDiri);
 }
