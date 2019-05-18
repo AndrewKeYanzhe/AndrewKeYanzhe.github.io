@@ -32,6 +32,7 @@ var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
 //console.log(vocabList);
 //console.log(vocabList.includes(senangDiri));
 
+var currentAudioPlayingElement;
 
 function hidePages(){
     //console.log(document.getElementsByTagName("div"));
@@ -58,39 +59,25 @@ function generateOptions(vocab){
     return options;
 }
 
-//function checkAudioPlaying(index){
-//    //numOfAudioPlaying = 0;
-//    
-//    console.log(soundDiv.getElementsByTagName("a"));
-//    
-//    var arrayLength = soundDiv.getElementsByTagName("a").length;
-//    for (var i = 0; i < arrayLength; i++) {
-//        buttonToCheck = soundDiv.getElementsByTagName("a")[i];
-//        console.log(buttonToCheck);
-//        //Do something
-//        if (buttonToCheck.buttonParam[1] != index && buttonToCheck.buttonParam[2] == true){
-//            return true;
-//        } 
-//    }
-//    return false;
-//    //soundDiv.getElementsByClassName("check")[0].buttonParam
-//}
 var loadSoundButton = function(event){
     //console.log("loading soundbutton sound and setting var chosen");
     //options, index
     options = event.target.buttonParam[0];
     index = event.target.buttonParam[1];
     
-//    event.target.buttonParam[2] = true;
+    //pause other sounds
+    if (typeof currentAudioPlayingElement !== "undefined"){
+        malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]];
+        //console.log(malayCommandObjBeingPlayed.malayWord);
+        malayCommandObjBeingPlayed.sound.pause();
+        malayCommandObjBeingPlayed.sound.currentTime = 0;
+    }
     
-    
-//    var i = 0;
-//    while (checkAudioPlaying(index) == false && i == 0){
-//        options[index].sound.play();
-//        i++;
-//    }
-//    event.target.buttonParam[2] = false;
+    currentAudioPlayingElement = event.target;
+    //console.log(currentAudioPlayingElement);
     options[index].sound.play();
+    options[index].sound.addEventListener("ended", function(){currentAudioPlayingElement = undefined;}, false);
+    
     chosen = options[index];
     
     //diagnosis 
@@ -127,6 +114,7 @@ function loadSoundMCQ(vocab){
     for (i = 0; i < 3; i++){
         soundDiv.getElementsByClassName("sound".concat(String(i)))[0].addEventListener("click", loadSoundButton);
         soundDiv.getElementsByClassName("sound".concat(String(i)))[0].buttonParam = [options, i];
+        console.log(options[i].malayWord);
     }
     soundDiv.getElementsByClassName("check")[0].addEventListener("click", loadSoundCheckButton);
     
@@ -143,6 +131,15 @@ function unloadSoundMCQ(soundDiv){
     soundDiv.getElementsByClassName("check")[0].removeEventListener("click", loadSoundCheckButton);
 }
 function checkSoundMCQ(vocab, soundDiv, options){
+    //pause other sounds
+    if (typeof currentAudioPlayingElement !== "undefined"){
+        malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]];
+        //console.log(malayCommandObjBeingPlayed.malayWord);
+        malayCommandObjBeingPlayed.sound.pause();
+        malayCommandObjBeingPlayed.sound.currentTime = 0;
+    }
+    
+    //check answer
     if (typeof chosen == "undefined"){
         alert("Please select an option");
     } else if (chosen == vocab){
