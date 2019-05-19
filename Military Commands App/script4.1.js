@@ -46,7 +46,8 @@ function hidePages(){
 function newPage(){
     console.log(">>>>>>>newPage>>>>>>>"); 
     //loadRandomPage();
-    loadDictionary(vocabList[Math.floor(Math.random() * 4)]);
+    loadSoundMCQ(vocabList[Math.floor(Math.random() * 4)]);
+    //loadDictionary(vocabList[Math.floor(Math.random() * 4)]);
     //loadDefMCQMalayPrompt(vocabList[Math.floor(Math.random() * 4)]);
 }
 
