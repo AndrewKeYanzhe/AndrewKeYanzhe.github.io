@@ -4,7 +4,7 @@
 //constants
 var correctBeep = new Audio();
 correctBeep.src = "Audio/bleep.mp3";
-correctBeep.preload = 'auto';
+
 
 //Global variables
 var progress = {
@@ -358,6 +358,8 @@ function loadRandomPage(){
 }
 
 window.onload = function(){
+    document.getElementsByTagName("body")[0].addEventListener("click", function(){correctBeep.preload = 'auto';});
+    
     loadDefMCQMalayPrompt(sedia);
 //    loadSoundMCQ(sedia);
     //loadRandomPage();
