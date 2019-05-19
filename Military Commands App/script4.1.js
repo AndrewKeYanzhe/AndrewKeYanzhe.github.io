@@ -34,6 +34,7 @@ var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
 //console.log(vocabList);
 //console.log(vocabList.includes(senangDiri));
 
+//this is an element like <button>
 var currentAudioPlayingElement;
 
 function hidePages(){
@@ -173,13 +174,21 @@ function checkSoundMCQ(vocab, soundDiv, options){
 }
 
 var dictContinueButton = function(event){
+    vocab = event.target.buttonParam[0];
+    console.log(vocab);
+    vocab.sound.pause();
+    vocab.sound.currentTime = 0;
+    
     unloadDictionary(dictDiv);
     console.log('newpage from dict')
     newPage();
 }
 var loadDictionaryAudio = function(event){
     vocab = event.target.buttonParam[0];
+
     vocab.sound.play();
+
+    
 }
 function loadDictionary(vocab){
     dictDiv = document.getElementById("dictionary");
@@ -192,7 +201,8 @@ function loadDictionary(vocab){
     dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
     dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
     
-    dictDiv.getElementsByClassName("continue")[0].addEventListener("click", dictContinueButton);    
+    dictDiv.getElementsByClassName("continue")[0].addEventListener("click", dictContinueButton);
+    dictDiv.getElementsByClassName("continue")[0].buttonParam=[vocab];
     
     //vocab.sound.play();
 }
@@ -217,8 +227,8 @@ var checkDefMCQ = function(event){
     vocab = event.target.buttonParam[2];
     
     //pause all sounds
-    var sounds = document.getElementsByTagName('audio');
-    for(i=0; i<sounds.length; i++) sounds[i].pause();   
+    vocab.sound.pause();
+    vocab.sound.currentTime = 0;
     //chosen = options[index];  
 
     if (options[index] == vocab){
@@ -406,6 +416,9 @@ function loadInOrder(){
 }
 
 window.onload = function(){
+    //loadDefMCQSoundPrompt(dariKiriCepatJalan);
+
+    
     newPage();
     //loadMalayWordMCQ(sedia);
 //    loadSoundMCQ(sedia);
