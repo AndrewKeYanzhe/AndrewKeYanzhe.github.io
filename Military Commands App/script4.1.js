@@ -29,7 +29,7 @@ const senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senan
 const sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a");
 const berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a");
 //const dariKiriCepatJalan = new malayCommand("Dari kiri, cepat jalan", "Towards the commander's left, quick march", "Audio/dariKiriCJ.m4a");
-const dariKiriCepatJalan = new malayCommand("Dari kiri, cepat jalan", "March, Commander on right", "Audio/dariKiriCJ.m4a");
+const dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a");
 var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
 //console.log(vocabList);
 //console.log(vocabList.includes(senangDiri));
@@ -46,7 +46,8 @@ function hidePages(){
 function newPage(){
     console.log(">>>>>>>newPage>>>>>>>"); 
     //loadRandomPage();
-    loadDefMCQMalayPrompt(options[Math.floor(Math.random() * 4)]);
+    loadDictionary(vocabList[Math.floor(Math.random() * 4)]);
+    //loadDefMCQMalayPrompt(vocabList[Math.floor(Math.random() * 4)]);
 }
 
 function generateOptions(vocab){
@@ -173,7 +174,7 @@ function loadDictionary(vocab){
     });
     //load data
     dictDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
-    dictDiv.getElementsByTagName("h2")[0].innerHTML = vocab.engDef;
+    document.getElementById("engDef").innerHTML = vocab.engDef;
     dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
     dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
     
@@ -359,8 +360,8 @@ function loadRandomPage(){
 
 window.onload = function(){
     document.getElementsByTagName("body")[0].addEventListener("click", function(){correctBeep.preload = 'auto';});
-    
-    loadDefMCQMalayPrompt(sedia);
+    newPage();
+    //loadMalayWordMCQ(sedia);
 //    loadSoundMCQ(sedia);
     //loadRandomPage();
     //loadDefMCQMalayPrompt(senangDiri);
