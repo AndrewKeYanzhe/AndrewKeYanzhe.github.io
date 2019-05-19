@@ -45,8 +45,8 @@ function hidePages(){
 }
 function newPage(){
     console.log(">>>>>>>newPage>>>>>>>"); 
-    //loadRandomPage();
-    loadSoundMCQ(vocabList[Math.floor(Math.random() * 4)]);
+    loadRandomPage();
+    //loadSoundMCQ(vocabList[Math.floor(Math.random() * 4)]);
     //loadDictionary(vocabList[Math.floor(Math.random() * 4)]);
     //loadDefMCQMalayPrompt(vocabList[Math.floor(Math.random() * 4)]);
 }
@@ -102,6 +102,7 @@ function loadSoundMCQ(vocab){
     soundDiv = document.getElementById("soundMCQ");
     soundDiv.style.display = 'block';
     
+
     //creating options list
     var incorrectSoundList = vocabList.filter(item => item !== vocab);
     //console.log(incorrectSoundList);
@@ -360,7 +361,6 @@ function loadRandomPage(){
 }
 
 window.onload = function(){
-    document.getElementsByTagName("body")[0].addEventListener("click", function(){correctBeep.preload = 'auto';});
     newPage();
     //loadMalayWordMCQ(sedia);
 //    loadSoundMCQ(sedia);
