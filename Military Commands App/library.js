@@ -17,3 +17,8 @@ function shuffle(array) {
 
   return array;
 }
+
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};

@@ -125,7 +125,7 @@ function loadSoundMCQ(vocab){
     for (i = 0; i < 3; i++){
         soundDiv.getElementsByClassName("sound".concat(String(i)))[0].addEventListener("click", loadSoundButton);
         soundDiv.getElementsByClassName("sound".concat(String(i)))[0].buttonParam = [options, i];
-        console.log(options[i].malayWord);
+        console.log(options[i].malayWord.replaceAll("&nbsp;", " "));
     }
     soundDiv.getElementsByClassName("check")[0].addEventListener("click", loadSoundCheckButton);
     
