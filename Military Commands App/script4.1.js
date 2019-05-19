@@ -100,7 +100,7 @@ function loadSoundCheckButton(event){
     checkSoundMCQ(vocab, soundDiv, options);
 }
 function loadSoundMCQ(vocab){
-    console.log("function loadSoundMCQ(vocab)")
+    console.log(">>>>>function loadSoundMCQ(vocab)")
     var chosen; //this keeps track of the option the user chooses and by default is undefined
     //show page
     soundDiv = document.getElementById("soundMCQ");
@@ -134,7 +134,7 @@ function loadSoundMCQ(vocab){
     
 }
 function unloadSoundMCQ(soundDiv){
-    console.log("function unloadSoundMCQ(soundDiv)")
+    console.log(">>>>>function unloadSoundMCQ(soundDiv)")
     soundDiv.getElementsByClassName("sound0")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound1")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound2")[0].removeEventListener("click", loadSoundButton);
@@ -172,6 +172,11 @@ function checkSoundMCQ(vocab, soundDiv, options){
     
 }
 
+var dictContinueButton = function(event){
+    unloadDictionary(dictDiv);
+    console.log('newpage from dict')
+    newPage();
+}
 var loadDictionaryAudio = function(event){
     vocab = event.target.buttonParam[0];
     vocab.sound.play();
@@ -187,16 +192,14 @@ function loadDictionary(vocab){
     dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
     dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
     
-    dictDiv.getElementsByClassName("continue")[0].addEventListener("click", function(){
-        unloadDictionary(dictDiv);
-        console.log('newpage from dict')
-        newPage();
-    });    
+    dictDiv.getElementsByClassName("continue")[0].addEventListener("click", dictContinueButton);    
     
     //vocab.sound.play();
 }
 function unloadDictionary(dictDiv){
     console.log("unloading dict");
+    dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);
+    
     progress.senangDiri.learnt = true;
     
     //console.log(progress);
@@ -403,7 +406,7 @@ function loadInOrder(){
 }
 
 window.onload = function(){
-    loadSoundMCQ(sedia);
+    newPage();
     //loadMalayWordMCQ(sedia);
 //    loadSoundMCQ(sedia);
     //loadRandomPage();
