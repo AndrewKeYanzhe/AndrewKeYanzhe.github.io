@@ -93,7 +93,7 @@ var loadSoundButton = function(event){
     //console.log(chosen);
 };
 function loadSoundCheckButton(event){
-    console.log("loadSoundCheckButton")
+//    console.log("loadSoundCheckButton")
     //vocab, soundDiv, options
     vocab = event.target.buttonParam[0];
     soundDiv = event.target.buttonParam[1];
@@ -101,7 +101,7 @@ function loadSoundCheckButton(event){
     checkSoundMCQ(vocab, soundDiv, options);
 }
 function loadSoundMCQ(vocab){
-    console.log(">>>>>function loadSoundMCQ(vocab)")
+//    console.log(">>>>>function loadSoundMCQ(vocab)")
     var chosen; //this keeps track of the option the user chooses and by default is undefined
     //show page
     soundDiv = document.getElementById("soundMCQ");
@@ -135,14 +135,14 @@ function loadSoundMCQ(vocab){
     
 }
 function unloadSoundMCQ(soundDiv){
-    console.log(">>>>>function unloadSoundMCQ(soundDiv)")
+//    console.log(">>>>>function unloadSoundMCQ(soundDiv)")
     soundDiv.getElementsByClassName("sound0")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound1")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound2")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("check")[0].removeEventListener("click", loadSoundCheckButton);
 }
 function checkSoundMCQ(vocab, soundDiv, options){
-    console.log("checkSoundMCQ");
+//    console.log("checkSoundMCQ");
     //pause other sounds
     if (typeof currentAudioPlayingElement !== "undefined"){
         malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]];
@@ -159,8 +159,8 @@ function checkSoundMCQ(vocab, soundDiv, options){
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         
-        console.log("hiding SoundDiv");
-        console.log("newpage from soundmcq")
+//        console.log("hiding SoundDiv");
+//        console.log("newpage from soundmcq")
         newPage();
     } else {
         alert("answer wrong. next page will show the correct answer with english definition");
@@ -168,19 +168,18 @@ function checkSoundMCQ(vocab, soundDiv, options){
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         
-        console.log("hiding SoundDiv");
+//        console.log("hiding SoundDiv");
     }
     
 }
 
 var dictContinueButton = function(event){
     vocab = event.target.buttonParam[0];
-    console.log(vocab);
     vocab.sound.pause();
     vocab.sound.currentTime = 0;
     
     unloadDictionary(dictDiv);
-    console.log('newpage from dict')
+    //console.log('newpage from dict')
     newPage();
 }
 var loadDictionaryAudio = function(event){
@@ -207,7 +206,7 @@ function loadDictionary(vocab){
     //vocab.sound.play();
 }
 function unloadDictionary(dictDiv){
-    console.log("unloading dict");
+    //console.log("unloading dict");
     dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);
     
     progress.senangDiri.learnt = true;
