@@ -26,31 +26,6 @@ for (var vocabIndex = 0; vocabIndex < noOfVocab; vocabIndex++){
 }
 //console.log(lessonPages);
 
-//FAILED ATTEMP TO SHUFFLE LESSONPAGES
-//for (var vocabIndex = 0; vocabIndex < noOfVocab; vocabIndex++){
-//    for (var pageIndex = 0; pageIndex < noOfPages; pageIndex++){
-////        console.log(lessonPages[pageIndex]);
-////        console.log([vocabIndex, 1]);
-////        console.log(JSON.stringify(lessonPages[pageIndex]) == JSON.stringify([vocabIndex, 1]));
-////        if (JSON.stringify(lessonPages[pageIndex]) == JSON.stringify([vocabIndex, 1]) ){
-////            console.log("Shifting");
-//////            console.log(lessonPages.indexOf([vocabIndex, 0]));
-////            for(var k = 0; k < pageIndex.length; k++){
-////                if(arr[k][0] == vocabIndex && arr[k][1] == 0){
-////                    break;
-////                }
-////            }
-////            dictIndex = k;
-//////            console.log(lessonPages, pageIndex, lessonPages.indexOf([vocabIndex, 0]));
-////            moveElementInArray(lessonPages, pageIndex, dictIndex + 2);
-////            console.log(lessonPages);
-////            pageIndex--;
-////            break;
-////        }
-//    }
-//}
-//console.log(moveElementInArray([1, 3, 4], 0, 4));
-
 noOfPages = lessonPages.length;
 pageIndices = range(noOfPages);
 //console.log(JSON.stringify(pageIndices));

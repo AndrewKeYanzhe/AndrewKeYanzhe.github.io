@@ -443,7 +443,3 @@ function loadPage ([vocabIndex, page]){
 window.onload = function(){   
     newPage();
 }
-//show that classes are initiated with properly with test attributes
-//console.log(senangDiri.audioName);
-//console.log(senangDiri.engDef);
-//console.log(senangDiri.malayWord);
