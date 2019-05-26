@@ -16,7 +16,6 @@ case 4:
 */
 
 //Configuration
-var noOfVocab = 4;
 var noOfLessons = 5; // Refers to the number of MCQ + dict pages in html
 
 class malayCommand {
@@ -34,15 +33,17 @@ class malayCommand {
 }
 
 //vocab
-const senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a");
-const sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a");
-const berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a");
-const dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a");
-var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
+var vocabList = [
+    senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a"),
+    sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a"),
+    berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a"),
+    dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a"),
+];
+var noOfVocab = vocabList.length;
 
 
-
-
+//Generating Lesson
+console.log(">>>>>>>>>>>Generating Lesson>>>>>>>>>>>>")
 
 //CREATING LESSONPAGES [[vocab, pageToShow]...]
 console.log("creating LESSONPAGES [[vocab, pageToShow]...]")
