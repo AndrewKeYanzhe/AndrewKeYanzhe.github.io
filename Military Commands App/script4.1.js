@@ -1,6 +1,5 @@
 //Written by Andrew Ke Yanzhe 2019
 
-
 //constants
 var correctBeep = new Audio();
 correctBeep.src = "Audio/bleep.mp3";
@@ -25,16 +24,14 @@ class malayCommand {
     }
 }
 
+//vocab
 const senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a");
 const sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a");
 const berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a");
-//const dariKiriCepatJalan = new malayCommand("Dari kiri, cepat jalan", "Towards the commander's left, quick march", "Audio/dariKiriCJ.m4a");
 const dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a");
 var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
-//console.log(vocabList);
-//console.log(vocabList.includes(senangDiri));
 
-//this is an element like <button>
+//this stores an element like <button>
 var currentAudioPlayingElement;
 
 function hidePages(){
@@ -44,14 +41,13 @@ function hidePages(){
         element.style.display = 'none';
     });
 }
-var currentPage = 0; //debug
+var currentPage = -1; 
 function newPage(){
+    currentPage++;
     console.log(">>>>>>>newPage>>>>>>>"); 
-    //loadRandomPage();
-    loadInOrder();
-    //loadSoundMCQ(vocabList[Math.floor(Math.random() * 4)]);
-    //loadDictionary(vocabList[Math.floor(Math.random() * 4)]);
-    //loadDefMCQMalayPrompt(vocabList[Math.floor(Math.random() * 4)]);
+    loadPage(lessonPages2[currentPage]);
+//    loadInOrder();
+
 }
 
 function generateOptions(vocab){
@@ -67,6 +63,7 @@ function generateOptions(vocab){
     return options;
 }
 
+//Pages----------------->
 var loadSoundButton = function(event){
     //console.log("loading soundbutton sound and setting var chosen");
     //options, index
@@ -362,7 +359,9 @@ function loadDefMCQMalayPrompt(vocab){
     //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
 
 }
+//Pages----------------->
 
+//Order of displaying pages
 function loadRandomPage(){
     var i = Math.floor(Math.random() * 5);
     var j = Math.floor(Math.random() * 4);
@@ -387,7 +386,7 @@ function loadRandomPage(){
     }
 }
 function loadInOrder(){
-    var j = Math.floor(Math.random() * 4);
+    var vocabIndex = Math.floor(Math.random() * 4);
     //console.log(j);
     console.log(currentPage);
 
@@ -397,34 +396,52 @@ function loadInOrder(){
 
     switch(currentPage){
         case 0:
-            loadDictionary(vocabList[j]);
+//            loadDictionary(vocabList[vocabIndex]);
+            loadPage([vocabIndex,0]);
             break;
         case 1:
-            loadSoundMCQ(vocabList[j]);
+            loadSoundMCQ(vocabList[vocabIndex]);
             break;
         case 2:
-            loadDefMCQSoundPrompt(vocabList[j]);
+            loadDefMCQSoundPrompt(vocabList[vocabIndex]);
             break;
         case 3:
-            loadDefMCQMalayPrompt(vocabList[j]);
+            loadDefMCQMalayPrompt(vocabList[vocabIndex]);
             break;
         case 4:
-            loadMalayWordMCQ(vocabList[j]);
+            loadMalayWordMCQ(vocabList[vocabIndex]);
+            break;
     }
     currentPage++;
 }
 
-window.onload = function(){
-    //loadDefMCQSoundPrompt(dariKiriCepatJalan);
+function loadPage ([vocabIndex, page]){
+    vocab = vocabList[vocabIndex];
+//    console.log(page);
+    switch(page){
+        case 0:
+//            console.log("loadLesson case 0");
+            loadDictionary(vocab);
+            break;
+        case 1:
+//            console.log("loadLesson case 1");
+            loadMalayWordMCQ(vocab);
+            break;
+        case 2:
+            loadDefMCQMalayPrompt(vocab);
+            break;
+        case 3:
+            loadDefMCQSoundPrompt(vocab);
+            break;
+        case 4:
+            loadSoundMCQ(vocab);
+            break;
+    }
+}
 
-    
+
+window.onload = function(){   
     newPage();
-    //loadMalayWordMCQ(sedia);
-//    loadSoundMCQ(sedia);
-    //loadRandomPage();
-    //loadDefMCQMalayPrompt(senangDiri);
-    //loadDefMCQMalayPrompt(senangDiri);
-    //loadDictionary(sedia);
 }
 //show that classes are initiated with properly with test attributes
 //console.log(senangDiri.audioName);
