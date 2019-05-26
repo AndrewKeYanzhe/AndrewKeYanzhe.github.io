@@ -93,7 +93,7 @@ var checkMalayWordMCQ = function(event){
     if (options[index] == vocab){
         correctBeep.play();
         malayWordMCQDiv.style.display = 'none';
-        console.log('newpage from malaywordmcq')
+//        console.log('newpage from malaywordmcq')
         newPage();
     } else {
         malayWordMCQDiv.style.display = 'none';
@@ -143,7 +143,7 @@ var checkDefMCQ = function(event){
     if (options[index] == vocab){
         correctBeep.play();
         defMCQDiv.style.display = 'none';
-        console.log("newpage from defmcq")
+//        console.log("newpage from defmcq")
         newPage();
     } else {
         alert("answer wrong. next page will show the correct answer with english definition");
@@ -294,7 +294,7 @@ function loadSoundMCQ(vocab){
     for (i = 0; i < 3; i++){
         soundDiv.getElementsByClassName("sound".concat(String(i)))[0].addEventListener("click", loadSoundButton);
         soundDiv.getElementsByClassName("sound".concat(String(i)))[0].buttonParam = [options, i];
-        console.log(options[i].malayWord.replaceAll("&nbsp;", " "));
+        console.log("   ".concat(options[i].malayWord.replaceAll("&nbsp;", " ")));
     }
     soundDiv.getElementsByClassName("check")[0].addEventListener("click", loadSoundCheckButton);
     
