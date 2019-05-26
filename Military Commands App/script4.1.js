@@ -5,35 +5,10 @@ var correctBeep = new Audio();
 correctBeep.src = "Audio/bleep.mp3";
 
 
-//Global variables
-var progress = {
-    senangDiri: {learnt: false}
-}
+//global variables
+var currentAudioPlayingElement; //this stores an element like <button>
 
-class malayCommand {
-    constructor(malayWord, engDef, audioName){
-        //String Properties
-        this.malayWord = malayWord;
-        this.engDef = engDef;
-        this.audioName = audioName;
-        this.learnt = false
-        
-        //Audio File Source
-        this.sound = new Audio();
-        this.sound.src = this.audioName;
-    }
-}
-
-//vocab
-const senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a");
-const sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a");
-const berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a");
-const dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a");
-var vocabList = [senangDiri, sedia, berhenti, dariKiriCepatJalan];
-
-//this stores an element like <button>
-var currentAudioPlayingElement;
-
+//page management
 function hidePages(){
     //console.log(document.getElementsByTagName("div"));
     Array.from(document.getElementsByTagName("div")).forEach(function(element){
@@ -43,13 +18,17 @@ function hidePages(){
 }
 var currentPage = -1; 
 function newPage(){
-    currentPage++;
     console.log(">>>>>>>newPage>>>>>>>"); 
-    loadPage(lessonPages2[currentPage]);
-//    loadInOrder();
+    
+    
+    currentPage++;       
+    
+//    loadPage(lessonPages2[currentPage]);
+    loadInOrder();
 
 }
 
+//MCQ generation
 function generateOptions(vocab){
     //creating list of 4 items - 1 correct and 3 incorrect from vocablist
     var incorrectDefList = vocabList.filter(item => item !== vocab);
@@ -63,7 +42,200 @@ function generateOptions(vocab){
     return options;
 }
 
-//Pages----------------->
+//pages----------------->
+
+//Dictionary
+var dictContinueButton = function(event){
+    vocab = event.target.buttonParam[0];
+    vocab.sound.pause();
+    vocab.sound.currentTime = 0;
+    
+    unloadDictionary(dictDiv);
+    //console.log('newpage from dict')
+    newPage();
+}
+var loadDictionaryAudio = function(event){
+    vocab = event.target.buttonParam[0];
+
+    vocab.sound.play();
+
+    
+}
+function loadDictionary(vocab){
+    dictDiv = document.getElementById("dictionary");
+    //show dictionary page
+    dictDiv.style.display = 'block';
+
+    //load data
+    dictDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
+    document.getElementById("engDef").innerHTML = vocab.engDef;
+    dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
+    dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
+    
+    dictDiv.getElementsByClassName("continue")[0].addEventListener("click", dictContinueButton);
+    dictDiv.getElementsByClassName("continue")[0].buttonParam=[vocab];
+    
+    //vocab.sound.play();
+}
+function unloadDictionary(dictDiv){
+    //console.log("unloading dict");
+    dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);    
+    
+    dictDiv.style.display = 'none';    
+}
+
+//MalayWordMCQ
+var checkMalayWordMCQ = function(event){
+    options = event.target.buttonParam[0];
+    index = event.target.buttonParam[1];
+    vocab = event.target.buttonParam[2];
+    
+    if (options[index] == vocab){
+        correctBeep.play();
+        malayWordMCQDiv.style.display = 'none';
+        console.log('newpage from malaywordmcq')
+        newPage();
+    } else {
+        malayWordMCQDiv.style.display = 'none';
+        alert("answer wrong. next page will show the correct answer with english definition");
+        loadDictionary(vocab);
+        
+    }
+}
+function loadMalayWordMCQ(vocab){
+    //display div
+    malayWordMCQDiv = document.getElementById("malayWordMCQ");    
+    malayWordMCQDiv.style.display = 'block';
+    
+    //vocab is the correct answer    
+    //var chosen tracks the option selected by the user
+    var chosen;    
+    var options = generateOptions(vocab);
+    //console.log(options); 
+    
+    //display choices and prompt  
+    var i;
+    for (i = 0; i < 4; i++){
+        malayWordMCQDiv.getElementsByClassName("malay".concat(String(i)))[0].innerHTML = options[i].malayWord;
+    }    
+    malayWordMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.engDef;
+    
+    //make buttons set var chosen
+    var j;
+    for (j = 0; j < 4; j++){
+        malayWordMCQDiv.getElementsByClassName("malay".concat(String(j)))[0].addEventListener("click", checkMalayWordMCQ);    
+        malayWordMCQDiv.getElementsByClassName("malay".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
+    }
+}
+
+//Def MCQ Malay Prompt
+var checkDefMCQ = function(event){    
+    //options, index, vocab
+    options = event.target.buttonParam[0];
+    index = event.target.buttonParam[1];
+    vocab = event.target.buttonParam[2];
+    
+    //pause all sounds
+    vocab.sound.pause();
+    vocab.sound.currentTime = 0;
+    //chosen = options[index];  
+
+    if (options[index] == vocab){
+        correctBeep.play();
+        defMCQDiv.style.display = 'none';
+        console.log("newpage from defmcq")
+        newPage();
+    } else {
+        alert("answer wrong. next page will show the correct answer with english definition");
+        loadDictionary(vocab);
+        defMCQDiv.style.display = 'none';
+    }
+};
+function loadDefMCQMalayPrompt(vocab){
+    //vocab is the correct answer    
+    //var chosen tracks the option selected by the user
+    var chosen;
+    
+    //show page
+    defMCQDiv = document.getElementById("defMCQMalayPrompt");    
+    defMCQDiv.style.display = 'block';
+    
+ 
+    
+    //creating options list
+    var incorrectDefList = vocabList.filter(item => item !== vocab);
+    incorrectDefList = shuffle(incorrectDefList);
+    var incorrectDef1 = incorrectDefList[0];
+    var incorrectDef2 = incorrectDefList[1];
+    var incorrectDef3 = incorrectDefList[2];
+    var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
+    //console.log(options);
+    
+    //display malay word prompt
+    defMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
+    //defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
+    
+    //display choices   
+    var i;
+    for (i = 0; i < 4; i++){
+        defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
+    }
+    
+    //make buttons set var chosen
+    var j;
+    for (j = 0; j < 4; j++){
+        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
+        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
+    }
+    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
+
+}
+
+//Def MCQ Sound Prompt
+var loadSoundPromptForDefMCQ = function(event){
+    vocab = event.target.buttonParam[0];
+    vocab.sound.play();
+}
+function loadDefMCQSoundPrompt(vocab){
+    //vocab is the correct answer
+    
+    //var chosen tracks the option selected by the user
+    var chosen;
+    
+    //show page
+    defMCQDiv = document.getElementById("defMCQSoundPrompt");    
+    defMCQDiv.style.display = 'block';
+        
+    //creating options list
+    var incorrectDefList = vocabList.filter(item => item !== vocab);
+    incorrectDefList = shuffle(incorrectDefList);
+    var incorrectDef1 = incorrectDefList[0];
+    var incorrectDef2 = incorrectDefList[1];
+    var incorrectDef3 = incorrectDefList[2];
+    var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
+    //console.log(options);
+    
+    //attach sound to audio button
+    defMCQDiv.getElementsByTagName("h1")[0].addEventListener("click", loadSoundPromptForDefMCQ);
+    defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
+    
+    //display choices   
+    var i;
+    for (i = 0; i < 4; i++){
+        defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
+    }
+    
+    //make buttons set var chosen
+    var j;
+    for (j = 0; j < 4; j++){
+        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
+        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
+    }
+    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
+
+}
+
+//SoundMCQ
 var loadSoundButton = function(event){
     //console.log("loading soundbutton sound and setting var chosen");
     //options, index
@@ -169,197 +341,7 @@ function checkSoundMCQ(vocab, soundDiv, options){
     }
     
 }
-
-var dictContinueButton = function(event){
-    vocab = event.target.buttonParam[0];
-    vocab.sound.pause();
-    vocab.sound.currentTime = 0;
-    
-    unloadDictionary(dictDiv);
-    //console.log('newpage from dict')
-    newPage();
-}
-var loadDictionaryAudio = function(event){
-    vocab = event.target.buttonParam[0];
-
-    vocab.sound.play();
-
-    
-}
-function loadDictionary(vocab){
-    dictDiv = document.getElementById("dictionary");
-    //show dictionary page
-    dictDiv.style.display = 'block';
-
-    //load data
-    dictDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
-    document.getElementById("engDef").innerHTML = vocab.engDef;
-    dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
-    dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
-    
-    dictDiv.getElementsByClassName("continue")[0].addEventListener("click", dictContinueButton);
-    dictDiv.getElementsByClassName("continue")[0].buttonParam=[vocab];
-    
-    //vocab.sound.play();
-}
-function unloadDictionary(dictDiv){
-    //console.log("unloading dict");
-    dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);
-    
-    progress.senangDiri.learnt = true;
-    
-    //console.log(progress);
-    dictDiv.style.display = 'none';    
-}
-
-var loadSoundPromptForDefMCQ = function(event){
-    vocab = event.target.buttonParam[0];
-    vocab.sound.play();
-}
-var checkDefMCQ = function(event){    
-    //options, index, vocab
-    options = event.target.buttonParam[0];
-    index = event.target.buttonParam[1];
-    vocab = event.target.buttonParam[2];
-    
-    //pause all sounds
-    vocab.sound.pause();
-    vocab.sound.currentTime = 0;
-    //chosen = options[index];  
-
-    if (options[index] == vocab){
-        correctBeep.play();
-        defMCQDiv.style.display = 'none';
-        console.log("newpage from defmcq")
-        newPage();
-    } else {
-        alert("answer wrong. next page will show the correct answer with english definition");
-        loadDictionary(vocab);
-        defMCQDiv.style.display = 'none';
-    }
-};
-function loadDefMCQSoundPrompt(vocab){
-    //vocab is the correct answer
-    
-    //var chosen tracks the option selected by the user
-    var chosen;
-    
-    //show page
-    defMCQDiv = document.getElementById("defMCQSoundPrompt");    
-    defMCQDiv.style.display = 'block';
-        
-    //creating options list
-    var incorrectDefList = vocabList.filter(item => item !== vocab);
-    incorrectDefList = shuffle(incorrectDefList);
-    var incorrectDef1 = incorrectDefList[0];
-    var incorrectDef2 = incorrectDefList[1];
-    var incorrectDef3 = incorrectDefList[2];
-    var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
-    //console.log(options);
-    
-    //attach sound to audio button
-    defMCQDiv.getElementsByTagName("h1")[0].addEventListener("click", loadSoundPromptForDefMCQ);
-    defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
-    
-    //display choices   
-    var i;
-    for (i = 0; i < 4; i++){
-        defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
-    }
-    
-    //make buttons set var chosen
-    var j;
-    for (j = 0; j < 4; j++){
-        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
-        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
-    }
-    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
-
-}
-
-var checkMalayWordMCQ = function(event){
-    options = event.target.buttonParam[0];
-    index = event.target.buttonParam[1];
-    vocab = event.target.buttonParam[2];
-    
-    if (options[index] == vocab){
-        correctBeep.play();
-        malayWordMCQDiv.style.display = 'none';
-        console.log('newpage from malaywordmcq')
-        newPage();
-    } else {
-        malayWordMCQDiv.style.display = 'none';
-        alert("answer wrong. next page will show the correct answer with english definition");
-        loadDictionary(vocab);
-        
-    }
-}
-function loadMalayWordMCQ(vocab){
-    //display div
-    malayWordMCQDiv = document.getElementById("malayWordMCQ");    
-    malayWordMCQDiv.style.display = 'block';
-    
-    //vocab is the correct answer    
-    //var chosen tracks the option selected by the user
-    var chosen;    
-    var options = generateOptions(vocab);
-    //console.log(options); 
-    
-    //display choices and prompt  
-    var i;
-    for (i = 0; i < 4; i++){
-        malayWordMCQDiv.getElementsByClassName("malay".concat(String(i)))[0].innerHTML = options[i].malayWord;
-    }    
-    malayWordMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.engDef;
-    
-    //make buttons set var chosen
-    var j;
-    for (j = 0; j < 4; j++){
-        malayWordMCQDiv.getElementsByClassName("malay".concat(String(j)))[0].addEventListener("click", checkMalayWordMCQ);    
-        malayWordMCQDiv.getElementsByClassName("malay".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
-    }
-}
-
-function loadDefMCQMalayPrompt(vocab){
-    //vocab is the correct answer    
-    //var chosen tracks the option selected by the user
-    var chosen;
-    
-    //show page
-    defMCQDiv = document.getElementById("defMCQMalayPrompt");    
-    defMCQDiv.style.display = 'block';
-    
- 
-    
-    //creating options list
-    var incorrectDefList = vocabList.filter(item => item !== vocab);
-    incorrectDefList = shuffle(incorrectDefList);
-    var incorrectDef1 = incorrectDefList[0];
-    var incorrectDef2 = incorrectDefList[1];
-    var incorrectDef3 = incorrectDefList[2];
-    var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
-    //console.log(options);
-    
-    //display malay word prompt
-    defMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
-    //defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
-    
-    //display choices   
-    var i;
-    for (i = 0; i < 4; i++){
-        defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
-    }
-    
-    //make buttons set var chosen
-    var j;
-    for (j = 0; j < 4; j++){
-        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
-        defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
-    }
-    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
-
-}
-//Pages----------------->
+//pages----------------->
 
 //Order of displaying pages
 function loadRandomPage(){
@@ -387,13 +369,13 @@ function loadRandomPage(){
 }
 function loadInOrder(){
     var vocabIndex = Math.floor(Math.random() * 4);
-    //console.log(j);
-    console.log(currentPage);
+    //console.log(j);    
 
     if (currentPage>4){
         currentPage=0;
     }
-
+    console.log("current page is ".concat(currentPage));
+    
     switch(currentPage){
         case 0:
 //            loadDictionary(vocabList[vocabIndex]);
@@ -412,7 +394,6 @@ function loadInOrder(){
             loadMalayWordMCQ(vocabList[vocabIndex]);
             break;
     }
-    currentPage++;
 }
 
 function loadPage ([vocabIndex, page]){
