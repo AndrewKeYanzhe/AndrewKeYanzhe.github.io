@@ -31,8 +31,7 @@ function newPage(){
         case 0:
             loadInOrder();
             break;
-        case 1:
-            loadPage(lessonPages2[currentPage]);
+        case 1:            loadPage(lessonPages[currentPage]);
             break;
         default:
     }
