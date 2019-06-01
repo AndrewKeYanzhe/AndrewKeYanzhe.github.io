@@ -1,9 +1,10 @@
 //Written by Andrew Ke Yanzhe 2019
 
 //constants
-var correctBeep = new Audio();
-correctBeep.src = "Audio/bleep.mp3";
-
+var correctBleep = new Audio();
+correctBleep.src = "Audio/correct.mp3";
+var wrongBleep = new Audio();
+wrongBleep.src = "Audio/wrong.mp3";
 
 //global variables
 var currentAudioPlayingElement; //this stores an element like <button>
@@ -99,6 +100,7 @@ function unloadDictionary(dictDiv){
     }
 }
 function correction(wrongVocab, vocab){
+    wrongBleep.play();
     wrongAns = wrongVocab.malayWord;    
     document.getElementsByClassName("correction")[0].style.display = "block";
     document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongAns;
@@ -117,7 +119,7 @@ var checkMalayWordMCQ = function(event){
     wrongVocab = options[index];
     
     if (wrongVocab == vocab){
-        correctBeep.play();
+        correctBleep.play();
         malayWordMCQDiv.style.display = 'none';
 //        console.log('newpage from malaywordmcq')
         newPage();
@@ -166,7 +168,7 @@ var checkDefMCQ = function(event){
     //chosen = options[index];  
 
     if (options[index] == vocab){
-        correctBeep.play();
+        correctBleep.play();
         defMCQDiv.style.display = 'none';
 //        console.log("newpage from defmcq")
         newPage();
@@ -349,7 +351,7 @@ function checkSoundMCQ(vocab, soundDiv, options){
     if (typeof chosen == "undefined"){
         alert("Please select an option");
     } else if (chosen == vocab){
-        correctBeep.play();
+        correctBleep.play();
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         
