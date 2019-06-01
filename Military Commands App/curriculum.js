@@ -16,7 +16,8 @@ case 4:
 */
 
 //Configuration
-var noOfLessons = 5; // Refers to the number of MCQ + dict pages in html
+var noOfLessons = 5; // MCQ + dict page
+var noOfQuizzes = 4; // MCQ 
 
 class malayCommand {
     constructor(malayWord, engDef, audioName){
@@ -40,6 +41,8 @@ var vocabList = [
     dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a"),
 ];
 var noOfVocab = vocabList.length;
+
+var timesVocabCorrect = Array(10).fill(0); //times nth vocab correct is timesVocabCorrect[n]
 
 function generateLesson(){
     console.log(">>>>>>>>>>>Generating Lesson>>>>>>>>>>>>")
@@ -111,6 +114,80 @@ function generateLesson(){
     });
     console.log("LESSONPAGES recreation by replacing N in PAGE INDICES with LESSONPAGES[N]");
     console.log(JSON.stringify(lessonPages));
+    
+    return lessonPages;
 }
+function generateTest(){
+    console.log(">>>>>>>>>>>Generating Test>>>>>>>>>>>>");
 
-var lessonPages = generateLesson();    
+    //variables
+    var vocabOrder = shuffle(range(noOfVocab)); 
+    console.log("vocabOrder is ".concat(vocabOrder));
+    var testPages = [];
+
+    //logic
+    for (var index = 0; index < vocabOrder.length; index++){
+        vocabItem = vocabOrder[index];
+
+        var quizListForOneVocab = shuffle(range(noOfQuizzes));
+        quizListForOneVocab = quizListForOneVocab.map(function(item) {
+          return item + 1;
+        }); //change range from 0-3 to 1-4 since page0 is dict and page1-4 are quizzes
+        
+        quizListForOneVocab.forEach(function (quiz, index){
+            //debug([vocabItem, quiz]);
+            testPages.push([vocabItem, quiz]);    		
+        });
+    }
+    debug(testPages);
+
+    var unshuffledTestPages = testPages;
+    //CUSTOM SHUFFLE //
+    for (var vocabItem = 0; vocabItem < noOfVocab; vocabItem++){
+        debug("vocab item is ".concat(vocabItem));	
+        var pagesToRemove = [];
+
+        for (var page = 0; page < unshuffledTestPages.length; page++){
+            pageContent = unshuffledTestPages[page];
+    //        debug("   page is ".concat(page));
+    //        debug("   page content is".concat(JSON.stringify(pageContent)));
+            if (pageContent[0] == vocabItem){
+                pagesToRemove.push(pageContent);
+                testPages = testPages.filter(function(page2Content) { return page2Content != pageContent; }); 
+            }
+    //        debug("          pagesToRemove is ".concat(JSON.stringify(pagesToRemove)));      
+        }
+
+        if (pagesToRemove.length == 0){
+            continue;
+        }
+
+        var noOfQns = testPages.length;
+        var spacing = Math.random()*3;
+        noOfSpaces = noOfQns/spacing;
+        debug("spacing is ".concat(spacing));
+        debug("noOfSpaces is ".concat(noOfSpaces));
+        var positionList = [];		
+        positionList.push(noOfQns);
+
+        for (var position = 0; position < noOfSpaces; position++){		positionList.push(Math.floor(position*noOfQns/noOfSpaces));
+        }
+        positionList = shuffle(positionList);
+        positionList = positionList.slice(0, noOfQuizzes);
+        positionList = positionList.sort((a, b) => a - b);
+        debug("   positionList is ".concat(positionList));
+
+        positionList.forEach(function (position, index){
+           testPages.splice(position + index, 0, pagesToRemove[index]);
+        });
+        debug(JSON.stringify(testPages));
+    }
+    //debug(testPages);
+    console.log("testPages length is ".concat(testPages.length));
+    console.log(JSON.stringify(testPages));
+
+    //alternative shuffle algorithm
+    //debug(JSON.stringify(shuffle(testPages)));
+    
+    return testPages;
+}

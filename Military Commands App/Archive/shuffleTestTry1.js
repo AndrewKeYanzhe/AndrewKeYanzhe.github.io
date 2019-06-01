@@ -1,43 +1,43 @@
 //constants
 var noOfVocab = 10;
 var noOfQuizzes = 4;
+debugMode = true    ;
+
+console.log(">>>>>>>>>>>Generating Test>>>>>>>>>>>>");
 
 //variables
 var vocabOrder = shuffle(range(noOfVocab)); 
 console.log("vocabOrder is ".concat(vocabOrder));
 var testPages = [];
-var timesVocabCorrect = Array(10).fill(0); //times nth vocab correct is timesVocabCorrect[n]
-//console.log(timesVocabCorrect)
 
 //logic
-console.log(">>>>>>>>>>>Generating Test>>>>>>>>>>>>")
 for (var index = 0; index < vocabOrder.length; index++){
     vocabItem = vocabOrder[index];
 
 	var quizListForOneVocab = shuffle(range(noOfQuizzes));
-	//console.log(quizListForOneVocab);
+	//debug(quizListForOneVocab);
 	quizListForOneVocab.forEach(function (quiz, index){
-		//console.log([vocabItem, quiz]);
+		//debug([vocabItem, quiz]);
 		testPages.push([vocabItem, quiz]);    		
 	});
 }
-console.log(testPages);
+debug(testPages);
 
 var unshuffledTestPages = testPages;
 //CUSTOM SHUFFLE //
 for (var vocabItem = 0; vocabItem < noOfVocab; vocabItem++){
-    console.log("vocab item is ".concat(vocabItem));	
+    debug("vocab item is ".concat(vocabItem));	
 	var pagesToRemove = [];
 
     for (var page = 0; page < unshuffledTestPages.length; page++){
         pageContent = unshuffledTestPages[page];
-//        console.log("   page is ".concat(page));
-//        console.log("   page content is".concat(JSON.stringify(pageContent)));
+//        debug("   page is ".concat(page));
+//        debug("   page content is".concat(JSON.stringify(pageContent)));
 		if (pageContent[0] == vocabItem){
 			pagesToRemove.push(pageContent);
 			testPages = testPages.filter(function(page2Content) { return page2Content != pageContent; }); 
 		}
-//        console.log("          pagesToRemove is ".concat(JSON.stringify(pagesToRemove)));      
+//        debug("          pagesToRemove is ".concat(JSON.stringify(pagesToRemove)));      
     }
         
 	if (pagesToRemove.length == 0){
@@ -47,8 +47,8 @@ for (var vocabItem = 0; vocabItem < noOfVocab; vocabItem++){
 	var noOfQns = testPages.length;
 	var spacing = Math.random()*3;
     noOfSpaces = noOfQns/spacing;
-    console.log("spacing is ".concat(spacing));
-    console.log("noOfSpaces is ".concat(noOfSpaces));
+    debug("spacing is ".concat(spacing));
+    debug("noOfSpaces is ".concat(noOfSpaces));
 	var positionList = [];		
 	positionList.push(noOfQns);
     
@@ -57,16 +57,17 @@ for (var vocabItem = 0; vocabItem < noOfVocab; vocabItem++){
 	positionList = shuffle(positionList);
 	positionList = positionList.slice(0, noOfQuizzes);
 	positionList = positionList.sort((a, b) => a - b);
-    console.log("   positionList is ".concat(positionList));
+    debug("   positionList is ".concat(positionList));
     
     positionList.forEach(function (position, index){
        testPages.splice(position + index, 0, pagesToRemove[index]);
     });
-    console.log(JSON.stringify(testPages));
+    debug(JSON.stringify(testPages));
 }
-console.log(testPages);
+//debug(testPages);
+console.log("testPages length is ".concat(testPages.length));
 console.log(JSON.stringify(testPages));
 
 //alternative shuffle algorithm
-//console.log(JSON.stringify(shuffle(testPages)));
+//debug(JSON.stringify(shuffle(testPages)));
 

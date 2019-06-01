@@ -1,6 +1,3 @@
-//Imported algorithms
-
-//shuffle
 function shuffle(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -19,17 +16,10 @@ function shuffle(array) {
 
   return array;
 }
-
-String.prototype.replaceAll = function(search, replacement) {
-    var target = this;
-    return target.split(search).join(replacement);
-};
-
-//array of incrementing numbers from 0
 function range(length){
+    //array incrementing from 0 to length
 	return Array.from({length: length}, (v, k) => k); 
-};
-
+}
 function moveElementInArray(arr, old_index, new_index) {
     if (new_index >= arr.length) {
         var k = new_index - arr.length + 1;
@@ -42,11 +32,14 @@ function moveElementInArray(arr, old_index, new_index) {
 
     
     return arr; // for testing
-};
+}
+function debug(content){
+    if (debugMode){
+        console.log(content);
+    }
+}
 
-//function filter(array, key){
-//    var filtered = array.filter(function (el) {
-//      return el != key;
-//    });
-//    return filtered;
-//}
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.split(search).join(replacement);
+};
