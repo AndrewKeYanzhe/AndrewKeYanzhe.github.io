@@ -1,8 +1,9 @@
 //Written by Andrew Ke Yanzhe 2019
 
-
 //parameters
 var debugMode = false;
+var testMode = true;
+
 //constants
 var correctBleep = new Audio();
 correctBleep.src = "Audio/correct.mp3";
@@ -12,6 +13,7 @@ wrongBleep.src = "Audio/wrong.mp3";
 //global variables
 var currentAudioPlayingElement; //this stores an element like <button>
 var wrongAns = null;
+var lessonPages = null;
 
 //page management
 function hidePages(){
@@ -23,28 +25,25 @@ function hidePages(){
 }
 var currentPage = -1;
 function newPage(){
-    console.log(">>>>>>>newPage>>>>>>>");    
-    var loadMode = -1;      
-    loadSoundMCQ(sedia);
-//    loadDictionary(sedia);
-//    loadMalayWordMCQ(sedia);
-    
+    console.log(">>>>>>>newPage>>>>>>>"); 
+    var loadMode = 1;  
+
     currentPage++;
     
     switch(loadMode){
         case 0:
-            loadInOrder();
+            loadInOrder2();
             break;
         case 1:
             //LESSON
-            if (typeof lessonPages === "undefined"){
+            if (lessonPages == null){
                 var lessonPages = generateLesson();
             }
             loadPage(lessonPages[currentPage]);
             break;
         case 2:
             //TEST
-            if (typeof testPages === "undefined"){
+            if (testPages == null){
                 var testPages = generateTest();
             }
             
@@ -71,12 +70,18 @@ function generateOptions(vocab){
     return options;
 }
 
-function handleWrongAns(wrongVocab, vocab){
+function handleWrongAns(wrongVocab, vocab, ansType){
     wrongBleep.play();
-    wrongAns = wrongVocab.malayWord;    
+    wrongAns = wrongVocab;
     document.getElementsByClassName("correction")[0].style.display = "block";
-    document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongAns; 
-    
+    switch (ansType){
+        case "malayWord":
+            document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongVocab.malayWord;
+            break;
+        case "engDef":
+            document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongVocab.engDef;
+            break;
+    }   
     loadDictionary(vocab);
 }
 function handleCorrectAns(vocab){
@@ -125,6 +130,8 @@ function unloadDictionary(dictDiv){
     
     dictDiv.style.display = 'none';    
     
+    console.log(wrongAns)
+    
     if (wrongAns !== null){
         dictDiv.getElementsByClassName("correction")[0].style.display="none";
         
@@ -144,7 +151,7 @@ var checkMalayWordMCQ = function(event){
     } else {        
         malayWordMCQDiv.style.display = 'none';
 //        alert("answer wrong. next page will show the correct answer with english definition");
-        handleWrongAns(options[index], vocab);        
+        handleWrongAns(options[index], vocab, "malayWord");        
     }
 }
 function loadMalayWordMCQ(vocab){
@@ -191,7 +198,7 @@ var checkDefMCQ = function(event){
     } else {
 //        alert("answer wrong. next page will show the correct answer with english definition");
         defMCQDiv.style.display = 'none';
-        handleWrongAns(options[index], vocab);
+        handleWrongAns(options[index], vocab, "engDef");
     }
 };
 function loadDefMCQMalayPrompt(vocab){
@@ -432,6 +439,33 @@ function loadInOrder(){
             break;
         case 3:
             loadDefMCQMalayPrompt(vocabList[vocabIndex]);
+            break;
+        case 4:
+            loadMalayWordMCQ(vocabList[vocabIndex]);
+            break;
+    }
+}
+function loadInOrder2(){
+    var vocabIndex = Math.floor(Math.random() * 4);
+    //console.log(j);    
+
+    if (currentPage>4){
+        currentPage=0;
+    }
+    console.log("current page is ".concat(currentPage));
+    
+    switch(currentPage){
+        case 0:
+            loadDefMCQMalayPrompt(vocabList[vocabIndex]);
+            break;
+        case 1:            
+            loadDictionary(vocabList[vocabIndex]);
+            break;
+        case 2:
+            loadDefMCQSoundPrompt(vocabList[vocabIndex]);
+            break;
+        case 3:
+            loadDictionary(vocabList[vocabIndex]);
             break;
         case 4:
             loadMalayWordMCQ(vocabList[vocabIndex]);
