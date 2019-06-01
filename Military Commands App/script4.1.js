@@ -7,6 +7,7 @@ correctBeep.src = "Audio/bleep.mp3";
 
 //global variables
 var currentAudioPlayingElement; //this stores an element like <button>
+var wrongAns = null;
 
 //page management
 function hidePages(){
@@ -18,14 +19,22 @@ function hidePages(){
 }
 var currentPage = -1; 
 function newPage(){
-    console.log(">>>>>>>newPage>>>>>>>"); 
+    console.log(">>>>>>>newPage>>>>>>>");    
+    var loadMode = 0;
+//    loadDictionary(sedia);
+//    loadMalayWordMCQ(sedia);
     
+    currentPage++;
     
-    currentPage++;       
-    
-//    loadPage(lessonPages2[currentPage]);
-    loadInOrder();
-
+    switch(loadMode){
+        case 0:
+            loadInOrder();
+            break;
+        case 1:
+            loadPage(lessonPages2[currentPage]);
+            break;
+        default:
+    }
 }
 
 //MCQ generation
@@ -82,6 +91,21 @@ function unloadDictionary(dictDiv){
     dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);    
     
     dictDiv.style.display = 'none';    
+    
+    if (wrongAns !== null){
+        dictDiv.getElementsByClassName("correction")[0].style.display="none";
+        
+        wrongAns = null;
+    }
+}
+function correction(wrongVocab, vocab){
+    wrongAns = wrongVocab.malayWord;    
+    document.getElementsByClassName("correction")[0].style.display = "block";
+    document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongAns;
+    
+    
+    
+    loadDictionary(vocab);
 }
 
 //MalayWordMCQ
@@ -90,16 +114,17 @@ var checkMalayWordMCQ = function(event){
     index = event.target.buttonParam[1];
     vocab = event.target.buttonParam[2];
     
-    if (options[index] == vocab){
+    wrongVocab = options[index];
+    
+    if (wrongVocab == vocab){
         correctBeep.play();
         malayWordMCQDiv.style.display = 'none';
 //        console.log('newpage from malaywordmcq')
         newPage();
-    } else {
+    } else {        
         malayWordMCQDiv.style.display = 'none';
-        alert("answer wrong. next page will show the correct answer with english definition");
-        loadDictionary(vocab);
-        
+//        alert("answer wrong. next page will show the correct answer with english definition");
+        correction(wrongVocab, vocab);        
     }
 }
 function loadMalayWordMCQ(vocab){
@@ -146,9 +171,9 @@ var checkDefMCQ = function(event){
 //        console.log("newpage from defmcq")
         newPage();
     } else {
-        alert("answer wrong. next page will show the correct answer with english definition");
-        loadDictionary(vocab);
+//        alert("answer wrong. next page will show the correct answer with english definition");
         defMCQDiv.style.display = 'none';
+        correction(options[index], vocab);
     }
 };
 function loadDefMCQMalayPrompt(vocab){
