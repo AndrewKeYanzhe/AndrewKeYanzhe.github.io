@@ -4,6 +4,7 @@
 var debugMode = false;
 var testMode = true;
 var requiredScore = 20;
+var loadMode = 0;  
 
 //constants
 var correctBleep = new Audio();
@@ -34,8 +35,7 @@ function hidePages(){
 var currentPage = -1;
 function newPage(){
     console.log("%cnewPage", "color:teal");
-    console.log("timesVocabCorrect ".concat(timesVocabCorrect));
-    var loadMode = -1;  
+    console.log("timesVocabCorrect ".concat(timesVocabCorrect));    
 
     currentPage++;
     
