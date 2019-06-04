@@ -3,6 +3,7 @@
 //parameters
 var debugMode = false;
 var testMode = true;
+var requiredScore = 20;
 
 //constants
 var correctBleep = new Audio();
@@ -10,10 +11,17 @@ correctBleep.src = "Audio/correct.mp3";
 var wrongBleep = new Audio();
 wrongBleep.src = "Audio/wrong.mp3";
 
-//global variables
+//global variables to initialise
+var lessonPages = null;
+var testPages = null;
+
+//memory variables
+var currentlyTestedPage = null;
 var currentAudioPlayingElement; //this stores an element like <button>
 var wrongAns = null;
-var lessonPages = null;
+
+//progress variables
+var timesVocabCorrect = Array(vocabList.length).fill(0); //times nth vocab correct is timesVocabCorrect[n]
 
 //page management
 function hidePages(){
@@ -25,32 +33,54 @@ function hidePages(){
 }
 var currentPage = -1;
 function newPage(){
-    console.log("%cnewPage", "color:teal"); 
-    var loadMode = 1;  
+    console.log("%cnewPage", "color:teal");
+    console.log(timesVocabCorrect);
+    var loadMode = 2;  
 
     currentPage++;
     
     switch(loadMode){
         case 0:
-            loadInOrder2();
+            loadInOrder();
             break;
         case 1:
-            //LESSON
+            //**lesson**//
             if (lessonPages == null){
                 lessonPages = generateLesson();
             }            
             loadPage(lessonPages[currentPage]);            
             break;
         case 2:
-            //TEST
+            //**test**//
+            
+            //generating lesson
             if (testPages == null){
-                var testPages = generateTest();
+                testPages = generateTest();
             }
             
-            var timesVocabCorrect = Array(vocabList.length).fill(0); //times nth vocab correct is timesVocabCorrect[n]
-            console.log(timesVocabCorrect);
+            //check if quiz is done
+            var quizDone = true;
+            timesVocabCorrect.forEach(function(score, index){
+               if (score < requiredScore){
+                   quizDone = false;
+               } 
+            });
+            if (quizDone){
+                alert("test is done");
+            }
             
-            loadPage(testPages[0]);
+            //making sure quiz has enough questions
+            if (testPages.length < noOfQuizzes * vocabList.length / 2){
+                testPages = generateTest();
+            }
+            
+            console.log(JSON.stringify(testPages));
+            
+            //removing first element of testPages
+            currentlyTestedPage = testPages[0];
+            testPages.shift();
+            
+            loadPage(currentlyTestedPage);
             break;
         default:
     }
@@ -70,26 +100,35 @@ function generateOptions(vocab){
     return options;
 }
 
+//handling answers
 function handleWrongAns(wrongVocab, vocab, ansType){
     wrongBleep.play();
     wrongAns = wrongVocab;
-    document.getElementsByClassName("correction")[0].style.display = "block";
     switch (ansType){
         case "malayWord":
             document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongVocab.malayWord;
+            document.getElementsByClassName("correction")[0].style.display = "block";
             break;
         case "engDef":
             document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongVocab.engDef;
+            document.getElementsByClassName("correction")[0].style.display = "block";
             break;
-    }   
+        case "soundMCQ":
+            break;
+    }
+    if (testPages !== null){
+        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage);
+    }
     loadDictionary(vocab);
 }
 function handleCorrectAns(vocab){
     correctBleep.play();
+    timesVocabCorrect[vocabList.indexOf(vocab)] = timesVocabCorrect[vocabList.indexOf(vocab)] + 1; 
+    
     newPage();
 }
 
-//pages----------------->
+//pages---------------------------------->
 
 //Dictionary
 var dictContinueButton = function(event){
@@ -382,16 +421,15 @@ function checkSoundMCQ(vocab, soundDiv, options,){
         handleCorrectAns(vocab);
     } else {
         chosen = undefined;
-        alert("answer wrong. next page will show the correct answer with english definition");
-        loadDictionary(vocab);
+//        alert("answer wrong. next page will show the correct answer with english definition");
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         
-//        console.log("hiding SoundDiv");
+        handleWrongAns(null, vocab, "soundMCQ"); //no wrongAns is passed to function
     }
     
 }
-//pages----------------->
+//pages---------------------------------->
 
 //Order of displaying pages
 function loadRandomPage(){
@@ -459,7 +497,7 @@ function loadInOrder2(){
             loadDefMCQMalayPrompt(vocabList[vocabIndex]);
             break;
         case 1:            
-            loadDictionary(vocabList[vocabIndex]);
+            loadSoundMCQ(vocabList[vocabIndex]);
             break;
         case 2:
             loadDefMCQSoundPrompt(vocabList[vocabIndex]);
