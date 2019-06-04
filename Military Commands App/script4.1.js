@@ -34,12 +34,15 @@ function hidePages(){
 var currentPage = -1;
 function newPage(){
     console.log("%cnewPage", "color:teal");
-    console.log(timesVocabCorrect);
-    var loadMode = 2;  
+    console.log("timesVocabCorrect ".concat(timesVocabCorrect));
+    var loadMode = -1;  
 
     currentPage++;
     
     switch(loadMode){
+        case -1:
+            loadSoundMCQ(sedia);
+            break;
         case 0:
             loadInOrder();
             break;
