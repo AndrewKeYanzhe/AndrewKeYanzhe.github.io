@@ -42,10 +42,8 @@ var vocabList = [
 ];
 var noOfVocab = vocabList.length;
 
-var timesVocabCorrect = Array(10).fill(0); //times nth vocab correct is timesVocabCorrect[n]
-
 function generateLesson(){
-    console.log(">>>>>>>>>>>Generating Lesson>>>>>>>>>>>>")
+    console.log("%cgenerating lesson", 'background: white; color: purple')
     
     //CREATING LESSONPAGES [[vocab, pageToShow]...]
     console.log("LESSONPAGES creation [[vocab, pageToShow]...]")
@@ -114,11 +112,13 @@ function generateLesson(){
     });
     console.log("LESSONPAGES recreation by replacing N in PAGE INDICES with LESSONPAGES[N]");
     console.log(JSON.stringify(lessonPages));
+        
+    console.log("%cgenerated lesson", 'background: white; color: purple')
     
     return lessonPages;
 }
 function generateTest(){
-    console.log(">>>>>>>>>>>Generating Test>>>>>>>>>>>>");
+    console.log("%cgenerating test", "color:maroon");
 
     //variables
     var vocabOrder = shuffle(range(noOfVocab)); 
@@ -188,6 +188,9 @@ function generateTest(){
 
     //alternative shuffle algorithm
     //debug(JSON.stringify(shuffle(testPages)));
+    
+    console.log("%cgenerated test", "color:maroon");
+
     
     return testPages;
 }

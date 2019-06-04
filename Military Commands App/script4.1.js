@@ -25,7 +25,7 @@ function hidePages(){
 }
 var currentPage = -1;
 function newPage(){
-    console.log(">>>>>>>newPage>>>>>>>"); 
+    console.log("%cnewPage", "color:teal"); 
     var loadMode = 1;  
 
     currentPage++;
@@ -37,9 +37,9 @@ function newPage(){
         case 1:
             //LESSON
             if (lessonPages == null){
-                var lessonPages = generateLesson();
-            }
-            loadPage(lessonPages[currentPage]);
+                lessonPages = generateLesson();
+            }            
+            loadPage(lessonPages[currentPage]);            
             break;
         case 2:
             //TEST
@@ -130,7 +130,7 @@ function unloadDictionary(dictDiv){
     
     dictDiv.style.display = 'none';    
     
-    console.log(wrongAns)
+//    console.log(wrongAns)
     
     if (wrongAns !== null){
         dictDiv.getElementsByClassName("correction")[0].style.display="none";
