@@ -2,7 +2,6 @@
 
 //parameters
 var debugMode = false;
-var testMode = true;
 var requiredScore = 20;
 var loadMode = 0;  
 
