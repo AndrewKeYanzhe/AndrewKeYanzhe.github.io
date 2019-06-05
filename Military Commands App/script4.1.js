@@ -33,7 +33,7 @@ function hidePages(){
     });
 }
 var currentPage = -1;
-var loadMode = 0;  
+var loadMode = -1;  
 function newPage(){
     console.log("%cnewPage", "color:teal");      
 
@@ -41,7 +41,7 @@ function newPage(){
     
     switch(loadMode){
         case -1:
-            loadPage([Math.floor(Math.random() * 4), 4]);
+            loadPage([Math.floor(Math.random() * 4), 3]);
             break;
         case 0:
             loadInOrder();
@@ -320,8 +320,8 @@ function loadDefMCQSoundPrompt(vocab){
     //console.log(options);
     
     //attach sound to audio button
-    defMCQDiv.getElementsByTagName("h1")[0].addEventListener("click", loadSoundPromptForDefMCQ);
-    defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
+    defMCQDiv.getElementsByClassName("soundPrompt")[0].addEventListener("click", loadSoundPromptForDefMCQ);
+    defMCQDiv.getElementsByClassName("soundPrompt")[0].buttonParam = [vocab];
     
     //display choices   
     var i;

@@ -15,6 +15,26 @@
     color: #2ee4bb !important;
 }
 
+.soundPrompt {
+    background: url(../../Images/audioIcon.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    padding: 2rem 2rem;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: block;
+    background-color: white;
+    box-shadow: 0 5px 10px rgba(154,160,185,.6), 0 15px 40px rgba(166,173,201,.2);
+/*    box-shadow: none;*/
+}
+
+.soundPompt:hover {
+    
+}
+
 .correction h3, .correction h4 {
     text-align: center;
     color: crimson;
