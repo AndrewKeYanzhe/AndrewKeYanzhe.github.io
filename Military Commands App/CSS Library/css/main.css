@@ -10,7 +10,7 @@
     background: url(../../Images/audioIcon.svg); background-repeat: no-repeat; background-position: center; border-radius: 50%; padding: 2rem 2rem;
 }
 
-.soundMCQ:focus {
+.soundMCQ:focus, .soundMCQ:hover {
     box-shadow: inset 0 0 0 2px #2ee4bb;
     color: #2ee4bb !important;
 }
