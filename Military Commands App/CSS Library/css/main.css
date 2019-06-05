@@ -20,6 +20,9 @@
     color: crimson;
 }
 
+.malayText {
+    font-style: oblique;
+}
 /*
 input[type="submit"]:hover,
 input[type="reset"]:hover,

@@ -3,7 +3,6 @@
 //parameters
 var debugMode = false;
 var requiredScore = 20;
-var loadMode = -1;  
 
 //constants
 var correctBleep = new Audio();
@@ -34,6 +33,7 @@ function hidePages(){
     });
 }
 var currentPage = -1;
+var loadMode = 0;  
 function newPage(){
     console.log("%cnewPage", "color:teal");      
 
@@ -112,17 +112,21 @@ function handleWrongAns(wrongVocab, vocab, ansType){
     switch (ansType){
         case "malayWord":
             document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongVocab.malayWord;
+            document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].style.fontStyle = "oblique";
             document.getElementsByClassName("correction")[0].style.display = "block";
             break;
         case "engDef":
             document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].innerHTML = wrongVocab.engDef;
+            document.getElementsByClassName("correction")[0].getElementsByTagName("h3")[0].style.fontStyle = "normal";
             document.getElementsByClassName("correction")[0].style.display = "block";
             break;
         case "soundMCQ":
             break;
     }
     if (testPages !== null){
-        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage);
+        
+        testPages.splice(Math.floor(Math.random() * 3) + 3, 0, currentlyTestedPage);// insert randomly in next 3-6
+//        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage); //insert randomly in whole of test
     }
     loadDictionary(vocab);
 }
