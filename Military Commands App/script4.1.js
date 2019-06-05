@@ -3,7 +3,7 @@
 //parameters
 var debugMode = false;
 var requiredScore = 20;
-var loadMode = 0;  
+var loadMode = -1;  
 
 //constants
 var correctBleep = new Audio();
@@ -21,6 +21,7 @@ var currentAudioPlayingElement; //this stores an element like <button>
 var wrongAns = null;
 
 //progress variables
+var vocabLearnt = Array(vocabList.length).fill(false); 
 var timesVocabCorrect = Array(vocabList.length).fill(0); //times nth vocab correct is timesVocabCorrect[n]
 
 //page management
@@ -33,14 +34,13 @@ function hidePages(){
 }
 var currentPage = -1;
 function newPage(){
-    console.log("%cnewPage", "color:teal");
-    console.log("timesVocabCorrect ".concat(timesVocabCorrect));    
+    console.log("%cnewPage", "color:teal");      
 
     currentPage++;
     
     switch(loadMode){
         case -1:
-            loadSoundMCQ(sedia);
+            loadPage([Math.floor(Math.random() * 4), 0]);
             break;
         case 0:
             loadInOrder();
@@ -54,6 +54,8 @@ function newPage(){
             break;
         case 2:
             //**test**//
+            
+            console.log("timesVocabCorrect ".concat(timesVocabCorrect));  
             
             //generating lesson
             if (testPages == null){
@@ -153,6 +155,14 @@ function loadDictionary(vocab){
     dictDiv = document.getElementById("dictionary");
     //show dictionary page
     dictDiv.style.display = 'block';
+    
+
+    
+    //play pronounciation on the first time
+    if (vocabLearnt[vocabList.indexOf(vocab)] == false){
+        vocab.sound.play();
+        vocabLearnt[vocabList.indexOf(vocab)] = true;
+    }
 
     //load data
     dictDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
