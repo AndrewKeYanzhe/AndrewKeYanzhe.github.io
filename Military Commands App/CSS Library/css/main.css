@@ -339,7 +339,7 @@ input, select, textarea {
 	@media screen and (max-width: 360px) {
 
 		h1 {
-			font-size: 3.75rem;
+			font-size: 1.75rem; /* edited */
 		}
 
 		h2 {
@@ -1974,7 +1974,7 @@ input, select, textarea {
 			font-size: 0.7rem;
 			height: 3.2625rem;
 			line-height: 3.2625rem;
-			padding: 0 3.25rem;
+			padding: 0 1.25rem;
 		}
 
 		input[type="submit"].wide,
@@ -3792,7 +3792,7 @@ input, select, textarea {
 			}
 
 				#wrapper > section > header {
-					padding: 2.25rem 1.5rem;
+					padding: 1.5rem 1.5rem;
 				}
 
 				#wrapper > section > .content {

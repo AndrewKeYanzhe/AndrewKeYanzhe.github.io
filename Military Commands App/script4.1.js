@@ -40,6 +40,9 @@ function newPage(){
     currentPage++;
     
     switch(loadMode){
+        case -2:
+            loadMainMenu();
+            break;
         case -1:
             loadPage([Math.floor(Math.random() * 4), 3]);
             break;
@@ -139,6 +142,13 @@ function handleCorrectAns(vocab){
 }
 
 //pages---------------------------------->
+
+//Main Menu
+function loadMainMenu(){
+    mainMenuSec = document.getElementById("mainMenu");
+    
+    mainMenuSec.style.display = "block";
+}
 
 //Dictionary
 var dictContinueButton = function(event){
