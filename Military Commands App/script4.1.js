@@ -3,7 +3,7 @@
 //parameters
 var debugMode = false;
 var requiredScore = 20;
-var loadMode = -1;  
+var loadMode = 1;  
 
 //constants
 var correctBleep = new Audio();
@@ -19,6 +19,7 @@ var testPages = null;
 var currentlyTestedPage = null;
 var currentAudioPlayingElement; //this stores an element like <button>
 var wrongAns = null;
+var showingLessons = false;
 
 //progress variables
 var vocabLearnt = Array(vocabList.length).fill(false); 
@@ -49,12 +50,12 @@ function newPage(){
             //**lesson**//
             if (lessonPages == null){
                 lessonPages = generateLesson();
+                showingLessons = true;
             }            
             loadPage(lessonPages[currentPage]);            
             break;
         case 2:
-            //**test**//
-            
+            //**test**//            
             console.log("timesVocabCorrect ".concat(timesVocabCorrect));  
             
             //generating lesson
@@ -156,10 +157,8 @@ function loadDictionary(vocab){
     //show dictionary page
     dictDiv.style.display = 'block';
     
-
-    
-    //play pronounciation on the first time
-    if (vocabLearnt[vocabList.indexOf(vocab)] == false){
+    //autoplay pronounciation on the first time
+    if (vocabLearnt[vocabList.indexOf(vocab)] == false && showingLessons){
         vocab.sound.play();
         vocabLearnt[vocabList.indexOf(vocab)] = true;
     }
