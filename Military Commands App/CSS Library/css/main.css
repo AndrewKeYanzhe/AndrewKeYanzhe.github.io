@@ -22,7 +22,7 @@
 
 .malayText {
     font-style: oblique;
-}
+} /*wrongAns div is italicised via JS*/
 /*
 input[type="submit"]:hover,
 input[type="reset"]:hover,
