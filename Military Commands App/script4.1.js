@@ -3,6 +3,7 @@
 //parameters
 var debugMode = false;
 var requiredScore = 20;
+var autoPlayPronounciationDelay = 700; //in ms
 
 //constants
 var correctBleep = new Audio();
@@ -32,12 +33,14 @@ function hidePages(){
         element.style.display = 'none';
     });
 }
-var currentPage = -1;
-var loadMode = 0;  
+var currentPage = null;
+var loadMode = -2;  
 function newPage(){
-    console.log("%cnewPage", "color:teal");      
-
-    currentPage++;
+    console.log("%cnewPage", "color:teal");
+    
+    if (currentPage !== null){
+        currentPage++;
+    }    
     
     switch(loadMode){
         case -2:
@@ -47,6 +50,9 @@ function newPage(){
             loadPage([Math.floor(Math.random() * 4), 3]);
             break;
         case 0:
+            if (currentPage == null){
+                currentPage = 0;
+            }
             loadInOrder();
             break;
         case 1:
@@ -54,7 +60,12 @@ function newPage(){
             if (lessonPages == null){
                 lessonPages = generateLesson();
                 showingLessons = true;
-            }            
+            }
+            if (currentPage == null){
+                currentPage = 0;
+            }
+//            console.log(currentPage);
+//            console.log(JSON.stringify(lessonPages));
             loadPage(lessonPages[currentPage]);            
             break;
         case 2:
@@ -145,9 +156,21 @@ function handleCorrectAns(vocab){
 
 //Main Menu
 function loadMainMenu(){
-    mainMenuSec = document.getElementById("mainMenu");
+    mainMenuSect = document.getElementById("mainMenu");
     
-    mainMenuSec.style.display = "block";
+    mainMenuSect.style.display = "block";
+    mainMenuSect.getElementsByClassName("learnButton")[0].addEventListener("click", function(){
+        loadMode = 1;
+        mainMenuSect.style.display = "none";
+        newPage();
+//        console.log(loadMode);
+    });
+    mainMenuSect.getElementsByClassName("testButton")[0].addEventListener("click", function(){
+        loadMode = 2;
+        mainMenuSect.style.display = "none";
+        newPage();
+//        console.log(loadMode);
+    });    
 }
 
 //Dictionary
@@ -174,7 +197,10 @@ function loadDictionary(vocab){
     
     //autoplay pronounciation on the first time
     if (vocabLearnt[vocabList.indexOf(vocab)] == false && showingLessons){
-        vocab.sound.play();
+//        vocab.sound.play();
+        setTimeout(function(){
+            vocab.sound.play(); 
+        }, autoPlayPronounciationDelay); 
         vocabLearnt[vocabList.indexOf(vocab)] = true;
     }
 
