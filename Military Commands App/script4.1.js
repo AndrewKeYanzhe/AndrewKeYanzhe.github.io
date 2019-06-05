@@ -33,7 +33,7 @@ function hidePages(){
     });
 }
 var currentPage = -1;
-var loadMode = -1;  
+var loadMode = 0;  
 function newPage(){
     console.log("%cnewPage", "color:teal");      
 
@@ -128,6 +128,7 @@ function handleWrongAns(wrongVocab, vocab, ansType){
         testPages.splice(Math.floor(Math.random() * 3) + 3, 0, currentlyTestedPage);// insert randomly in next 3-6
 //        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage); //insert randomly in whole of test
     }
+    document.getElementById("dictionary").classList.add('dictionaryCorrection');
     loadDictionary(vocab);
 }
 function handleCorrectAns(vocab){
@@ -188,6 +189,7 @@ function unloadDictionary(dictDiv){
     
     if (wrongAns !== null){
         dictDiv.getElementsByClassName("correction")[0].style.display="none";
+        dictDiv.classList.remove('dictionaryCorrection');
         
         wrongAns = null;
     }

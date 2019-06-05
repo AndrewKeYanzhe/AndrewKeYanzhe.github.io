@@ -45,16 +45,22 @@
 .malayText {
     font-style: oblique;
 } /*wrongAns div is italicised via JS*/
-/*
-input[type="submit"]:hover,
-input[type="reset"]:hover,
-input[type="button"]:hover,
-button:hover,
-.button:hover {
-    box-shadow: inset 0 0 0 2px #2ee4bb;
-    color: #2ee4bb !important;
+
+
+.dictionaryCorrection > header {
+    background-image: url("../../Experiments/bg.svg") !important;
+    background-color: FC4971 !important;
 }
-*/
+
+.dictionaryCorrection > div > .actions > li > a {
+    background-color: FC4971;
+    color: white !important;
+}
+
+.dictionaryCorrection > header > h2, .dictionaryCorrection > header > h1 {
+    color: #ffeaef;
+/*    color: white;*/
+}
 
 html, body, div, span, applet, object,
 iframe, h1, h2, h3, h4, h5, h6, p, blockquote,
