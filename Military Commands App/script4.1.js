@@ -3,7 +3,7 @@
 //parameters
 var debugMode = false;
 var requiredScore = 20;
-var loadMode = 1;  
+var loadMode = -1;  
 
 //constants
 var correctBleep = new Audio();
@@ -41,7 +41,7 @@ function newPage(){
     
     switch(loadMode){
         case -1:
-            loadPage([Math.floor(Math.random() * 4), 0]);
+            loadPage([Math.floor(Math.random() * 4), 4]);
             break;
         case 0:
             loadInOrder();
