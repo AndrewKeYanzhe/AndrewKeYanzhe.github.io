@@ -2,7 +2,7 @@
 
 //parameters
 var debugMode = false;
-var requiredScore = 20;
+var requiredScore = 2;
 var autoPlayPronounciationDelay = 0; //in ms
 
 //constants
@@ -19,7 +19,6 @@ var testPages = null;
 var currentlyTestedPage = null;
 var currentAudioPlayingElement; //this stores an element like <button>
 var wrongAns = null;
-var showingLessons = false;
 
 //progress variables
 var vocabLearnt = Array(vocabList.length).fill(false); 
@@ -59,18 +58,25 @@ function newPage(){
             //**lesson**//
             if (lessonPages == null){
                 lessonPages = generateLesson();
-                showingLessons = true;
             }
             if (currentPage == null){
                 currentPage = 0;
             }
-//            console.log(currentPage);
+            console.log(currentPage);
 //            console.log(JSON.stringify(lessonPages));
+            if (currentPage > lessonPages.length - 1) {
+                currentPage = null;
+                loadMode = -2;
+                lessonPages = null;
+                newPage();
+                break;
+            }
+//            console.log("hi")
             loadPage(lessonPages[currentPage]);            
             break;
         case 2:
             //**test**//            
-            console.log("timesVocabCorrect ".concat(timesVocabCorrect));  
+            console.log("timesVocabCorrect ".concat(timesVocabCorrect));
             
             //generating lesson
             if (testPages == null){
@@ -86,6 +92,12 @@ function newPage(){
             });
             if (quizDone){
                 alert("test is done");
+                loadMode = -2;
+                testPages = null;
+                timesVocabCorrect = Array(vocabList.length).fill(0); 
+                newPage();
+                break;                
+                //delete testpages go menu
             }
             
             //making sure quiz has enough questions
@@ -147,31 +159,39 @@ function handleWrongAns(wrongVocab, vocab, ansType){
 }
 function handleCorrectAns(vocab){
     correctBleep.play();
-    timesVocabCorrect[vocabList.indexOf(vocab)] = timesVocabCorrect[vocabList.indexOf(vocab)] + 1; 
-    
+    if (testPages !== null){
+        timesVocabCorrect[vocabList.indexOf(vocab)] = timesVocabCorrect[vocabList.indexOf(vocab)] + 1; 
+    }    
     newPage();
 }
 
 //pages---------------------------------->
 
 //Main Menu
+var learnButton = function(event){
+    loadMode = 1;
+    document.getElementById("mainMenu").style.display = 'none';
+    unloadMainMenu();
+    newPage();
+}
+var testButton = function(event){
+    loadMode = 2;
+    document.getElementById("mainMenu").style.display = 'none';
+    unloadMainMenu();
+    newPage();
+}
+function unloadMainMenu(){
+    document.getElementsByClassName("learnButton")[0].removeEventListener("click", learnButton);
+    document.getElementsByClassName("testButton")[0].removeEventListener("click", testButton);
+}
 function loadMainMenu(){
     mainMenuSect = document.getElementById("mainMenu");
     
     mainMenuSect.style.display = "block";
-    mainMenuSect.getElementsByClassName("learnButton")[0].addEventListener("click", function(){
-        loadMode = 1;
-        mainMenuSect.style.display = "none";
-        newPage();
-//        console.log(loadMode);
-    });
-    mainMenuSect.getElementsByClassName("testButton")[0].addEventListener("click", function(){
-        loadMode = 2;
-        mainMenuSect.style.display = "none";
-        newPage();
-//        console.log(loadMode);
-    });    
+    mainMenuSect.getElementsByClassName("learnButton")[0].addEventListener("click", learnButton);
+    mainMenuSect.getElementsByClassName("testButton")[0].addEventListener("click", testButton);   
 }
+
 
 //Dictionary
 var dictContinueButton = function(event){
@@ -195,8 +215,8 @@ function loadDictionary(vocab){
     //show dictionary page
     dictDiv.style.display = 'block';
     
-    //autoplay pronounciation on the first time
-    if (vocabLearnt[vocabList.indexOf(vocab)] == false && showingLessons){
+    //autoplay pronounciation on the first time, for lesson only
+    if (vocabLearnt[vocabList.indexOf(vocab)] == false && lessonPages !== null){
 //        vocab.sound.play();
         setTimeout(function(){
             vocab.sound.play(); 
@@ -329,8 +349,6 @@ function loadDefMCQMalayPrompt(vocab){
         defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
         defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
     }
-    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
-
 }
 
 //Def MCQ Sound Prompt
@@ -373,8 +391,6 @@ function loadDefMCQSoundPrompt(vocab){
         defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].addEventListener("click", checkDefMCQ);    
         defMCQDiv.getElementsByClassName("def".concat(String(j)))[0].buttonParam = [options, j, vocab]; 
     }
-    //defMCQDiv.getElementsByClassName("def1")[0].addEventListener("click", function(){chosen = options[1]; checkDefMCQ(vocab, defMCQDiv, options)}) 
-
 }
 
 //SoundMCQ
