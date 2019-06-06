@@ -3,7 +3,7 @@
 //parameters
 var debugMode = false;
 var requiredScore = 20;
-var autoPlayPronounciationDelay = 700; //in ms
+var autoPlayPronounciationDelay = 0; //in ms
 
 //constants
 var correctBleep = new Audio();
@@ -143,7 +143,7 @@ function handleWrongAns(wrongVocab, vocab, ansType){
 //        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage); //insert randomly in whole of test
     }
     document.getElementById("dictionary").classList.add('dictionaryCorrection');
-    loadDictionary(vocab);
+    loadDictionary(vocab);    
 }
 function handleCorrectAns(vocab){
     correctBleep.play();
@@ -386,7 +386,7 @@ var loadSoundButton = function(event){
     
     //pause other sounds
     if (typeof currentAudioPlayingElement !== "undefined"){
-        malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]];
+        malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]]; //old audio playing
         //console.log(malayCommandObjBeingPlayed.malayWord);
         malayCommandObjBeingPlayed.sound.pause();
         malayCommandObjBeingPlayed.sound.currentTime = 0;
