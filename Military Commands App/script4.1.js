@@ -250,17 +250,17 @@ function loadDictionary(vocab){
     //vocab.sound.play();
 }
 function unloadDictionary(dictDiv){
-    console.log("unloading dict");
+//    console.log("unloading dict");
     dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);    
     
     dictDiv.style.display = 'none';    
     
-    console.log(wrongAns)
+//    console.log(wrongAns)
     
     if (wrongAns !== null){
         dictDiv.getElementsByClassName("correction")[0].style.display="none";
         dictDiv.classList.remove('dictionaryCorrection');
-        console.log("dictDivClassList ".concat(JSON.stringify(dictDiv.classList)))
+//        console.log("dictDivClassList ".concat(JSON.stringify(dictDiv.classList)))
         
         wrongAns = null;
     }
