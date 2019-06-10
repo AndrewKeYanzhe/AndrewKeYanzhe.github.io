@@ -7,6 +7,43 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+/*   background-color: #438ad9;*/
+   color: white;
+/*    -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.75);*/
+/*    -moz-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.75);*/
+    box-shadow: 0 20px 40px rgba(154,160,185,1), 0 30px 40px rgba(166,173,201,1);
+
+}
+
+.footer {
+    display: none;
+}
+
+#footerHeader {
+    margin: 1rem 0rem 1rem 0rem;
+/*    color: #d99243;*/
+}
+
+.footer-content {
+    padding-left: 2rem;
+    padding-right: 2rem;
+    
+}
+
+.progress {
+    height: 0.5rem;
+    border-radius:0px;
+    margin-bottom: 0px;
+}
+
+.progress-Bar {
+    background-color: 	#fcd449;
+}
 
 .mainMenu {
     display: table;
@@ -71,12 +108,10 @@
     background-image: url("../../Images/redBgLines.svg") !important;
     background-color: FC4971 !important;
 }
-
 .dictionaryCorrection > div > .actions > li > a {
     background-color: FC4971;
     color: white !important;
 }
-
 .dictionaryCorrection > header > h2, .dictionaryCorrection > header > h1 {
     color: #ffeaef;
 /*    color: white;*/
@@ -3779,7 +3814,7 @@ input, select, textarea {
 				}
 
 				#wrapper > section > .content {
-					padding: 3rem 2rem;
+					padding: 2rem 2rem;
 /*                    edited*/
 				}
 

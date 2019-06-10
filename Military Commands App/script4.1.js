@@ -19,6 +19,7 @@ var testPages = null;
 var currentlyTestedPage = null;
 var currentAudioPlayingElement; //this stores an element like <button>
 var wrongAns = null;
+var progressBarCounter = null;
 
 //progress variables
 var vocabLearnt = Array(vocabList.length).fill(false); 
@@ -62,16 +63,29 @@ function newPage(){
             if (currentPage == null){
                 currentPage = 0;
             }
-            console.log(currentPage);
-//            console.log(JSON.stringify(lessonPages));
+            console.log("currentPage ".concat(currentPage));
+
+            //end lesson
             if (currentPage > lessonPages.length - 1) {
                 currentPage = null;
                 loadMode = -2;
-                lessonPages = null;
+                lessonPages = null;                document.getElementsByClassName("footer")[0].style.display="none";
+                progressBarCounter = null;
+                vocabLearnt = Array(vocabList.length).fill(false);
                 newPage();
                 break;
             }
-//            console.log("hi")
+            
+            //loading footer
+            document.getElementsByClassName("footer")[0].style.display="block";            
+            if (progressBarCounter == null) {
+                progressBarCounter = 0;
+            }
+            progressBarCounter = progressBarCounter + 1;
+//            console.log(JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"))
+            $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"));
+            
+
             loadPage(lessonPages[currentPage]);            
             break;
         case 2:
@@ -236,16 +250,17 @@ function loadDictionary(vocab){
     //vocab.sound.play();
 }
 function unloadDictionary(dictDiv){
-    //console.log("unloading dict");
+    console.log("unloading dict");
     dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);    
     
     dictDiv.style.display = 'none';    
     
-//    console.log(wrongAns)
+    console.log(wrongAns)
     
     if (wrongAns !== null){
         dictDiv.getElementsByClassName("correction")[0].style.display="none";
         dictDiv.classList.remove('dictionaryCorrection');
+        console.log("dictDivClassList ".concat(JSON.stringify(dictDiv.classList)))
         
         wrongAns = null;
     }
@@ -270,10 +285,7 @@ function loadMalayWordMCQ(vocab){
     //display div
     malayWordMCQDiv = document.getElementById("malayWordMCQ");    
     malayWordMCQDiv.style.display = 'block';
-    
-    //vocab is the correct answer    
-    //var chosen tracks the option selected by the user
-//    var chosen = null;    
+      
     var options = generateOptions(vocab);
     //console.log(options); 
     
@@ -301,8 +313,7 @@ var checkDefMCQ = function(event){
     
     //pause all sounds
     vocab.sound.pause();
-    vocab.sound.currentTime = 0;
-    //chosen = options[index];  
+    vocab.sound.currentTime = 0;  
 
     if (options[index] == vocab){
         defMCQDiv.style.display = 'none';
@@ -314,15 +325,9 @@ var checkDefMCQ = function(event){
     }
 };
 function loadDefMCQMalayPrompt(vocab){
-    //vocab is the correct answer    
-    //var chosen tracks the option selected by the user
-//    var chosen;
-    
     //show page
     defMCQDiv = document.getElementById("defMCQMalayPrompt");    
     defMCQDiv.style.display = 'block';
-    
- 
     
     //creating options list
     var incorrectDefList = vocabList.filter(item => item !== vocab);
@@ -357,11 +362,6 @@ var loadSoundPromptForDefMCQ = function(event){
     vocab.sound.play();
 }
 function loadDefMCQSoundPrompt(vocab){
-    //vocab is the correct answer
-    
-    //var chosen tracks the option selected by the user
-//    var chosen;
-    
     //show page
     defMCQDiv = document.getElementById("defMCQSoundPrompt");    
     defMCQDiv.style.display = 'block';
@@ -394,6 +394,7 @@ function loadDefMCQSoundPrompt(vocab){
 }
 
 //SoundMCQ
+var chosen = null;
 var loadSoundButton = function(event){
     //console.log("loading soundbutton sound and setting var chosen");
     //options, index
@@ -430,13 +431,11 @@ function loadSoundCheckButton(event){
 }
 function loadSoundMCQ(vocab){
 //    console.log(">>>>>function loadSoundMCQ(vocab)")
-    var chosen = null; //this keeps track of the option the user chooses and by default is undefined
-//    console.log(chosen);
-//    console.log(chosen == null);
+    chosen = null; //this keeps track of the option the user chooses 
+    
     //show page
     soundDiv = document.getElementById("soundMCQ");
-    soundDiv.style.display = 'block';
-    
+    soundDiv.style.display = 'block';    
 
     //creating options list
     var incorrectSoundList = vocabList.filter(item => item !== vocab);
@@ -482,19 +481,19 @@ function checkSoundMCQ(vocab, soundDiv, options,){
     
     //check answer
 //    console.log(chosen);
-    if (typeof chosen === "undefined"){
+    if (chosen == null){
         alert("Please select an option");
     } else if (chosen == vocab){
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         handleCorrectAns(vocab);
     } else {
-        chosen = undefined;
-//        alert("answer wrong. next page will show the correct answer with english definition");
+        var wrongAns = chosen;
+        chosen = null;
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
         
-        handleWrongAns(null, vocab, "soundMCQ"); //no wrongAns is passed to function
+        handleWrongAns(wrongAns, vocab, "soundMCQ"); //no wrongAns is passed to function
     }
     
 }
