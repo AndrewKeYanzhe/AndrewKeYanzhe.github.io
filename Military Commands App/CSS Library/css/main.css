@@ -7,6 +7,10 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 */
 
+#lessonOverview h3, #lessonOverview h4 {
+    margin: 0;
+}
+
 .footer {
    position: fixed;
    left: 0;
@@ -17,22 +21,34 @@
 /*    -webkit-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.75);*/
 /*    -moz-box-shadow: 0px -4px 5px 0px rgba(0,0,0,0.75);*/
     box-shadow: 0 20px 40px rgba(154,160,185,1), 0 30px 40px rgba(166,173,201,1);
-
 }
-
 .footer {
     display: none;
 }
-
 #footerHeader {
     margin: 1rem 0rem 1rem 0rem;
 /*    color: #d99243;*/
 }
-
 .footer-content {
     padding-left: 2rem;
-    padding-right: 2rem;
-    
+    padding-right: 2rem;  
+    display: flex;
+    justify-content: space-between;
+}
+.footer button {
+/*    position: absolute;*/
+/*    top:50%;*/
+/*    transform: translateY(-50%);*/
+/*    right: 2rem;*/
+    height: 2.5rem;
+    padding: 0 1rem;;
+    line-height: 2rem;
+    font-size: 1rem;
+    color: grey !important;
+/*    margin: auto;*/
+/*    top: 0; left: auto; bottom: 0; right: 1rem;    */
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .progress {
@@ -40,7 +56,6 @@
     border-radius:0px;
     margin-bottom: 0px;
 }
-
 .progress-Bar {
     background-color: 	#fcd449;
 }
@@ -2875,9 +2890,11 @@ input, select, textarea {
 			border-right: 0;
 		}
 
+/*
 			table tbody tr:nth-child(2n + 1) {
 				background-color: rgba(144, 144, 144, 0.1);
 			}
+*/
 
 		table td {
 			padding: 0.75rem 0.75rem;

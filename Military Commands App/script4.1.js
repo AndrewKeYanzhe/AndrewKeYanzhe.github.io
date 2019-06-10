@@ -12,7 +12,7 @@ var correctBleep = new Audio();
 correctBleep.src = "Audio/correct.mp3";
 var wrongBleep = new Audio();
 wrongBleep.src = "Audio/wrong.mp3";
-var allVocab = {}; //initialised with vocabScore
+var allVocab = {}; //dictionary, "malayCommand":vocab - initialised with vocabScore
 
 //memory
 var currentlyTestedPage = null;
@@ -22,14 +22,15 @@ var progressBarCounter = null;
 var vocabList = [];
 var lessonPages = null;
 var testPages = null;
+var currentSect = null;
 
 //data
 var vocabScore = {}
 lessonList.forEach(function (lesson, index){
-   lesson.forEach(function(vocab, index){
-       vocabScore[vocab.malayWord] = 0;
-       allVocab[vocab.malayWord] = vocab;
-   }); 
+    lesson.forEach(function(vocab, index){
+        vocabScore[vocab.malayWord] = 0;
+        allVocab[vocab.malayWord] = vocab;
+    }); 
 });
 console.log(vocabScore)
 var testVocabList = []; //stores malayCommand obj
@@ -45,7 +46,7 @@ function loadLesson(){
     console.log(vocabScore);
     if (lessonPages == null){
         vocabList = lesson1;
-        document.getElementById("footerHeader").innerHTML = "Lesson1"
+        document.getElementById("footerHeader").innerHTML = "Lesson1";
         lessonPages = generateLesson(lesson1);
         vocabLearnt = Array(vocabList.length).fill(false); 
     }
@@ -56,21 +57,9 @@ function loadLesson(){
 
     //end lesson
     if (currentPage > lessonPages.length - 1) {
-        vocabList.forEach(function (vocab, index){
-            if (!testVocabList.includes(vocab)){
-               testVocabList.push(vocab);
-            } 
-        });
-        vocabList = [];
-    
-        currentPage = null;
-        loadMode = -2;
-        lessonPages = null;
-        
-        progressBarCounter = null;      
-        document.getElementsByClassName("footer")[0].style.display="none";
-    
-        newPage();
+        progressBarCounter = progressBarCounter + 1;
+        $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"));
+        loadLessonOverview();
         return;
     }
 
@@ -81,21 +70,40 @@ function loadLesson(){
     }
     progressBarCounter = progressBarCounter + 1;
     $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"));
+    document.getElementsByClassName("goHome")[0].addEventListener("click", goHome);
 
 
     loadPage(lessonPages[currentPage]);    
 }
+function unloadLesson(){
+    vocabList.forEach(function (vocab, index){
+        if (!testVocabList.includes(vocab)){
+            testVocabList.push(vocab);
+        } 
+    });
+    vocabList = [];
+
+    currentPage = null;
+    loadMode = -2;
+    lessonPages = null;
+
+    progressBarCounter = null;    
+    document.getElementsByClassName("goHome")[0].removeEventListener("click", goHome);
+    document.getElementsByClassName("footer")[0].style.display="none";
+
+    newPage();
+}
 function loadTest(){
     console.log(vocabScore);
     console.log("currentPage ".concat(currentPage));
-    
+
     if (testVocabList.length == 0){
         alert("do a lesson first");
         loadMode = -2;
         newPage();
         return;
     }
-    
+
     if (currentPage == null){
         currentPage = 0;
     }
@@ -107,28 +115,14 @@ function loadTest(){
         console.log(testVocabList);
         document.getElementById("footerHeader").innerHTML = "Test"
     }
-    
+
     //check if quiz is done
     if (currentPage >= reqTestQns){
-        alert("test is done");
-        loadMode = -2;
-        for (var key in vocabScore){
-            if (vocabScore[key] >= requiredScore && testVocabList.includes(allVocab[key])){
-               testVocabList.splice(testVocabList.indexOf(vocab), 1);
-                console.log(key.concat(" mastered"))
-            }        
-        }
-        vocabList = [];
-        testPages = null;
-        currentPage = null;
-        
-        progressBarCounter = null;      
-        document.getElementsByClassName("footer")[0].style.display="none";
-        
-        newPage();
+        alert("test is done"); //change to a score page
+        unloadTest();
         return;                
     }
-    
+
     //making sure quiz has enough questions
     if (testPages.length < noOfQuizzes * vocabList.length / 2){
         testPages = generateTest(vocabList);
@@ -139,7 +133,7 @@ function loadTest(){
     //removing first element of testPages
     currentlyTestedPage = testPages[0];
     testPages.shift();
-    
+
     //loading footer
     document.getElementsByClassName("footer")[0].style.display="block";            
     if (progressBarCounter == null) {
@@ -148,15 +142,35 @@ function loadTest(){
     progressBarCounter = progressBarCounter + 1;
 
     $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(reqTestQns+1)).concat("%"));
+    document.getElementsByClassName("goHome")[0].addEventListener("click", goHome);
 
     loadPage(currentlyTestedPage);
+}
+function unloadTest(){
+    document.getElementsByClassName("goHome")[0].removeEventListener("click", goHome);
+
+    loadMode = -2;
+    for (var key in vocabScore){
+        if (vocabScore[key] >= requiredScore && testVocabList.includes(allVocab[key])){
+            testVocabList.splice(testVocabList.indexOf(vocab), 1);
+            console.log(key.concat(" mastered"))
+        }        
+    }
+    vocabList = [];
+    testPages = null;
+    currentPage = null;
+
+    progressBarCounter = null;      
+    document.getElementsByClassName("footer")[0].style.display="none";
+
+    newPage();
 }
 
 //page management
 function hidePages(){
     //console.log(document.getElementsByTagName("div"));
     Array.from(document.getElementsByTagName("div")).forEach(function(element){
-       //console.log(element);
+        //console.log(element);
         element.style.display = 'none';
     });
 }
@@ -164,12 +178,15 @@ var currentPage = null;
 var loadMode = -2;  
 function newPage(){
     console.log("%cnewPage", "color:teal");
-    
+
     if (currentPage !== null){
         currentPage++;
     }    
-    
+
     switch(loadMode){
+        case -3:
+            loadLessonOverview();
+            break;
         case -2:
             loadMainMenu();
             break;
@@ -177,6 +194,7 @@ function newPage(){
             loadPage([Math.floor(Math.random() * 4), 3]);
             break;
         case 0:
+            vocabList = lesson1;
             if (currentPage == null){
                 currentPage = 0;
             }
@@ -189,20 +207,20 @@ function newPage(){
             loadTest();
             break;
         default:
-    }
+                   }
 }
 
 //MCQ options generation
 function generateOptions(vocab){
     //creating list of 4 items - 1 correct and 3 incorrect from vocablist
     var incorrectDefList = vocabList.filter(item => item !== vocab);
-    
+
     //shuffle once to get 3 random wrong answers
     incorrectDefList = shuffle(incorrectDefList);
-    
+
     //shuffle a second time to change order of options displayed
     var options = shuffle([vocab, incorrectDefList[0], incorrectDefList[1], incorrectDefList[2]]);    
-    
+
     return options;
 }
 
@@ -223,11 +241,11 @@ function handleWrongAns(wrongVocab, vocab, ansType){
             break;
         case "soundMCQ":
             break;
-    }
+                   }
     if (testPages !== null){
-        
+
         testPages.splice(Math.floor(Math.random() * 3) + 3, 0, currentlyTestedPage);// insert randomly in next 3-6
-//        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage); //insert randomly in whole of test
+        //        testPages.splice(Math.floor(Math.random() * testPages.length) + 1, 0, currentlyTestedPage); //insert randomly in whole of test
     }
     document.getElementById("dictionary").classList.add('dictionaryCorrection');
     loadDictionary(vocab);    
@@ -236,7 +254,7 @@ function handleCorrectAns(vocab){
     correctBleep.play();
 
     vocabScore[vocab.malayWord] = vocabScore[vocab.malayWord] + 1;
-    
+
     newPage();
 }
 
@@ -261,10 +279,60 @@ function unloadMainMenu(){
 }
 function loadMainMenu(){
     mainMenuSect = document.getElementById("mainMenu");
-    
+
     mainMenuSect.style.display = "block";
     mainMenuSect.getElementsByClassName("learnButton")[0].addEventListener("click", learnButton);
     mainMenuSect.getElementsByClassName("testButton")[0].addEventListener("click", testButton);   
+}
+
+//Lesson Overview
+var goHome = function(Event){
+    currentSect.style.display = "none";
+    if (lessonPages !== null){
+        unloadLesson();
+    }
+    if (testPages !== null){
+        unloadTest();
+    }
+
+}
+function loadLessonOverview(){
+    document.getElementById("footerHeader").innerHTML = "Complete"
+
+    lessonOverviewSect = document.getElementById("lessonOverview");
+    currentSect = lessonOverviewSect;
+    lessonOverviewSect.style.display = "block";
+    lessonOverviewSect.getElementsByTagName("header")[0].getElementsByTagName("h1")[0].innerHTML = "lesson1";
+    lessonOverviewSect.getElementsByClassName("content")[0].getElementsByTagName("h2")[0].innerHTML = JSON.stringify(lesson1.length).concat(" commands")
+    lesson1.forEach(function(vocab, index){
+        var lessonOverviewTable = lessonOverviewSect.getElementsByClassName("lessonOverviewTable")[0];
+        var overviewTr = document.createElement("tr");
+        var overviewTd = document.createElement("td");
+        var overviewH3 = document.createElement("h3");
+        var overviewH4 = document.createElement("h4");
+        lessonOverviewTable.appendChild(overviewTr);
+        overviewTr.appendChild(overviewTd);
+        overviewTd.appendChild(overviewH3);
+        overviewTd.appendChild(overviewH4);
+        overviewH3.innerHTML = vocab.malayWord;
+        overviewH4.innerHTML = vocab.engDef;
+
+        //CSS
+        overviewTr.style.border = " solid 1px rgba(144, 144, 144, 0.25)";
+        overviewTr.style.borderLeft = "0";
+        overviewTr.style.borderRight = "0";
+        overviewH3.style.fontWeight = "bold";
+    });
+
+    //    setTimeout(function() {
+    //        unloadLessonOverview();
+    //    }, 1000);
+
+}
+function unloadLessonOverview(){
+    while (document.getElementsByClassName("lessonOverviewTable")[0].firstChild){
+        document.getElementsByClassName("lessonOverviewTable")[0].removeChild(document.getElementsByClassName("lessonOverviewTable")[0].firstChild);
+    }
 }
 
 //Dictionary
@@ -272,7 +340,7 @@ var dictContinueButton = function(event){
     vocab = event.target.buttonParam[0];
     vocab.sound.pause();
     vocab.sound.currentTime = 0;
-    
+
     unloadDictionary(dictDiv);
     //console.log('newpage from dict')
     newPage();
@@ -282,16 +350,17 @@ var loadDictionaryAudio = function(event){
 
     vocab.sound.play();
 
-    
+
 }
 function loadDictionary(vocab){
     dictDiv = document.getElementById("dictionary");
+    currentSect = dictDiv;
     //show dictionary page
     dictDiv.style.display = 'block';
-    
+
     //autoplay pronounciation on the first time, for lesson only
     if (vocabLearnt[vocabList.indexOf(vocab)] == false && lessonPages !== null){
-//        vocab.sound.play();
+        //        vocab.sound.play();
         setTimeout(function(){
             vocab.sound.play(); 
         }, autoPlayPronounciationDelay); 
@@ -303,25 +372,25 @@ function loadDictionary(vocab){
     document.getElementById("engDef").innerHTML = vocab.engDef;
     dictDiv.getElementsByClassName("pronounciation")[0].addEventListener("click", loadDictionaryAudio);
     dictDiv.getElementsByClassName("pronounciation")[0].buttonParam = [vocab];
-    
+
     dictDiv.getElementsByClassName("continue")[0].addEventListener("click", dictContinueButton);
     dictDiv.getElementsByClassName("continue")[0].buttonParam=[vocab];
-    
+
     //vocab.sound.play();
 }
 function unloadDictionary(dictDiv){
-//    console.log("unloading dict");
+    //    console.log("unloading dict");
     dictDiv.getElementsByClassName("continue")[0].removeEventListener("click", dictContinueButton);    
-    
+
     dictDiv.style.display = 'none';    
-    
-//    console.log(wrongAns)
-    
+
+    //    console.log(wrongAns)
+
     if (wrongAns !== null){
         dictDiv.getElementsByClassName("correction")[0].style.display="none";
         dictDiv.classList.remove('dictionaryCorrection');
-//        console.log("dictDivClassList ".concat(JSON.stringify(dictDiv.classList)))
-        
+        //        console.log("dictDivClassList ".concat(JSON.stringify(dictDiv.classList)))
+
         wrongAns = null;
     }
 }
@@ -331,13 +400,13 @@ var checkMalayWordMCQ = function(event){
     options = event.target.buttonParam[0];
     index = event.target.buttonParam[1];
     vocab = event.target.buttonParam[2];
-    
+
     if (options[index] == vocab){        
         malayWordMCQDiv.style.display = 'none';
         handleCorrectAns(vocab);
     } else {        
         malayWordMCQDiv.style.display = 'none';
-//        alert("answer wrong. next page will show the correct answer with english definition");
+        //        alert("answer wrong. next page will show the correct answer with english definition");
         handleWrongAns(options[index], vocab, "malayWord");        
     }
 }
@@ -345,17 +414,18 @@ function loadMalayWordMCQ(vocab){
     //display div
     malayWordMCQDiv = document.getElementById("malayWordMCQ");    
     malayWordMCQDiv.style.display = 'block';
-      
+    currentSect = malayWordMCQDiv;
+
     var options = generateOptions(vocab);
     //console.log(options); 
-    
+
     //display choices and prompt  
     var i;
     for (i = 0; i < 4; i++){
         malayWordMCQDiv.getElementsByClassName("malay".concat(String(i)))[0].innerHTML = options[i].malayWord;
     }    
     malayWordMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.engDef;
-    
+
     //make buttons set var selected
     var j;
     for (j = 0; j < 4; j++){
@@ -370,7 +440,7 @@ var checkDefMCQ = function(event){
     options = event.target.buttonParam[0];
     index = event.target.buttonParam[1];
     vocab = event.target.buttonParam[2];
-    
+
     //pause all sounds
     vocab.sound.pause();
     vocab.sound.currentTime = 0;  
@@ -379,7 +449,7 @@ var checkDefMCQ = function(event){
         defMCQDiv.style.display = 'none';
         handleCorrectAns(vocab);
     } else {
-//        alert("answer wrong. next page will show the correct answer with english definition");
+        //        alert("answer wrong. next page will show the correct answer with english definition");
         defMCQDiv.style.display = 'none';
         handleWrongAns(options[index], vocab, "engDef");
     }
@@ -388,7 +458,8 @@ function loadDefMCQMalayPrompt(vocab){
     //show page
     defMCQDiv = document.getElementById("defMCQMalayPrompt");    
     defMCQDiv.style.display = 'block';
-    
+    currentSect = defMCQDiv;
+
     //creating options list
     var incorrectDefList = vocabList.filter(item => item !== vocab);
     incorrectDefList = shuffle(incorrectDefList);
@@ -397,17 +468,17 @@ function loadDefMCQMalayPrompt(vocab){
     var incorrectDef3 = incorrectDefList[2];
     var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
     //console.log(options);
-    
+
     //display malay word prompt
     defMCQDiv.getElementsByTagName("h1")[0].innerHTML = vocab.malayWord;
     //defMCQDiv.getElementsByTagName("h1")[0].buttonParam = [vocab];
-    
+
     //display choices   
     var i;
     for (i = 0; i < 4; i++){
         defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
     }
-    
+
     //make buttons set var selected
     var j;
     for (j = 0; j < 4; j++){
@@ -425,7 +496,8 @@ function loadDefMCQSoundPrompt(vocab){
     //show page
     defMCQDiv = document.getElementById("defMCQSoundPrompt");    
     defMCQDiv.style.display = 'block';
-        
+    currentSect = defMCQDiv;
+
     //creating options list
     var incorrectDefList = vocabList.filter(item => item !== vocab);
     incorrectDefList = shuffle(incorrectDefList);
@@ -434,17 +506,17 @@ function loadDefMCQSoundPrompt(vocab){
     var incorrectDef3 = incorrectDefList[2];
     var options = shuffle([vocab, incorrectDef1, incorrectDef2, incorrectDef3]);
     //console.log(options);
-    
+
     //attach sound to audio button
     defMCQDiv.getElementsByClassName("soundPrompt")[0].addEventListener("click", loadSoundPromptForDefMCQ);
     defMCQDiv.getElementsByClassName("soundPrompt")[0].buttonParam = [vocab];
-    
+
     //display choices   
     var i;
     for (i = 0; i < 4; i++){
         defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
     }
-    
+
     //make buttons set var chosen
     var j;
     for (j = 0; j < 4; j++){
@@ -460,7 +532,7 @@ var loadSoundButton = function(event){
     //options, index
     options = event.target.buttonParam[0];
     index = event.target.buttonParam[1];
-    
+
     //pause other sounds
     if (typeof currentAudioPlayingElement !== "undefined"){
         malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]]; //old audio playing
@@ -468,34 +540,35 @@ var loadSoundButton = function(event){
         malayCommandObjBeingPlayed.sound.pause();
         malayCommandObjBeingPlayed.sound.currentTime = 0;
     }
-    
+
     currentAudioPlayingElement = event.target;
     //console.log(currentAudioPlayingElement);
     options[index].sound.play();
     options[index].sound.addEventListener("ended", function(){currentAudioPlayingElement = undefined;}, false);
-    
+
     chosen = options[index];
-    
+
     //diagnosis 
     //console.log("current var chosen is ".concat(chosen));
     //console.log(chosen);
 };
 function loadSoundCheckButton(event){
-//    console.log("loadSoundCheckButton")
+    //    console.log("loadSoundCheckButton")
     //vocab, soundDiv, options
     vocab = event.target.buttonParam[0];
     soundDiv = event.target.buttonParam[1];
     options = event.target.buttonParam[2];
-//    chosen = event.target.buttonParam[3];
+    //    chosen = event.target.buttonParam[3];
     checkSoundMCQ(vocab, soundDiv, options);
 }
 function loadSoundMCQ(vocab){
-//    console.log(">>>>>function loadSoundMCQ(vocab)")
+    //    console.log(">>>>>function loadSoundMCQ(vocab)")
     chosen = null; //this keeps track of the option the user chooses 
-    
+
     //show page
     soundDiv = document.getElementById("soundMCQ");
-    soundDiv.style.display = 'block';    
+    soundDiv.style.display = 'block';
+    currentSect = soundDiv;
 
     //creating options list
     var incorrectSoundList = vocabList.filter(item => item !== vocab);
@@ -505,10 +578,10 @@ function loadSoundMCQ(vocab){
     var incorrectSound2 = incorrectSoundList[1];
     var options = shuffle([vocab, incorrectSound1, incorrectSound2]);
     //console.log(options);
-        
+
     //display engDef
     soundDiv.getElementsByTagName("h1")[0].innerHTML = vocab.engDef;
-    
+
     //make buttons play sound and also set var chosen
     var i;
     for (i = 0; i < 3; i++){
@@ -518,19 +591,19 @@ function loadSoundMCQ(vocab){
     }
     soundDiv.getElementsByClassName("check")[0].addEventListener("click", loadSoundCheckButton);    
     soundDiv.getElementsByClassName("check")[0].buttonParam = [vocab, soundDiv, options];
-    
+
     //console.log(soundDiv.getElementsByClassName("sound1")[0]);
-    
+
 }
 function unloadSoundMCQ(soundDiv){
-//    console.log(">>>>>function unloadSoundMCQ(soundDiv)")
+    //    console.log(">>>>>function unloadSoundMCQ(soundDiv)")
     soundDiv.getElementsByClassName("sound0")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound1")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("sound2")[0].removeEventListener("click", loadSoundButton);
     soundDiv.getElementsByClassName("check")[0].removeEventListener("click", loadSoundCheckButton);
 }
 function checkSoundMCQ(vocab, soundDiv, options,){
-//    console.log("checkSoundMCQ");
+    //    console.log("checkSoundMCQ");
     //pause other sounds
     if (typeof currentAudioPlayingElement !== "undefined"){
         malayCommandObjBeingPlayed = options[currentAudioPlayingElement.buttonParam[1]];
@@ -538,9 +611,9 @@ function checkSoundMCQ(vocab, soundDiv, options,){
         malayCommandObjBeingPlayed.sound.pause();
         malayCommandObjBeingPlayed.sound.currentTime = 0;
     }
-    
+
     //check answer
-//    console.log(chosen);
+    //    console.log(chosen);
     if (chosen == null){
         alert("Please select an option");
     } else if (chosen == vocab){
@@ -552,10 +625,10 @@ function checkSoundMCQ(vocab, soundDiv, options,){
         chosen = null;
         unloadSoundMCQ(soundDiv);    
         soundDiv.style.display = 'none';
-        
+
         handleWrongAns(wrongAns, vocab, "soundMCQ"); //no wrongAns is passed to function
     }
-    
+
 }
 //pages---------------------------------->
 
@@ -581,7 +654,7 @@ function loadRandomPage(){
             break;
         case 4:
             loadMalayWordMCQ(vocabList[j]);
-    }
+            }
 }
 function loadInOrder(){
     var vocabIndex = Math.floor(Math.random() * 4);
@@ -591,10 +664,10 @@ function loadInOrder(){
         currentPage=0;
     }
     console.log("current page is ".concat(currentPage));
-    
+
     switch(currentPage){
         case 0:
-//            loadDictionary(vocabList[vocabIndex]);
+            //            loadDictionary(vocabList[vocabIndex]);
             loadPage([vocabIndex,0]);
             break;
         case 1:
@@ -609,7 +682,7 @@ function loadInOrder(){
         case 4:
             loadMalayWordMCQ(vocabList[vocabIndex]);
             break;
-    }
+                      }
 }
 function loadInOrder2(){
     var vocabIndex = Math.floor(Math.random() * 4);
@@ -619,7 +692,7 @@ function loadInOrder2(){
         currentPage=0;
     }
     console.log("current page is ".concat(currentPage));
-    
+
     switch(currentPage){
         case 0:
             loadDefMCQMalayPrompt(vocabList[vocabIndex]);
@@ -636,19 +709,19 @@ function loadInOrder2(){
         case 4:
             loadMalayWordMCQ(vocabList[vocabIndex]);
             break;
-    }
+                      }
 }
 
 function loadPage ([vocabIndex, page]){
     vocab = vocabList[vocabIndex];
-//    console.log(page);
+    //    console.log(page);
     switch(page){
         case 0:
-//            console.log("loadLesson case 0");
+            //            console.log("loadLesson case 0");
             loadDictionary(vocab);
             break;
         case 1:
-//            console.log("loadLesson case 1");
+            //            console.log("loadLesson case 1");
             loadMalayWordMCQ(vocab);
             break;
         case 2:
@@ -660,7 +733,7 @@ function loadPage ([vocabIndex, page]){
         case 4:
             loadSoundMCQ(vocab);
             break;
-    }
+               }
 }
 
 window.onload = function(){   
