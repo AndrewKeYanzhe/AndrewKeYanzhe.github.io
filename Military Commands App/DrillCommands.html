@@ -1,0 +1,166 @@
+<!--Written by Andrew Ke Yanzhe 2019-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <meta name="description" content="" />
+        <meta name="keywords" content="" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" type="text/css" href="CSS%20Library/css/main.css">
+    </head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="library.js"></script>
+    <script src="curriculum.js"></script>
+    <script src="script4.1.js"></script>
+    <body class="is-preload">
+        <div id="wrapper">
+            <section id="mainMenu" style="display:none">
+                <header>
+                    <h1 style="margin-bottom: 0.5rem">DrillCommands<sup style="vertical-align: super;">©</sup></h1>
+                    <h4>Improve your command of commands</h4>
+                </header>
+                <div class="content">
+                    <div class="mainMenu">
+                        <div class="mainMenuOption learnButton">
+                            <img src="Images/learn.svg" style="padding-left: 0.25rem">
+                            <br>
+                            <h3>Learn</h3>
+                        </div>
+                        <div class="mainMenuOption testButton">
+                            <img src="Images/test.svg" style="padding-left: 0.5rem">
+                            <br>
+                            <h3>Test</h3>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="lessonOverview" style="display:none">
+                <header>
+                    <h2>Overview</h2>
+                    <h1>Lesson Name</h1>
+                </header>
+                <div class="content">
+                    <h2 style="text-align: center">n Commands</h2>
+<!--                    <br>-->
+                    <table style="width:100%" class="lessonOverviewTable">
+<!--
+                        <tr>
+                            <td>
+                                <h3>Malay Word</h3>
+                                <h4>English Definition</h4>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <h3>Malay Word</h3>
+                                <h4>English Definition</h4>
+                            </td>
+                        </tr>
+-->
+                    </table>
+                </div>
+            </section>
+            <section id="dictionary" style="display: none">
+                <header>
+                    <h2>Command</h2>
+                    <h1 class="malayText">Malay Command Spelled Out</h1>
+                </header>                
+                <div class="content">
+                    <h3 style="margin-bottom: 0;">Definition</h3>
+                    <ul style="padding-left:0;">
+                        <li style="padding-left: 0; display: table-cell;"><h2 style="margin-bottom:0" id="engDef">English Definition</h2></li>
+                        <li style=" padding-left: 1rem; vertical-align:middle; display: table-cell;"><button class="pronounciation button small" style="background: url(Images/audioIcon.svg); background-repeat: no-repeat; background-position: center; box-shadow: inset 0 0 0 0px #2ee4bb; display: float; width: 24px; height: 24px"></button></li>
+                    </ul>
+                    <div class="correction" style="display: None">
+                        <h4 style="margin-bottom: 0;">You answered</h4>
+                        <h3 style="margin-bottom:0">Wrong Answer</h3>
+                        <br>
+                    </div>                    
+                    <ul class="actions">
+                        <li><a href="#"  class="continue button primary large">Continue</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section id="soundMCQ" style="display: none">
+                <header>
+                    <h2>Definition</h2>
+                    <h1>English Definition</h1>
+                    <p>Select the audio that matches the command</p>
+                </header>
+                <div class="content">
+                    <div style="display: flex; width: 75%; margin: auto; justify-content:space-between; margin-bottom: 1rem; margin-top:1rem;">
+                        <button href="#" class="sound0 soundMCQ"></button>
+                        <button href="#" class="sound1 soundMCQ"></button>
+                        <button href="#" class="sound2 soundMCQ"></button>
+                    </div>
+                    <br>
+                    <ul class="actions">
+                        <li><a href="#" class="check button primary large">Check</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section id="defMCQSoundPrompt" style="display: none">
+                <header>
+                    <!--                    <h1>Audio (Click here)</h1>-->
+                    <button href="#" class="soundPrompt"></button>
+                    <p>Select the definition that matches the audio</p>
+                </header>
+                <div class="content">
+                    <ul class="actions">
+                        <li><a href="#" class="def0 button large">Option 1</a></li>
+
+                        <li><a href="#" class="def1 button large">Option 2</a></li>
+
+                        <li><a href="#" class="def2 button large">Option 3</a></li>
+
+                        <li><a href="#" class="def3 button large">Option 4</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section id="defMCQMalayPrompt" style="display: none">
+                <header>
+                    <h1 class="malayText">Malay Word</h1>
+                    <p>Select the definition that matches the malay command</p>
+                </header>
+                <div class="content">
+                    <ul class="actions">
+                        <li><a href="#" class="def0 button large ">Option 1</a></li>
+                        <li><a href="#" class="def1 button large">Option 2</a></li>
+                        <li><a href="#" class="def2 button large">Option 3</a></li>
+                        <li><a href="#" class="def3 button large">Option 4</a></li>
+                    </ul>
+                </div>
+            </section>
+            <section id="malayWordMCQ" style="display: none">
+                <header>
+                    <h2>Definition</h2>
+                    <h1>English Definition</h1>
+                </header>
+                <div class="content">
+                    <p style="margin-bottom: 2rem; margin-top: -1rem">Select the Malay command that matches the English definition</p>
+                    <ul class="actions">    
+                        <li><a href="#" class="malay0 button large malayText">Option 1</a></li>
+                        <li><a href="#" class="malay1 button large malayText">Option 2</a></li>
+                        <li><a href="#" class="malay2 button large malayText">Option 3</a></li>
+                        <li><a href="#" class="malay3 button large malayText">Option 4</a></li>
+                    </ul>
+                </div>
+            </section>        
+        </div>
+        <!--        <p>v2019-06-05-1120</p>-->
+
+        <footer class="footer">
+            <div class="footer-content">
+                <h2 id="footerHeader">Footer Text</h2>
+                <button class="goHome">Home</button>
+            </div>
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow="70"
+                     aria-valuemin="0" aria-valuemax="100" style="width:70%; ">
+                    <span class="sr-only">70% Complete</span>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>
