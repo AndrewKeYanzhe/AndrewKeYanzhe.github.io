@@ -2,6 +2,7 @@
 
 //parameters
 var debugMode = false;
+var testMode = false;
 var requiredScore = 5;
 var reqTestQns = 10;
 var autoPlayPronounciationDelay = 0; //in ms
@@ -34,7 +35,9 @@ console.log(vocabScore)
 var testVocabList = []; //stores malayCommand obj
 
 //testing
-testVocabList = lesson1;
+if (testMode){
+    testVocabList = lesson1;
+}
 
 //curriculum
 var vocabLearnt = [];
