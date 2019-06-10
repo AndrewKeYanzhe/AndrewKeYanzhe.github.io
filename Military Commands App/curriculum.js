@@ -34,16 +34,18 @@ class malayCommand {
 }
 
 //vocab
-var vocabList = [
+var lesson1 = [
     senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a"),
     sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a"),
     berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a"),
     dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a"),
 ];
-var noOfVocab = vocabList.length;
+var lessonList = [lesson1]
 
-function generateLesson(){
+function generateLesson(vocabList){
     console.log("%cgenerating lesson", 'background: white; color: purple')
+    
+    var noOfVocab = vocabList.length;
     
     //CREATING LESSONPAGES [[vocab, pageToShow]...]
     console.log("LESSONPAGES creation [[vocab, pageToShow]...]")
@@ -117,12 +119,14 @@ function generateLesson(){
     
     return lessonPages;
 }
-function generateTest(){
+function generateTest(vocabList){
     console.log("%cgenerating test", "color:maroon");
+    
+    var noOfVocab = vocabList.length;
 
     //variables
     var vocabOrder = shuffle(range(noOfVocab)); 
-    console.log("vocabOrder is ".concat(vocabOrder));
+    debug("vocabOrder is ".concat(vocabOrder));
     var testPages = [];
 
     //logic
@@ -183,7 +187,7 @@ function generateTest(){
         debug(JSON.stringify(testPages));
     }
     //debug(testPages);
-    console.log("testPages length is ".concat(testPages.length));
+    debug("testPages length is ".concat(testPages.length));
     console.log(JSON.stringify(testPages));
 
     //alternative shuffle algorithm

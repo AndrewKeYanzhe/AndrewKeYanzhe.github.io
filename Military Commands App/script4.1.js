@@ -2,7 +2,8 @@
 
 //parameters
 var debugMode = false;
-var requiredScore = 2;
+var requiredScore = 5;
+var reqTestQns = 10;
 var autoPlayPronounciationDelay = 0; //in ms
 
 //constants
@@ -10,20 +11,143 @@ var correctBleep = new Audio();
 correctBleep.src = "Audio/correct.mp3";
 var wrongBleep = new Audio();
 wrongBleep.src = "Audio/wrong.mp3";
+var allVocab = {}; //initialised with vocabScore
 
-//global variables to initialise
+//memory
+var currentlyTestedPage = null;
+var currentAudioPlayingElement; //stores <htmlElement>
+var wrongAns = null;
+var progressBarCounter = null;
+var vocabList = [];
 var lessonPages = null;
 var testPages = null;
 
-//memory variables
-var currentlyTestedPage = null;
-var currentAudioPlayingElement; //this stores an element like <button>
-var wrongAns = null;
-var progressBarCounter = null;
+//data
+var vocabScore = {}
+lessonList.forEach(function (lesson, index){
+   lesson.forEach(function(vocab, index){
+       vocabScore[vocab.malayWord] = 0;
+       allVocab[vocab.malayWord] = vocab;
+   }); 
+});
+console.log(vocabScore)
+var testVocabList = []; //stores malayCommand obj
 
-//progress variables
-var vocabLearnt = Array(vocabList.length).fill(false); 
-var timesVocabCorrect = Array(vocabList.length).fill(0); //times nth vocab correct is timesVocabCorrect[n]
+//testing
+testVocabList = lesson1;
+
+//curriculum
+var vocabLearnt = [];
+function loadLesson(){
+    console.log(vocabScore);
+    if (lessonPages == null){
+        vocabList = lesson1;
+        document.getElementById("footerHeader").innerHTML = "Lesson1"
+        lessonPages = generateLesson(lesson1);
+        vocabLearnt = Array(vocabList.length).fill(false); 
+    }
+    if (currentPage == null){
+        currentPage = 0;
+    }
+    console.log("currentPage ".concat(currentPage));
+
+    //end lesson
+    if (currentPage > lessonPages.length - 1) {
+        vocabList.forEach(function (vocab, index){
+            if (!testVocabList.includes(vocab)){
+               testVocabList.push(vocab);
+            } 
+        });
+        vocabList = [];
+    
+        currentPage = null;
+        loadMode = -2;
+        lessonPages = null;
+        
+        progressBarCounter = null;      
+        document.getElementsByClassName("footer")[0].style.display="none";
+    
+        newPage();
+        return;
+    }
+
+    //loading footer
+    document.getElementsByClassName("footer")[0].style.display="block";            
+    if (progressBarCounter == null) {
+        progressBarCounter = 0;
+    }
+    progressBarCounter = progressBarCounter + 1;
+    $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"));
+
+
+    loadPage(lessonPages[currentPage]);    
+}
+function loadTest(){
+    console.log(vocabScore);
+    console.log("currentPage ".concat(currentPage));
+    
+    if (testVocabList.length == 0){
+        alert("do a lesson first");
+        loadMode = -2;
+        newPage();
+        return;
+    }
+    
+    if (currentPage == null){
+        currentPage = 0;
+    }
+
+    //generating test
+    if (testPages ==null){
+        vocabList = lesson1; //use most recent one
+        testPages = generateTest(lesson1);
+        console.log(testVocabList);
+        document.getElementById("footerHeader").innerHTML = "Test"
+    }
+    
+    //check if quiz is done
+    if (currentPage >= reqTestQns){
+        alert("test is done");
+        loadMode = -2;
+        for (var key in vocabScore){
+            if (vocabScore[key] >= requiredScore && testVocabList.includes(allVocab[key])){
+               testVocabList.splice(testVocabList.indexOf(vocab), 1);
+                console.log(key.concat(" mastered"))
+            }        
+        }
+        vocabList = [];
+        testPages = null;
+        currentPage = null;
+        
+        progressBarCounter = null;      
+        document.getElementsByClassName("footer")[0].style.display="none";
+        
+        newPage();
+        return;                
+    }
+    
+    //making sure quiz has enough questions
+    if (testPages.length < noOfQuizzes * vocabList.length / 2){
+        testPages = generateTest(vocabList);
+    }
+
+    debug(JSON.stringify(testPages));
+
+    //removing first element of testPages
+    currentlyTestedPage = testPages[0];
+    testPages.shift();
+    
+    //loading footer
+    document.getElementsByClassName("footer")[0].style.display="block";            
+    if (progressBarCounter == null) {
+        progressBarCounter = 0;
+    }
+    progressBarCounter = progressBarCounter + 1;
+
+    $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(reqTestQns+1)).concat("%"));
+
+    loadPage(currentlyTestedPage);
+}
 
 //page management
 function hidePages(){
@@ -56,76 +180,10 @@ function newPage(){
             loadInOrder();
             break;
         case 1:
-            //**lesson**//
-            if (lessonPages == null){
-                lessonPages = generateLesson();
-            }
-            if (currentPage == null){
-                currentPage = 0;
-            }
-            console.log("currentPage ".concat(currentPage));
-
-            //end lesson
-            if (currentPage > lessonPages.length - 1) {
-                currentPage = null;
-                loadMode = -2;
-                lessonPages = null;                document.getElementsByClassName("footer")[0].style.display="none";
-                progressBarCounter = null;
-                vocabLearnt = Array(vocabList.length).fill(false);
-                newPage();
-                break;
-            }
-            
-            //loading footer
-            document.getElementsByClassName("footer")[0].style.display="block";            
-            if (progressBarCounter == null) {
-                progressBarCounter = 0;
-            }
-            progressBarCounter = progressBarCounter + 1;
-//            console.log(JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"))
-            $('.progress-bar').css("width", JSON.stringify(100*progressBarCounter/(lessonPages.length+1)).concat("%"));
-            
-
-            loadPage(lessonPages[currentPage]);            
+            loadLesson();                    
             break;
         case 2:
-            //**test**//            
-            console.log("timesVocabCorrect ".concat(timesVocabCorrect));
-            
-            //generating lesson
-            if (testPages == null){
-                testPages = generateTest();
-            }
-            
-            //check if quiz is done
-            var quizDone = true;
-            timesVocabCorrect.forEach(function(score, index){
-               if (score < requiredScore){
-                   quizDone = false;
-               } 
-            });
-            if (quizDone){
-                alert("test is done");
-                loadMode = -2;
-                testPages = null;
-                timesVocabCorrect = Array(vocabList.length).fill(0); 
-                newPage();
-                break;                
-                //delete testpages go menu
-            }
-            
-            //making sure quiz has enough questions
-            if (testPages.length < noOfQuizzes * vocabList.length / 2){
-                testPages = generateTest();
-            }
-            
-            console.log(JSON.stringify(testPages));
-            
-            //removing first element of testPages
-            currentlyTestedPage = testPages[0];
-            testPages.shift();
-            
-            loadPage(currentlyTestedPage);
+            loadTest();
             break;
         default:
     }
@@ -173,9 +231,9 @@ function handleWrongAns(wrongVocab, vocab, ansType){
 }
 function handleCorrectAns(vocab){
     correctBleep.play();
-    if (testPages !== null){
-        timesVocabCorrect[vocabList.indexOf(vocab)] = timesVocabCorrect[vocabList.indexOf(vocab)] + 1; 
-    }    
+
+    vocabScore[vocab.malayWord] = vocabScore[vocab.malayWord] + 1;
+    
     newPage();
 }
 
@@ -205,7 +263,6 @@ function loadMainMenu(){
     mainMenuSect.getElementsByClassName("learnButton")[0].addEventListener("click", learnButton);
     mainMenuSect.getElementsByClassName("testButton")[0].addEventListener("click", testButton);   
 }
-
 
 //Dictionary
 var dictContinueButton = function(event){
@@ -602,7 +659,6 @@ function loadPage ([vocabIndex, page]){
             break;
     }
 }
-
 
 window.onload = function(){   
     newPage();
