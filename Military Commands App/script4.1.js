@@ -2,7 +2,7 @@
 
 //parameters
 var debugMode = false;
-var testMode = false;
+var testMode = true;
 var requiredScore = 5;
 var reqTestQns = 10;
 var autoPlayPronounciationDelay = 0; //in ms
