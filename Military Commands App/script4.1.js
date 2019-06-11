@@ -23,6 +23,7 @@ var vocabList = [];
 var lessonPages = null;
 var testPages = null;
 var currentSect = null;
+var lessonName = null;
 
 //data
 var vocabScore = {}
@@ -34,6 +35,10 @@ lessonList.forEach(function (lesson, index){
 });
 console.log(vocabScore)
 var testVocabList = []; //stores malayCommand obj
+var sessionComplete = false;
+var currentPage = null;
+var loadMode = -2;  
+var completedLessons = [];
 
 //testing
 if (testMode){
@@ -44,10 +49,9 @@ if (testMode){
 var vocabLearnt = [];
 function loadLesson(){
     console.log(vocabScore);
-    if (lessonPages == null){
-        vocabList = lesson1;
-        document.getElementById("footerHeader").innerHTML = "Lesson1";
-        lessonPages = generateLesson(lesson1);
+    if (lessonPages == null){        
+        document.getElementById("footerHeader").innerHTML = lessonName;
+        lessonPages = generateLesson(vocabList);
         vocabLearnt = Array(vocabList.length).fill(false); 
     }
     if (currentPage == null){
@@ -76,6 +80,10 @@ function loadLesson(){
     loadPage(lessonPages[currentPage]);    
 }
 function unloadLesson(){
+    if (!completedLessons.includes(vocabList)){
+        completedLessons.push(vocabList);
+    }
+
     vocabList.forEach(function (vocab, index){
         if (!testVocabList.includes(vocab)){
             testVocabList.push(vocab);
@@ -110,8 +118,8 @@ function loadTest(){
 
     //generating test
     if (testPages ==null){
-        vocabList = lesson1; //use most recent one
-        testPages = generateTest(lesson1);
+        vocabList = testVocabList;
+        testPages = generateTest(testVocabList);
         console.log(testVocabList);
         document.getElementById("footerHeader").innerHTML = "Test"
     }
@@ -174,8 +182,6 @@ function hidePages(){
         element.style.display = 'none';
     });
 }
-var currentPage = null;
-var loadMode = -2;  
 function newPage(){
     console.log("%cnewPage", "color:teal");
 
@@ -262,10 +268,13 @@ function handleCorrectAns(vocab){
 
 //Main Menu
 var learnButton = function(event){
-    loadMode = 1;
+    //    loadMode = 1;
+    //    document.getElementById("mainMenu").style.display = 'none';
+    //    unloadMainMenu();
+    //    newPage();
     document.getElementById("mainMenu").style.display = 'none';
     unloadMainMenu();
-    newPage();
+    loadLessonMenu();
 }
 var testButton = function(event){
     loadMode = 2;
@@ -285,6 +294,12 @@ function loadMainMenu(){
     mainMenuSect.getElementsByClassName("testButton")[0].addEventListener("click", testButton);   
 }
 
+//Lesson Menu
+function loadLessonMenu(){
+    lessonMenuSect = document.getElementById("lessonMenu");
+    lessonMenuSect.style.display = "block";
+}
+
 //Lesson Overview
 var goHome = function(Event){
     currentSect.style.display = "none";
@@ -297,14 +312,14 @@ var goHome = function(Event){
 
 }
 function loadLessonOverview(){
-    document.getElementById("footerHeader").innerHTML = "Complete"
+    document.getElementById("footerHeader").innerHTML = "Complete";
 
     lessonOverviewSect = document.getElementById("lessonOverview");
     currentSect = lessonOverviewSect;
     lessonOverviewSect.style.display = "block";
-    lessonOverviewSect.getElementsByTagName("header")[0].getElementsByTagName("h1")[0].innerHTML = "lesson1";
-    lessonOverviewSect.getElementsByClassName("content")[0].getElementsByTagName("h2")[0].innerHTML = JSON.stringify(lesson1.length).concat(" commands")
-    lesson1.forEach(function(vocab, index){
+    lessonOverviewSect.getElementsByTagName("header")[0].getElementsByTagName("h1")[0].innerHTML = lessonName;
+    lessonOverviewSect.getElementsByClassName("content")[0].getElementsByTagName("h2")[0].innerHTML = JSON.stringify(vocabList.length).concat(" commands")
+    vocabList.forEach(function(vocab, index){
         var lessonOverviewTable = lessonOverviewSect.getElementsByClassName("lessonOverviewTable")[0];
         var overviewTr = document.createElement("tr");
         var overviewTd = document.createElement("td");
@@ -323,16 +338,43 @@ function loadLessonOverview(){
         overviewTr.style.borderRight = "0";
         overviewH3.style.fontWeight = "bold";
     });
-
-    //    setTimeout(function() {
-    //        unloadLessonOverview();
-    //    }, 1000);
-
 }
 function unloadLessonOverview(){
     while (document.getElementsByClassName("lessonOverviewTable")[0].firstChild){
         document.getElementsByClassName("lessonOverviewTable")[0].removeChild(document.getElementsByClassName("lessonOverviewTable")[0].firstChild);
     }
+}
+
+//Results
+function loadResults(){
+    resultsSect = document.getElementById("resultsSect");
+    resultsSect.style.display = "block";
+    
+//    lesson1.forEach(function(vocab, index){
+//        var resultsTable = resultsSect.getElementsByClassName("resultsTable")[0];
+//        var resultsTr = document.createElement("tr");
+//        var resultsTd = document.createElement("td");
+//        var resultsH3 = document.createElement("h3");
+//        var resultsH4 = document.createElement("h4");
+//        resultsTable.appendChild(resultsTr);
+//        resultsTr.appendChild(resultsTd);
+//        resultsTd.appendChild(resultsH3);
+//        resultsTd.appendChild(resultsH4);
+//        resultsH3.innerHTML = vocab.malayWord;
+//        resultsH4.innerHTML = vocab.engDef;
+//
+//        //CSS
+//        resultsTr.style.border = " solid 1px rgba(144, 144, 144, 0.25)";
+//        resultsTr.style.borderLeft = "0";
+//        resultsTr.style.borderRight = "0";
+//        resultsH3.style.fontWeight = "bold";
+//    });
+    lesson1.forEach(function(vocab, index){
+        resulsTemplate = document.getElementById("resultsTableTemplate");
+        listItem = resulsTemplate.content.cloneNode(true);
+        resultsSect.getElementsByClassName("content")[0].appendChild(listItem);
+    });
+    
 }
 
 //Dictionary
@@ -735,7 +777,21 @@ function loadPage ([vocabIndex, page]){
             break;
                }
 }
+function setupButtons (){
+    document.getElementsByClassName("lesson1")[0].addEventListener("click", function(){
+        vocabList = lesson1;
+        lessonName = "Lesson 1";
+        loadMode = 1;       
+        document.getElementById("lessonMenu").style.display = "none";
+        newPage();
+    });
+}
 
 window.onload = function(){   
-    newPage();
+    setupButtons();
+    //    newPage();
+        loadResults();
+//    setTimeout(function() {
+//        loadResults();
+//    }, 1000);
 }

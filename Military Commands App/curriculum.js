@@ -40,7 +40,8 @@ var lesson1 = [
     berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a"),
     dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a"),
 ];
-var lessonList = [lesson1]
+var lessonList = [lesson1];
+//var lessonNames = ["Lesson 1"];
 
 function generateLesson(vocabList){
     console.log("%cgenerating lesson", 'background: white; color: purple')

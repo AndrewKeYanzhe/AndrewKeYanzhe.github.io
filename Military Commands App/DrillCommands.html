@@ -6,13 +6,14 @@
         <meta name="description" content="" />
         <meta name="keywords" content="" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="CSS%20Library/css/main.css">
+        <link rel="stylesheet" type="text/css" href="CSS Libraries/Theme/css/main.css">
+        <link rel="stylesheet" type="text/css" href="CSS%20Libraries/Circular%20Progress/circularProgress.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+        <script src="library.js"></script>
+        <script src="curriculum.js"></script>
+        <script src="script4.1.js"></script>
     </head>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
-    <script src="library.js"></script>
-    <script src="curriculum.js"></script>
-    <script src="script4.1.js"></script>
     <body class="is-preload">
         <div id="wrapper">
             <section id="mainMenu" style="display:none">
@@ -35,6 +36,52 @@
                     </div>
                 </div>
             </section>
+            <section id="lessonMenu" class="page" style="display:none">
+                <header>
+                    <h1>Lessons</h1>
+                </header>
+                <div class="content">
+                    <button class="lesson1">Lesson 1</button>
+                </div>
+            </section>
+            <section id="resultsSect" class="page" style="display:none">
+                <header>
+                    <h1>Results</h1>
+                </header>
+                <div class="content">
+                    <!--                    <h2 style="text-align: center">n Commands</h2>-->
+                    <!--                    <br>-->
+                    <table style = "margin:0;" class = "resultsTableDummy">
+                        <tr><td></td></tr>
+                    </table>
+                    <template id="resultsTableTemplate">
+                    <table style="width:100%" class="resultsTable">
+                        <tr>
+                            <td>
+                                <div>
+                                    <h3>Malay Word</h3>
+                                    <h4>English Definition</h4>
+                                    </div>
+                                <div class="circular-progress" data-percentage="50">
+                                    <span class="circular-progress-left">
+                                        <span class="circular-progress-bar"></span>
+                                    </span>
+                                    <span class="circular-progress-right">
+                                        <span class="circular-progress-bar"></span>
+                                    </span>
+                                    <div class="circular-progress-value">
+                                        <div>
+                                            <!--						tick<br>-->
+                                            <!--						<span>completed</span>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                        </template>
+                </div>
+            </section>
             <section id="lessonOverview" style="display:none">
                 <header>
                     <h2>Overview</h2>
@@ -42,21 +89,21 @@
                 </header>
                 <div class="content">
                     <h2 style="text-align: center">n Commands</h2>
-<!--                    <br>-->
+                    <!--                    <br>-->
                     <table style="width:100%" class="lessonOverviewTable">
-<!--
-                        <tr>
-                            <td>
-                                <h3>Malay Word</h3>
-                                <h4>English Definition</h4>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <h3>Malay Word</h3>
-                                <h4>English Definition</h4>
-                            </td>
-                        </tr>
+                        <!--
+<tr>
+<td>
+<h3>Malay Word</h3>
+<h4>English Definition</h4>
+</td>
+</tr>
+<tr>
+<td>
+<h3>Malay Word</h3>
+<h4>English Definition</h4>
+</td>
+</tr>
 -->
                     </table>
                 </div>
