@@ -43,10 +43,10 @@ var vocabMastered = [];
 //testing
 if (testMode){
     testVocabList = lesson1;
-//    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
+    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
     console.log(vocabScore);
-    reqTestQns = 2;
-    requiredScore = 2;
+    reqTestQns = 3;
+    requiredScore = 5;
 }
 
 //curriculum
@@ -177,9 +177,10 @@ function unloadTest(){
     loadMode = -2;    
     for (var key in vocabScore){
         if (vocabScore[key] >= requiredScore && testVocabList.includes(allVocab[key])){
-            testVocabList.splice(testVocabList.indexOf(vocab), 1);
+            testVocabList.splice(testVocabList.indexOf(allVocab[key]), 1);
             console.log(key.concat(" mastered"));
             vocabMastered.push(allVocab[key]);
+            console.log(vocabMastered);
         }        
     }
     
@@ -541,6 +542,7 @@ function loadDefMCQMalayPrompt(vocab){
 
     //display choices   
     var i;
+    console.log(options);
     for (i = 0; i < 4; i++){
         defMCQDiv.getElementsByClassName("def".concat(String(i)))[0].innerHTML = options[i].engDef;
     }
