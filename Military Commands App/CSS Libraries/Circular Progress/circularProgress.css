@@ -38,6 +38,11 @@
   top: 0;
   border-color: #ffb43e;
 }
+
+.circular-progress[data-percentage="100"] .circular-progress-bar{
+    border-color: #00cc7e; 
+}
+
 .circular-progress .circular-progress-left .circular-progress-bar {
   left: 100%;
   border-top-right-radius: 75px;
