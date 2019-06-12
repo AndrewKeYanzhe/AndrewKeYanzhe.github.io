@@ -13,28 +13,16 @@ display: none;
 }
 */
 
-.circular-progress {
-    margin-top: auto;
-    margin-bottom: auto;
-}
 
 #lessonOverview h3, #lessonOverview h4, #resultsSect h3, #resultsSect h4 {
     margin: 0;
 }
 
 .resultsTable td {
-    display: -webkit-flex;
-    justify-content: space-between;
-    -webkit-box-pack: justify;
-    -ms-flex-pack: justify;
+    vertical-align: middle;
 }
-.resultsTable {
+.resultsTable { 
     margin: 0;
-    /*
-    border-bottom-color: rgba(144, 144, 144, 0.25);
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    */
 }
 .resultsTable tr {
     border-top: 0;
