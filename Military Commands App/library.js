@@ -45,8 +45,8 @@ String.prototype.replaceAll = function(search, replacement) {
 };
 
 
-function removeElement(elementId) {
-    // Removes an element from the document
-    var element = document.getElementById(elementId);
-    element.parentNode.removeChild(element);
-}
+//function removeElement(elementId) {
+//    // Removes an element from the document
+//    var element = document.getElementById(elementId);
+//    element.parentNode.removeChild(element);
+//}

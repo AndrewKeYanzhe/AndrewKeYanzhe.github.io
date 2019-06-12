@@ -111,7 +111,7 @@ function loadTest(){
     console.log(vocabScore);
     console.log("currentPage ".concat(currentPage));
 //    console.log("testVocabList ".concat(JSON.stringify(testVocabList)));
-    console.log(testVocabList)
+//    console.log(testVocabList)
 
     if (testVocabList.length == 0){
         alert("do a lesson first");
@@ -156,7 +156,7 @@ function loadTest(){
     currentlyTestedPage = testPages[0];
     testPages.shift();
     
-    console.log(vocabList);
+//    console.log(vocabList);
 
     //loading footer
     document.getElementsByClassName("footer")[0].style.display="block";            
@@ -171,6 +171,7 @@ function loadTest(){
     loadPage(currentlyTestedPage);
 }
 function unloadTest(){
+    unloadResults();
     document.getElementsByClassName("goHome")[0].removeEventListener("click", goHome);
 
     loadMode = -2;    
@@ -188,7 +189,7 @@ function unloadTest(){
 
     progressBarCounter = null;      
     document.getElementsByClassName("footer")[0].style.display="none";
-    unloadResults();
+    
 
     newPage();
 }
@@ -384,14 +385,19 @@ function loadResults(){
         //inserting item
         var listItem = document.createElement('template');
         listItem.innerHTML = listItemStr;
-        resultsSect.getElementsByClassName("content")[0].appendChild(listItem.content);
+        document.getElementById("resultsList").appendChild(listItem.content);
     });    
 }
 function unloadResults(){
 //    document.getElementsByClassName("resultsTable").forEach(function(item, index){
 //        removeElement(item);
 //    });
-    console.log(document.getElementsByClassName("resultsTable"))
+//    console.log(document.getElementsByClassName("resultsTable"));
+    for (index = 0; index < testVocabList.length; index ++){
+//        console.log(document.getElementsByClassName("resultsTable")[0]);
+        document.getElementById("resultsList").removeChild(document.getElementsByClassName("resultsTable")[0])
+    }
+    
     
 }
 
