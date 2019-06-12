@@ -171,7 +171,7 @@ function loadTest(){
     loadPage(currentlyTestedPage);
 }
 function unloadTest(){
-    unloadResults();
+    unloadResults(); //must unload before modifying vocabMastered
     document.getElementsByClassName("goHome")[0].removeEventListener("click", goHome);
 
     loadMode = -2;    
@@ -387,6 +387,29 @@ function loadResults(){
         var listItem = document.createElement('template');
         listItem.innerHTML = listItemStr;
         document.getElementById("resultsList").appendChild(listItem.content);
+    });
+    
+    //managing masteredvocab
+    if (vocabMastered.length == 0){        document.getElementById("resultsSect").getElementsByTagName("h2")[0].style.display = "none";
+    } else {
+        document.getElementById("resultsSect").getElementsByTagName("h2")[0].style.display = "block"; 
+        document.getElementById("resultsSect").getElementsByTagName("h2")[0].innerHTML = "Already Mastered: ".concat(JSON.stringify(vocabMastered.length));
+    }
+    vocabMastered.forEach(function(vocab, index){
+        listItemStr = document.getElementById("resultsTableTemplate").innerHTML;
+
+        //setting values
+        listItemStr = listItemStr.replace("Malay Word", vocab.malayWord);
+        listItemStr = listItemStr.replace("English Definition", vocab.engDef);
+        listItemStr = listItemStr.replace("50", Math.min(100, Math.round(vocabScore[vocab.malayWord] / requiredScore * 10) * 10));
+        if (Math.min(100, Math.round(vocabScore[vocab.malayWord] / requiredScore * 10) * 10) !== 100){
+            listItemStr = listItemStr.replace('class="circular-progress-value"', 'class="circular-progress-value" style="display:none"')
+        }
+
+        //inserting item
+        var listItem = document.createElement('template');
+        listItem.innerHTML = listItemStr;
+        document.getElementById("masteredList").appendChild(listItem.content);
     });    
 }
 function unloadResults(){
@@ -397,6 +420,10 @@ function unloadResults(){
     for (index = 0; index < testVocabList.length; index ++){
 //        console.log(document.getElementsByClassName("resultsTable")[0]);
         document.getElementById("resultsList").removeChild(document.getElementsByClassName("resultsTable")[0])
+    }
+    for (index = 0; index < vocabMastered.length; index ++){
+//        console.log(document.getElementsByClassName("resultsTable")[0]);
+        document.getElementById("masteredList").removeChild(document.getElementsByClassName("resultsTable")[0])
     }
     
     
@@ -815,6 +842,6 @@ function setupButtons (){
 
 window.onload = function(){   
     setupButtons();
-        newPage();
+    newPage();
 //    loadResults();
 }
