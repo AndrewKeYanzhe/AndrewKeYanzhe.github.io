@@ -33,7 +33,6 @@ lessonList.forEach(function (lesson, index){
         allVocab[vocab.malayWord] = vocab;
     }); 
 });
-console.log(vocabScore)
 var testVocabList = []; //stores malayCommand obj
 var sessionComplete = false;
 var currentPage = null;
@@ -43,6 +42,8 @@ var completedLessons = [];
 //testing
 if (testMode){
     testVocabList = lesson1;
+    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 5, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
+    console.log(vocabScore)
 }
 
 //curriculum
@@ -350,31 +351,19 @@ function loadResults(){
     resultsSect = document.getElementById("resultsSect");
     resultsSect.style.display = "block";
     
-//    lesson1.forEach(function(vocab, index){
-//        var resultsTable = resultsSect.getElementsByClassName("resultsTable")[0];
-//        var resultsTr = document.createElement("tr");
-//        var resultsTd = document.createElement("td");
-//        var resultsH3 = document.createElement("h3");
-//        var resultsH4 = document.createElement("h4");
-//        resultsTable.appendChild(resultsTr);
-//        resultsTr.appendChild(resultsTd);
-//        resultsTd.appendChild(resultsH3);
-//        resultsTd.appendChild(resultsH4);
-//        resultsH3.innerHTML = vocab.malayWord;
-//        resultsH4.innerHTML = vocab.engDef;
-//
-//        //CSS
-//        resultsTr.style.border = " solid 1px rgba(144, 144, 144, 0.25)";
-//        resultsTr.style.borderLeft = "0";
-//        resultsTr.style.borderRight = "0";
-//        resultsH3.style.fontWeight = "bold";
-//    });
     lesson1.forEach(function(vocab, index){
-        resulsTemplate = document.getElementById("resultsTableTemplate");
-        listItem = resulsTemplate.content.cloneNode(true);
-        resultsSect.getElementsByClassName("content")[0].appendChild(listItem);
-    });
-    
+        listItemStr = document.getElementById("resultsTableTemplate").innerHTML;
+        
+        //setting values
+        listItemStr = listItemStr.replace("Malay Word", vocab.malayWord);
+        listItemStr = listItemStr.replace("English Definition", vocab.engDef);
+        listItemStr = listItemStr.replace("50", vocabScore[vocab.malayWord] / requiredScore * 100);
+        
+        //inserting item
+        var listItem = document.createElement('template');
+        listItem.innerHTML = listItemStr;
+        resultsSect.getElementsByClassName("content")[0].appendChild(listItem.content);
+    });    
 }
 
 //Dictionary
