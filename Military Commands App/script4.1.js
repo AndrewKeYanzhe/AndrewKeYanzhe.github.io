@@ -3,7 +3,7 @@
 //parameters
 var debugMode = false;
 var testMode = true;
-var requiredScore = 5;
+var requiredScore = 6;
 var reqTestQns = 10;
 var autoPlayPronounciationDelay = 0; //in ms
 
@@ -42,7 +42,7 @@ var completedLessons = [];
 //testing
 if (testMode){
     testVocabList = lesson1;
-    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 5, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
+    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
     console.log(vocabScore)
 }
 
@@ -357,7 +357,7 @@ function loadResults(){
         //setting values
         listItemStr = listItemStr.replace("Malay Word", vocab.malayWord);
         listItemStr = listItemStr.replace("English Definition", vocab.engDef);
-        listItemStr = listItemStr.replace("50", vocabScore[vocab.malayWord] / requiredScore * 100);
+        listItemStr = listItemStr.replace("50", Math.min(100, Math.round(vocabScore[vocab.malayWord] / requiredScore * 10) * 10));
         
         //inserting item
         var listItem = document.createElement('template');
