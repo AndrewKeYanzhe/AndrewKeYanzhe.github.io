@@ -13,6 +13,15 @@ display: none;
 }
 */
 
+.lessonButton {
+    border-radius: 1rem;
+    padding: 1rem;
+    box-shadow: 0 5px 10px rgba(154,160,185,.1), 0 15px 40px rgba(166,173,201,.2);
+}
+.lessonButton h3 {
+    margin: 0;
+    text-align: center;
+}
 
 #lessonOverview h3, #lessonOverview h4, #resultsSect h3, #resultsSect h4 {
     margin: 0;
