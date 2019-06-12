@@ -80,73 +80,73 @@
 Due to the split circle of progress-left and progress right, we must use the animations on each side. 
 */
 .circular-progress[data-percentage="10"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-1 0.5s ease-out forwards;
+  -webkit-animation: loading-1 0.5s linear forwards;
 }
 .circular-progress[data-percentage="10"] .circular-progress-left .circular-progress-bar {
   -webkit-animation: 0;
 }
 
 .circular-progress[data-percentage="20"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-2 0.5s ease-out forwards;
+  -webkit-animation: loading-2 0.5s linear forwards;
 }
 .circular-progress[data-percentage="20"] .circular-progress-left .circular-progress-bar {
   -webkit-animation: 0;
 }
 
 .circular-progress[data-percentage="30"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-3 0.5s ease-out forwards;
+  -webkit-animation: loading-3 0.5s linear forwards;
 }
 .circular-progress[data-percentage="30"] .circular-progress-left .circular-progress-bar {
   -webkit-animation: 0;
 }
 
 .circular-progress[data-percentage="40"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-4 0.5s ease-out forwards;
+  -webkit-animation: loading-4 0.5s linear forwards;
 }
 .circular-progress[data-percentage="40"] .circular-progress-left .circular-progress-bar {
   -webkit-animation: 0;
 }
 
 .circular-progress[data-percentage="50"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards;
+  -webkit-animation: loading-5 0.5s linear forwards;
 }
 .circular-progress[data-percentage="50"] .circular-progress-left .circular-progress-bar {
   -webkit-animation: 0;
 }
 
 .circular-progress[data-percentage="60"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards;
+  -webkit-animation: loading-5 0.25s linear forwards;
 }
 .circular-progress[data-percentage="60"] .circular-progress-left .circular-progress-bar {
-  -webkit-animation: loading-1 0.5s ease-out forwards 0.5s;
+  -webkit-animation: loading-1 0.25s linear forwards 0.25s;
 }
 
 .circular-progress[data-percentage="70"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards;
+  -webkit-animation: loading-5 0.25s linear forwards;
 }
 .circular-progress[data-percentage="70"] .circular-progress-left .circular-progress-bar {
-  -webkit-animation: loading-2 0.5s ease-out forwards 0.5s;
+  -webkit-animation: loading-2 0.25s linear forwards 0.25s;
 }
 
 .circular-progress[data-percentage="80"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards;
+  -webkit-animation: loading-5 0.25s linear forwards;
 }
 .circular-progress[data-percentage="80"] .circular-progress-left .circular-progress-bar {
-  -webkit-animation: loading-3 0.5s ease-out forwards 0.5s;
+  -webkit-animation: loading-3 0.25s linear forwards 0.25s;
 }
 
 .circular-progress[data-percentage="90"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards;
+  -webkit-animation: loading-5 0.25s linear forwards;
 }
 .circular-progress[data-percentage="90"] .circular-progress-left .circular-progress-bar {
-  -webkit-animation: loading-4 0.5s ease-out forwards 0.5s;
+  -webkit-animation: loading-4 0.25s linear forwards 0.25s;
 }
 
 .circular-progress[data-percentage="100"] .circular-progress-right .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards;
+  -webkit-animation: loading-5 0.25s linear forwards;
 }
 .circular-progress[data-percentage="100"] .circular-progress-left .circular-progress-bar {
-  -webkit-animation: loading-5 0.5s ease-out forwards 0.5s;
+  -webkit-animation: loading-5 0.25s linear forwards 0.25s;
 }
 
 @-webkit-keyframes loading-1 {

@@ -25,6 +25,8 @@ display: none;
 .resultsTable td {
     display: -webkit-flex;
     justify-content: space-between;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
 }
 .resultsTable {
     margin: 0;
