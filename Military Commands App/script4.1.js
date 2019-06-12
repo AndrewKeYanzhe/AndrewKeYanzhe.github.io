@@ -38,12 +38,15 @@ var sessionComplete = false;
 var currentPage = null;
 var loadMode = -2;  
 var completedLessons = [];
+var vocabMastered = [];
 
 //testing
 if (testMode){
     testVocabList = lesson1;
-    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
-    console.log(vocabScore)
+//    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
+    console.log(vocabScore);
+    reqTestQns = 2;
+    requiredScore = 2;
 }
 
 //curriculum
@@ -58,7 +61,7 @@ function loadLesson(){
     if (currentPage == null){
         currentPage = 0;
     }
-    console.log("currentPage ".concat(currentPage));
+//    console.log("currentPage ".concat(currentPage));
 
     //end lesson
     if (currentPage > lessonPages.length - 1) {
@@ -99,18 +102,28 @@ function unloadLesson(){
     progressBarCounter = null;    
     document.getElementsByClassName("goHome")[0].removeEventListener("click", goHome);
     document.getElementsByClassName("footer")[0].style.display="none";
+    
+    unloadLessonOverview;
 
     newPage();
 }
 function loadTest(){
     console.log(vocabScore);
     console.log("currentPage ".concat(currentPage));
+//    console.log("testVocabList ".concat(JSON.stringify(testVocabList)));
+    console.log(testVocabList)
 
     if (testVocabList.length == 0){
         alert("do a lesson first");
         loadMode = -2;
         newPage();
         return;
+    } else if (testVocabList.length < 4){
+        vocabList = testVocabList;
+        vocabList = shuffle(vocabMastered).slice(0, 4 - testVocabList.length).concat(vocabList);
+        console.log(vocabList);
+    } else {
+        vocabList = testVocabList;
     }
 
     if (currentPage == null){
@@ -119,18 +132,18 @@ function loadTest(){
 
     //generating test
     if (testPages ==null){
-        vocabList = testVocabList;
-        testPages = generateTest(testVocabList);
-        console.log(testVocabList);
+        
+        testPages = generateTest(vocabList);
+//        console.log(testVocabList);
         document.getElementById("footerHeader").innerHTML = "Test"
     }
 
     //check if quiz is done
     if (currentPage >= reqTestQns){
-        alert("test is done"); //change to a score page
-        unloadTest();
+        loadResults();
+//        unloadTest();
         return;                
-    }
+    }   
 
     //making sure quiz has enough questions
     if (testPages.length < noOfQuizzes * vocabList.length / 2){
@@ -142,6 +155,8 @@ function loadTest(){
     //removing first element of testPages
     currentlyTestedPage = testPages[0];
     testPages.shift();
+    
+    console.log(vocabList);
 
     //loading footer
     document.getElementsByClassName("footer")[0].style.display="block";            
@@ -158,19 +173,22 @@ function loadTest(){
 function unloadTest(){
     document.getElementsByClassName("goHome")[0].removeEventListener("click", goHome);
 
-    loadMode = -2;
+    loadMode = -2;    
     for (var key in vocabScore){
         if (vocabScore[key] >= requiredScore && testVocabList.includes(allVocab[key])){
             testVocabList.splice(testVocabList.indexOf(vocab), 1);
-            console.log(key.concat(" mastered"))
+            console.log(key.concat(" mastered"));
+            vocabMastered.push(allVocab[key]);
         }        
     }
+    
     vocabList = [];
     testPages = null;
     currentPage = null;
 
     progressBarCounter = null;      
     document.getElementsByClassName("footer")[0].style.display="none";
+    unloadResults();
 
     newPage();
 }
@@ -347,11 +365,12 @@ function unloadLessonOverview(){
 }
 
 //Results
-function loadResults(){
+function loadResults(){    
     resultsSect = document.getElementById("resultsSect");
     resultsSect.style.display = "block";
+    currentSect = resultsSect;
 
-    lesson1.forEach(function(vocab, index){
+    testVocabList.forEach(function(vocab, index){
         listItemStr = document.getElementById("resultsTableTemplate").innerHTML;
 
         //setting values
@@ -367,6 +386,13 @@ function loadResults(){
         listItem.innerHTML = listItemStr;
         resultsSect.getElementsByClassName("content")[0].appendChild(listItem.content);
     });    
+}
+function unloadResults(){
+//    document.getElementsByClassName("resultsTable").forEach(function(item, index){
+//        removeElement(item);
+//    });
+    console.log(document.getElementsByClassName("resultsTable"))
+    
 }
 
 //Dictionary
@@ -781,9 +807,6 @@ function setupButtons (){
 
 window.onload = function(){   
     setupButtons();
-    //    newPage();
-    loadResults();
-    //    setTimeout(function() {
-    //        loadResults();
-    //    }, 1000);
+        newPage();
+//    loadResults();
 }

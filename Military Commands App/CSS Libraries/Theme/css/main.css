@@ -105,7 +105,7 @@ display: none;
 }
 
 .soundMCQ{
-    background: url(../../Images/audioIcon.svg); background-repeat: no-repeat; background-position: center; border-radius: 50%; padding: 2rem 2rem;
+    background: url(../../../Images/audioIcon.svg); background-repeat: no-repeat; background-position: center; border-radius: 50%; padding: 2rem 2rem;
 }
 
 .soundMCQ:hover {
@@ -114,7 +114,7 @@ display: none;
 }
 
 .soundPrompt {
-    background: url(../../Images/audioIcon.svg);
+    background: url(../../../Images/audioIcon.svg);
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 50%;
@@ -146,7 +146,7 @@ box-shadow: none;
 
 
 .dictionaryCorrection > header {
-    background-image: url("../../Images/redBgLines.svg") !important;
+    background-image: url("../../../Images/redBgLines.svg") !important;
     background-color: FC4971 !important;
 }
 .dictionaryCorrection > div > .actions > li > a {
