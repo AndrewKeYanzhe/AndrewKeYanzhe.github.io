@@ -140,8 +140,8 @@ function loadTest(){
 
     //check if quiz is done
     if (currentPage >= reqTestQns){
+        $('.progress-bar').css("width", "100%");
         loadResults();
-//        unloadTest();
         return;                
     }   
 
@@ -367,11 +367,13 @@ function unloadLessonOverview(){
 }
 
 //Results
-function loadResults(){    
+function loadResults(){
+    document.getElementById("footerHeader").innerHTML = "Complete";
     resultsSect = document.getElementById("resultsSect");
     resultsSect.style.display = "block";
     currentSect = resultsSect;
-
+    
+    //creating resultsList
     testVocabList.forEach(function(vocab, index){
         listItemStr = document.getElementById("resultsTableTemplate").innerHTML;
 
@@ -389,7 +391,7 @@ function loadResults(){
         document.getElementById("resultsList").appendChild(listItem.content);
     });
     
-    //managing masteredvocab
+    //creating vocabMastered list
     if (vocabMastered.length == 0){        document.getElementById("resultsSect").getElementsByTagName("h2")[0].style.display = "none";
     } else {
         document.getElementById("resultsSect").getElementsByTagName("h2")[0].style.display = "block"; 
@@ -413,20 +415,15 @@ function loadResults(){
     });    
 }
 function unloadResults(){
-//    document.getElementsByClassName("resultsTable").forEach(function(item, index){
-//        removeElement(item);
-//    });
-//    console.log(document.getElementsByClassName("resultsTable"));
+    if (currentPage < reqTestQns){
+        return;
+    }
     for (index = 0; index < testVocabList.length; index ++){
-//        console.log(document.getElementsByClassName("resultsTable")[0]);
         document.getElementById("resultsList").removeChild(document.getElementsByClassName("resultsTable")[0])
     }
     for (index = 0; index < vocabMastered.length; index ++){
-//        console.log(document.getElementsByClassName("resultsTable")[0]);
         document.getElementById("masteredList").removeChild(document.getElementsByClassName("resultsTable")[0])
-    }
-    
-    
+    }    
 }
 
 //Dictionary
