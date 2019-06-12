@@ -39,8 +39,13 @@
   border-color: #ffb43e;
 }
 
+/*edited*/
 .circular-progress[data-percentage="100"] .circular-progress-bar{
-    border-color: #00cc7e; 
+    border-color: #00cc7e;
+    border-width: 3px;
+}
+.circular-progress[data-percentage="100"]:after {
+    border-width: 3px;
 }
 
 .circular-progress .circular-progress-left .circular-progress-bar {
@@ -74,7 +79,7 @@
   font-weight: 300;
 }
 .circular-progress .circular-progress-value div {
-  margin-top: 10px;
+/*  margin-top: 10px; EDITED*/ 
 }
 .circular-progress .circular-progress-value span {
   font-size: 12px;

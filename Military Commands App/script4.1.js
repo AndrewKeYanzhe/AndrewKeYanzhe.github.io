@@ -214,7 +214,7 @@ function newPage(){
             loadTest();
             break;
         default:
-                   }
+    }
 }
 
 //MCQ options generation
@@ -248,7 +248,7 @@ function handleWrongAns(wrongVocab, vocab, ansType){
             break;
         case "soundMCQ":
             break;
-                   }
+    }
     if (testPages !== null){
 
         testPages.splice(Math.floor(Math.random() * 3) + 3, 0, currentlyTestedPage);// insert randomly in next 3-6
@@ -350,15 +350,18 @@ function unloadLessonOverview(){
 function loadResults(){
     resultsSect = document.getElementById("resultsSect");
     resultsSect.style.display = "block";
-    
+
     lesson1.forEach(function(vocab, index){
         listItemStr = document.getElementById("resultsTableTemplate").innerHTML;
-        
+
         //setting values
         listItemStr = listItemStr.replace("Malay Word", vocab.malayWord);
         listItemStr = listItemStr.replace("English Definition", vocab.engDef);
         listItemStr = listItemStr.replace("50", Math.min(100, Math.round(vocabScore[vocab.malayWord] / requiredScore * 10) * 10));
-        
+        if (Math.min(100, Math.round(vocabScore[vocab.malayWord] / requiredScore * 10) * 10) !== 100){
+            listItemStr = listItemStr.replace('class="circular-progress-value"', 'class="circular-progress-value" style="display:none"')
+        }
+
         //inserting item
         var listItem = document.createElement('template');
         listItem.innerHTML = listItemStr;
@@ -685,7 +688,7 @@ function loadRandomPage(){
             break;
         case 4:
             loadMalayWordMCQ(vocabList[j]);
-            }
+    }
 }
 function loadInOrder(){
     var vocabIndex = Math.floor(Math.random() * 4);
@@ -713,7 +716,7 @@ function loadInOrder(){
         case 4:
             loadMalayWordMCQ(vocabList[vocabIndex]);
             break;
-                      }
+    }
 }
 function loadInOrder2(){
     var vocabIndex = Math.floor(Math.random() * 4);
@@ -740,7 +743,7 @@ function loadInOrder2(){
         case 4:
             loadMalayWordMCQ(vocabList[vocabIndex]);
             break;
-                      }
+    }
 }
 
 function loadPage ([vocabIndex, page]){
@@ -764,7 +767,7 @@ function loadPage ([vocabIndex, page]){
         case 4:
             loadSoundMCQ(vocab);
             break;
-               }
+    }
 }
 function setupButtons (){
     document.getElementsByClassName("lesson1")[0].addEventListener("click", function(){
@@ -779,8 +782,8 @@ function setupButtons (){
 window.onload = function(){   
     setupButtons();
     //    newPage();
-        loadResults();
-//    setTimeout(function() {
-//        loadResults();
-//    }, 1000);
+    loadResults();
+    //    setTimeout(function() {
+    //        loadResults();
+    //    }, 1000);
 }
