@@ -2,7 +2,7 @@
 
 //parameters
 var debugMode = false;
-var testMode = false;
+var testMode = true;
 var requiredScore = 6;
 var reqTestQns = 10;
 var autoPlayPronounciationDelay = 0; //in ms
@@ -42,10 +42,10 @@ var vocabMastered = [];
 
 //testing
 if (testMode){
-    testVocabList = lesson1;
-    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
+    testVocabList = lesson1
+//    vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
     console.log(vocabScore);
-    reqTestQns = 3;
+    reqTestQns = 5;
     requiredScore = 5;
 }
 
@@ -372,7 +372,7 @@ function loadResults(){
     resultsSect = document.getElementById("resultsSect");
     resultsSect.style.display = "block";
     currentSect = resultsSect;
-    
+
     //creating resultsList
     testVocabList.forEach(function(vocab, index){
         listItemStr = document.getElementById("resultsTableTemplate").innerHTML;
