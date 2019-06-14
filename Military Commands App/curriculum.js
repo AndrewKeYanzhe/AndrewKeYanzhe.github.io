@@ -38,7 +38,7 @@ var lesson1 = [
     senangDiri = new malayCommand("Senang diri", "Stand at ease", "Audio/senangDiri.m4a"),
     sedia = new malayCommand("Sedia", "Attention", "Audio/sedia.m4a"),
     berhenti = new malayCommand("Berhenti", "Stop", "Audio/berhenti.m4a"),
-    dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on right", "Audio/dariKiriCJ.m4a"),
+    dariKiriCepatJalan = new malayCommand("Dari&nbsp;kiri, cepat&nbsp;jalan", "March, commander on left", "Audio/dariKiriCJ.m4a"),
 ];
 var lessonList = [lesson1];
 //var lessonNames = ["Lesson 1"];
