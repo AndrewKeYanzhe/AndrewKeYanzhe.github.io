@@ -45,7 +45,8 @@ if (testMode){
     testVocabList = lesson1
     vocabScore = {"Senang diri": 1, "Sedia": 3, "Berhenti": 6, "Dari&nbsp;kiri, cepat&nbsp;jalan": 2};
     console.log(vocabScore);
-    reqTestQns = 5;
+//    reqTestQns = 5;
+    reqTestQns = 2;
     requiredScore = 5;
 }
 
