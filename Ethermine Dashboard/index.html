@@ -1,6 +1,22 @@
 <html><head>  
 	<title>Stats</title>
 	<style type="text/css">
+
+	@media screen and (min-width: 601px) {
+		div, label, input, button {
+			font-size: 25px;
+		}
+	}
+
+	/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+	@media screen and (max-width: 600px) {
+		div, button {
+			font-size: 6vw;
+		}
+		label, input{
+			font-size: 3vw;
+		}
+	}
 	input	{
 		width:100%;
 	}
@@ -100,7 +116,7 @@
 			breaksFromMining = 40 //in hours
 			dailyElectrictyCost = 0.7955697024000000 //sgd
 			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
-			
+
 			setCookie(varToString({minerAddress}),minerAddress)
 			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
 			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
@@ -185,7 +201,7 @@
 	text-align:center;
 	font-family: Verdana, Geneva, sans-serif;
 	font-weight: bold;
-	font-size: 15px;
+	/*font-size: 6vw;*/
 	line-height: 200%;
 	position: absolute;
 	top: 50%;
@@ -194,12 +210,12 @@
 	width: 80%;">
 
 	Unpaid ETH: <span id="unpaidEth">Fetching</span><br>		
-	Unpaid balance in SGD: <span id="unpaidBalSgd">Fetching</span><br>		
+	Unpaid SGD: <span id="unpaidBalSgd">Fetching</span><br>		
 	Profit in SGD: <span id="profitSgd">Fetching</span><br>	
 
 	<br>
 	<button onclick="showSettings()">Settings</button>
-
+	<p></p>	
 	<div id="settings" style="display: none">
 
 		<label for="minerAddress">Ethereum address:</label><br>
@@ -210,6 +226,7 @@
 		<input type="text" id="miningBeganTimestamp" name=""><br>
 		<label for="breaksFromMining">Hours of breaks from mining:</label><br>
 		<input type="text" id="breaksFromMining" name=""><br>
+		<br>
 		<button onclick="applySettings()">Apply</button>
 		<button onclick="showSample()">Sample</button>
 	</div>
