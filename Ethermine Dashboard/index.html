@@ -1,0 +1,205 @@
+<html><head>  
+	<title>Stats</title>
+	<style type="text/css">
+	input	{
+		width:100%;
+	}
+
+</style>
+</head>
+<body>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script>
+		// let minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+		// let breaksFromMining = 40 //in hours
+		// let dailyElectrictyCost = 0.7955697024000000 //sgd
+		// let miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
+		let minerAddress = getCookie("minerAddress")
+		let breaksFromMining = getCookie("breaksFromMining")
+		let dailyElectrictyCost = getCookie("dailyElectrictyCost")
+		let miningBeganTimestamp = getCookie("miningBeganTimestamp")
+
+		console.log(getCookie("hhhhh"))
+
+		function getEtherPrice() {
+			//for ETH to SGD
+			let apiUrl = "https://min-api.cryptocompare.com/data/price?fsym=eth&tsyms=sgd"
+			return new Promise(resolve => {
+				axios
+				.get(apiUrl)
+				.then(response => {
+					// console.log(response.data.data)
+					// console.log(response.data.data.currentStatistics.unpaid);
+					resolve(response.data.SGD)
+				})
+				.catch(error => console.error(error));
+			});
+		}
+
+		function getEthermineStats(minerAddress) {
+			let apiUrl = "https://api.ethermine.org/miner/" + minerAddress + "/dashboard"
+			return new Promise(resolve => {
+				axios
+				.get(apiUrl)
+				.then(response => {
+					// console.log(response.data.data)
+					// console.log(response.data.data.currentStatistics.unpaid);
+					resolve(response.data.data)
+				})
+				.catch(error => console.error(error));
+			});
+		}
+
+		function showSample(){
+			document.getElementById("minerAddress").value = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+			document.getElementById("dailyElectrictyCost").value = 0.7955697024000000
+			document.getElementById("miningBeganTimestamp").value = "2021-03-24T18:00:00.000+08:00"
+			document.getElementById("breaksFromMining").value = 40
+		}
+
+		function showSettings(){
+			if(document.getElementById("settings").style.display == 'none'){
+				document.getElementById("settings").style.display = 'block'
+
+				document.getElementById("minerAddress").value = minerAddress
+				document.getElementById("dailyElectrictyCost").value = dailyElectrictyCost
+				document.getElementById("miningBeganTimestamp").value = miningBeganTimestamp
+				document.getElementById("breaksFromMining").value = breaksFromMining
+			}
+			else{
+				document.getElementById("settings").style.display = 'none'
+			}
+		}
+
+		function applySettings(){
+			minerAddress = document.getElementById("minerAddress").value
+			dailyElectrictyCost = document.getElementById("dailyElectrictyCost").value
+			miningBeganTimestamp = document.getElementById("miningBeganTimestamp").value
+			breaksFromMining = document.getElementById("breaksFromMining").value
+
+
+			const varToString = varObj => Object.keys(varObj)[0]
+
+			setCookie(varToString({minerAddress}),minerAddress)
+			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
+			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
+			setCookie(varToString({breaksFromMining}),breaksFromMining)
+			console.log(document.cookie)
+
+			asyncCall()
+		}
+
+		async function asyncCall() {
+
+			document.getElementById("unpaidEth").innerText = "Fetching";
+			document.getElementById("unpaidBalSgd").innerText = "Fetching";
+			document.getElementById("profitSgd").innerText = "Fetching";
+
+			console.log('calling');
+			let ethermineStats = getEthermineStats(minerAddress);
+			let ethPrice = getEtherPrice() //in SGD
+			
+			ethermineStats = await ethermineStats
+			ethPrice = await ethPrice
+
+
+			console.log(ethermineStats);
+			console.log(ethPrice)
+
+			let unpaidEth = ethermineStats.currentStatistics.unpaid/10**18
+			console.log(unpaidEth)
+			let unpaidBalSgd = unpaidEth*ethPrice
+
+
+			currentTime = new Date()
+			miningBegan = new Date(miningBeganTimestamp);
+			// console.log(currentTime)
+			// console.log(miningBegan)
+			daysElapsed = (currentTime - miningBegan)/24/60/60/1000
+			console.log(daysElapsed)
+			daysMined = daysElapsed - breaksFromMining/24
+			console.log(daysMined)
+			totalCost = daysMined*dailyElectrictyCost
+			console.log(totalCost)
+			profitSgd = unpaidBalSgd - totalCost
+
+
+			document.getElementById("unpaidEth").innerText = unpaidEth.toFixed(6);
+			document.getElementById("unpaidBalSgd").innerText = unpaidBalSgd.toFixed(2);
+			document.getElementById("profitSgd").innerText = profitSgd.toFixed(2);   
+
+
+			console.log(document.cookie)
+			document.cookie = "afdsfd"
+			console.log(document.cookie)
+
+		}
+
+		function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
+		}
+		// function writeCookies(minerAddress,dailyElectrictyCost,miningBeganTimestamp,breaksFromMining){
+		// 	document.cookie = "value ="minerAddress + dailyElectrictyCost + miningBeganTimestamp +breaksFromMining + "; expires=Thu, 18 Dec 2013 12:00:00"
+		// }
+
+		function setCookie(cname, cvalue) {
+		  // var d = new Date();
+		  // d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		  var expires = "expires="+ "2037-03-24T18:00:00.000+08:00";
+		  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+		}
+
+		asyncCall();
+
+
+
+	</script>
+
+	<div style="margin: auto;
+	text-align:center;
+	font-family: Verdana, Geneva, sans-serif;
+	font-weight: bold;
+	font-size: 15px;
+	line-height: 200%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 80%;">
+	Unpaid ETH: <span id="unpaidEth">Fetching</span><br>		
+	Unpaid balance in SGD: <span id="unpaidBalSgd">Fetching</span><br>		
+	Profit in SGD: <span id="profitSgd">Fetching</span><br>	
+
+	<br>
+	<button onclick="showSettings()">Settings</button>
+
+	<div id="settings" style="display: none">
+
+		<label for="minerAddress">Ethereum address:</label><br>
+		<input type="text" id="minerAddress" name=""><br>
+		<label for="dailyElectrictyCost">Daily electricity cost in SGD:</label><br>
+		<input type="text" id="dailyElectrictyCost" name=""><br>
+		<label for="miningBeganTimestamp">Time when mining began:</label><br>
+		<input type="text" id="miningBeganTimestamp" name=""><br>
+		<label for="breaksFromMining">Hours of breaks from mining:</label><br>
+		<input type="text" id="breaksFromMining" name=""><br>
+		<button onclick="applySettings()">Apply</button>
+		<button onclick="showSample()">Sample</button>
+	</div>
+</div>
+
+
+
+</body></html>
