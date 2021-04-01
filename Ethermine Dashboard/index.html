@@ -10,16 +10,7 @@
 <body>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
-		// let minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-		// let breaksFromMining = 40 //in hours
-		// let dailyElectrictyCost = 0.7955697024000000 //sgd
-		// let miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
-		let minerAddress = getCookie("minerAddress")
-		let breaksFromMining = getCookie("breaksFromMining")
-		let dailyElectrictyCost = getCookie("dailyElectrictyCost")
-		let miningBeganTimestamp = getCookie("miningBeganTimestamp")
-
-		console.log(getCookie("hhhhh"))
+		const varToString = varObj => Object.keys(varObj)[0]
 
 		function getEtherPrice() {
 			//for ETH to SGD
@@ -76,14 +67,14 @@
 			document.getElementById("unpaidBalSgd").innerText = "Fetching"
 			document.getElementById("profitSgd").innerText = "Fetching"
 
-			
+
 			minerAddress = document.getElementById("minerAddress").value
 			dailyElectrictyCost = document.getElementById("dailyElectrictyCost").value
 			miningBeganTimestamp = document.getElementById("miningBeganTimestamp").value
 			breaksFromMining = document.getElementById("breaksFromMining").value
 
 
-			const varToString = varObj => Object.keys(varObj)[0]
+			
 
 			setCookie(varToString({minerAddress}),minerAddress)
 			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
@@ -92,6 +83,28 @@
 			console.log(document.cookie)
 
 			asyncCall()
+		}
+
+		// let minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+		// let breaksFromMining = 40 //in hours
+		// let dailyElectrictyCost = 0.7955697024000000 //sgd
+		// let miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
+		let minerAddress = getCookie("minerAddress")
+		let breaksFromMining = getCookie("breaksFromMining")
+		let dailyElectrictyCost = getCookie("dailyElectrictyCost")
+		let miningBeganTimestamp = getCookie("miningBeganTimestamp")
+
+		if (!(minerAddress || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
+			console.log("No cookies set")
+			minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+			breaksFromMining = 40 //in hours
+			dailyElectrictyCost = 0.7955697024000000 //sgd
+			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
+			
+			setCookie(varToString({minerAddress}),minerAddress)
+			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
+			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
+			setCookie(varToString({breaksFromMining}),breaksFromMining)
 		}
 
 		async function asyncCall() {
