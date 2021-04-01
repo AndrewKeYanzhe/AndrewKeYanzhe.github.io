@@ -91,9 +91,9 @@
 
 		async function asyncCall() {
 
-			document.getElementById("unpaidEth").innerText = "Fetching";
-			document.getElementById("unpaidBalSgd").innerText = "Fetching";
-			document.getElementById("profitSgd").innerText = "Fetching";
+			document.getElementById("unpaidEth").innerText = "Fetching"
+			document.getElementById("unpaidBalSgd").innerText = "Fetching"
+			document.getElementById("profitSgd").innerText = "Fetching"
 
 			console.log('calling');
 			let ethermineStats = getEthermineStats(minerAddress);
@@ -178,6 +178,7 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 	width: 80%;">
+
 	Unpaid ETH: <span id="unpaidEth">Fetching</span><br>		
 	Unpaid balance in SGD: <span id="unpaidBalSgd">Fetching</span><br>		
 	Profit in SGD: <span id="profitSgd">Fetching</span><br>	
