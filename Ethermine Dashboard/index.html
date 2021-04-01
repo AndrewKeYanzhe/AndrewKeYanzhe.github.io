@@ -72,6 +72,11 @@
 		}
 
 		function applySettings(){
+			document.getElementById("unpaidEth").innerText = "Fetching"
+			document.getElementById("unpaidBalSgd").innerText = "Fetching"
+			document.getElementById("profitSgd").innerText = "Fetching"
+
+			
 			minerAddress = document.getElementById("minerAddress").value
 			dailyElectrictyCost = document.getElementById("dailyElectrictyCost").value
 			miningBeganTimestamp = document.getElementById("miningBeganTimestamp").value
@@ -90,10 +95,6 @@
 		}
 
 		async function asyncCall() {
-
-			document.getElementById("unpaidEth").innerText = "Fetching"
-			document.getElementById("unpaidBalSgd").innerText = "Fetching"
-			document.getElementById("profitSgd").innerText = "Fetching"
 
 			console.log('calling');
 			let ethermineStats = getEthermineStats(minerAddress);
