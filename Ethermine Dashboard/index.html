@@ -56,6 +56,21 @@
 			});
 		}
 
+		function getEtherPrice2() {
+			//for ETH to SGD
+			let apiUrl = "https://api.coinbase.com/v2/exchange-rates?currency=sgd"
+			return new Promise(resolve => {
+				axios
+				.get(apiUrl)
+				.then(response => {
+					// console.log(response.data.data)
+					// console.log(response.data.data.currentStatistics.unpaid);
+					resolve(response.data.data.rates.ETH**-1)
+				})
+				.catch(error => console.error(error));
+			});
+		}
+
 		function getEthermineDashboard(minerAddress) {
 			let apiUrl = "https://api.ethermine.org/miner/" + minerAddress + "/dashboard"
 			return new Promise(resolve => {
@@ -163,15 +178,16 @@
 
 			console.log('calling');
 			let ethermineDashboard = getEthermineDashboard(minerAddress);
-			let ethPrice = getEtherPrice() //in SGD
+			let ethPrice = getEtherPrice2() //in SGD, using coinbase
 			let ethermineCurrentStats = getEthermineCurrentStats(minerAddress)
-			// let WhatToMineStats = getWhatToMineStats(29.2)
 			
 			ethermineDashboard = await ethermineDashboard
 			ethPrice = await ethPrice
-			ethermineCurrentStats = await getEthermineCurrentStats(minerAddress)
+			ethermineCurrentStats = await ethermineCurrentStats
 			// WhatToMineStats = await getWhatToMineStats(29.2)
 
+			// let ethPrice2 = await getEtherPrice2()
+			// console.log(1/ethPrice2)
 
 			console.log(ethermineDashboard);
 			console.log(ethPrice)
@@ -181,7 +197,7 @@
 			let unpaidEth = ethermineDashboard.currentStatistics.unpaid/10**18
 			let unpaidBalSgd = unpaidEth*ethPrice
 			let ethPerDay = ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate*10**6/ethermineCurrentStats.averageHashrate
-			console.log(ethPerDay)
+			// console.log(ethPerDay)
 			/*
 			ethermine provides coinsPerMin as a 24HR moving average based on network rewards/difficulty and your hashrate submitted in the last 24hrs
 			
