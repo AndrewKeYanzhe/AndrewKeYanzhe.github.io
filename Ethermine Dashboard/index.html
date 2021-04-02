@@ -31,7 +31,7 @@
 		label, input{
 			font-size: 3vw;
 		}
-	
+
 	}
 
 </style>
@@ -56,7 +56,7 @@
 			});
 		}
 
-		function getEthermineStats(minerAddress) {
+		function getEthermineDashboard(minerAddress) {
 			let apiUrl = "https://api.ethermine.org/miner/" + minerAddress + "/dashboard"
 			return new Promise(resolve => {
 				axios
@@ -70,11 +70,30 @@
 			});
 		}
 
+
+
+		function getEthermineCurrentStats(minerAddress) {
+			let apiUrl = "https://api.ethermine.org/miner/" + minerAddress + "/currentStats"
+			return new Promise(resolve => {
+				axios
+				.get(apiUrl)
+				.then(response => {
+					// console.log(response.data.data)
+					resolve(response.data.data)
+				})
+				.catch(error => console.error(error));
+			});
+		}
+
+
 		function showSample(){
 			document.getElementById("minerAddress").value = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+			document.getElementById("acceptedHashrate").value = 29
 			document.getElementById("dailyElectrictyCost").value = 0.7955697024000000
 			document.getElementById("miningBeganTimestamp").value = "2021-03-24T18:00:00.000+08:00"
 			document.getElementById("breaksFromMining").value = 40
+
+
 		}
 
 		function showSettings(){
@@ -82,6 +101,7 @@
 				document.getElementById("settings").style.display = 'block'
 
 				document.getElementById("minerAddress").value = minerAddress
+				document.getElementById("acceptedHashrate").value = acceptedHashrate
 				document.getElementById("dailyElectrictyCost").value = dailyElectrictyCost
 				document.getElementById("miningBeganTimestamp").value = miningBeganTimestamp
 				document.getElementById("breaksFromMining").value = breaksFromMining
@@ -93,11 +113,14 @@
 
 		function applySettings(){
 			document.getElementById("unpaidEth").innerText = "Fetching"
-			document.getElementById("unpaidBalSgd").innerText = "Fetching"
-			document.getElementById("profitSgd").innerText = "Fetching"
+			document.getElementById("dailyEth").innerText = "Fetching"
+			document.getElementById("dailyProfitSgd").innerText = "Fetching"
+			document.getElementById("totalProfitSgd").innerText = "Fetching"
+
 
 
 			minerAddress = document.getElementById("minerAddress").value
+			acceptedHashrate = document.getElementById("acceptedHashrate").value
 			dailyElectrictyCost = document.getElementById("dailyElectrictyCost").value
 			miningBeganTimestamp = document.getElementById("miningBeganTimestamp").value
 			breaksFromMining = document.getElementById("breaksFromMining").value
@@ -114,44 +137,65 @@
 			asyncCall()
 		}
 
-		// let minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-		// let breaksFromMining = 40 //in hours
-		// let dailyElectrictyCost = 0.7955697024000000 //sgd
-		// let miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
 		let minerAddress = getCookie("minerAddress")
+		let acceptedHashrate = getCookie("acceptedHashrate") //long run accepted hashrate from your mining pool
 		let breaksFromMining = getCookie("breaksFromMining")
 		let dailyElectrictyCost = getCookie("dailyElectrictyCost")
 		let miningBeganTimestamp = getCookie("miningBeganTimestamp")
 
-		if (!(minerAddress || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
+		if (!(minerAddress || acceptedHashrate || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
 			console.log("No cookies set")
 			minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+			acceptedHashrate = 29 //in MH/s
 			breaksFromMining = 40 //in hours
 			dailyElectrictyCost = 0.7955697024000000 //sgd
 			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
 
 			setCookie(varToString({minerAddress}),minerAddress)
+			setCookie(varToString({acceptedHashrate}))
 			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
 			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
 			setCookie(varToString({breaksFromMining}),breaksFromMining)
+
 		}
 
 		async function asyncCall() {
 
 			console.log('calling');
-			let ethermineStats = getEthermineStats(minerAddress);
+			let ethermineDashboard = getEthermineDashboard(minerAddress);
 			let ethPrice = getEtherPrice() //in SGD
+			let ethermineCurrentStats = getEthermineCurrentStats(minerAddress)
+			// let WhatToMineStats = getWhatToMineStats(29.2)
 			
-			ethermineStats = await ethermineStats
+			ethermineDashboard = await ethermineDashboard
 			ethPrice = await ethPrice
+			ethermineCurrentStats = await getEthermineCurrentStats(minerAddress)
+			// WhatToMineStats = await getWhatToMineStats(29.2)
 
 
-			console.log(ethermineStats);
+			console.log(ethermineDashboard);
 			console.log(ethPrice)
+			console.log(ethermineCurrentStats)
 
-			let unpaidEth = ethermineStats.currentStatistics.unpaid/10**18
-			console.log(unpaidEth)
+
+			let unpaidEth = ethermineDashboard.currentStatistics.unpaid/10**18
 			let unpaidBalSgd = unpaidEth*ethPrice
+			let ethPerDay = ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate*10**6/ethermineCurrentStats.averageHashrate
+			console.log(ethPerDay)
+			/*
+			ethermine provides coinsPerMin as a 24HR moving average based on network rewards/difficulty and your hashrate submitted in the last 24hrs
+			
+			Thus, if you have not mined for 24 full hours, you will not know your instantaneous payrate
+
+			this formula provides instantaneous payrate by multiplying your payrate by (long term accepted hashrate)/(hashrate over past 24Hrs) 
+
+			instantaneous payrate should be similar to values obtained from whattomine, minus fees (e.g. 0.75% teamredminer, 1% ethermine, 1% stale rate)
+			*/
+
+			dailyProfitSgd = ethPerDay*ethPrice - dailyElectrictyCost
+
+
+
 
 
 			currentTime = new Date()
@@ -159,22 +203,19 @@
 			// console.log(currentTime)
 			// console.log(miningBegan)
 			daysElapsed = (currentTime - miningBegan)/24/60/60/1000
-			console.log(daysElapsed)
+			// console.log(daysElapsed)
 			daysMined = daysElapsed - breaksFromMining/24
-			console.log(daysMined)
+			// console.log(daysMined)
 			totalCost = daysMined*dailyElectrictyCost
-			console.log(totalCost)
-			profitSgd = unpaidBalSgd - totalCost
+			// console.log(totalCost)
+			totalProfitSgd = unpaidBalSgd - totalCost
 
 
 			document.getElementById("unpaidEth").innerText = unpaidEth.toFixed(6);
-			document.getElementById("unpaidBalSgd").innerText = unpaidBalSgd.toFixed(2);
-			document.getElementById("profitSgd").innerText = profitSgd.toFixed(2);   
-
-
-			console.log(document.cookie)
-			document.cookie = "afdsfd"
-			console.log(document.cookie)
+			// document.getElementById("unpaidBalSgd").innerText = unpaidBalSgd.toFixed(2);
+			document.getElementById("totalProfitSgd").innerText = totalProfitSgd.toFixed(2);
+			document.getElementById("dailyEth").innerText = ethPerDay.toFixed(5)
+			document.getElementById("dailyProfitSgd").innerText = dailyProfitSgd.toFixed(2)
 
 		}
 
@@ -217,14 +258,17 @@
 	/*font-size: 6vw;*/
 	line-height: 200%;
 	position: absolute;
-	top: 50%;
+	top: 20%;
 	left: 50%;
-	transform: translate(-50%, -50%);
+	/*transform: translate(-50%, -50%);*/
+	transform: translate(-50%,0%);
 	width: 80%;">
 
 	Unpaid ETH: <span id="unpaidEth">Fetching</span><br>		
-	Unpaid SGD: <span id="unpaidBalSgd">Fetching</span><br>		
-	Profit in SGD: <span id="profitSgd">Fetching</span><br>	
+	<!-- Unpaid SGD: <span id="unpaidBalSgd">Fetching</span><br>		 -->
+	ETH/day: <span id="dailyEth">Fetching</span><br>	
+	SGD profit/day: <span id="dailyProfitSgd">Fetching</span><br>	
+	Total SGD profit: <span id="totalProfitSgd">Fetching</span><br>	
 
 	<br>
 	<button onclick="showSettings()">Settings</button>
@@ -233,6 +277,8 @@
 
 		<label for="minerAddress">Ethereum address:</label><br>
 		<input type="text" id="minerAddress" name=""><br>
+		<label for="acceptedHashrate">Average accepted hashrate:</label><br>
+		<input type="text" id="acceptedHashrate" name=""><br>
 		<label for="dailyElectrictyCost">Daily electricity cost in SGD:</label><br>
 		<input type="text" id="dailyElectrictyCost" name=""><br>
 		<label for="miningBeganTimestamp">Time when mining began:</label><br>
@@ -240,9 +286,11 @@
 		<label for="breaksFromMining">Hours of breaks from mining:</label><br>
 		<input type="text" id="breaksFromMining" name=""><br>
 		<br>
-		<button onclick="applySettings()">Apply</button>
+		<button onclick="applySettings()">Save</button>
 		<button onclick="showSample()">Sample</button>
 	</div>
+	<br>
+	<br>
 </div>
 
 
