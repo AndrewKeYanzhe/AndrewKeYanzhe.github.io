@@ -138,12 +138,10 @@
 			acceptedHashrate = document.getElementById("acceptedHashrate").value
 			dailyElectrictyCost = document.getElementById("dailyElectrictyCost").value
 			miningBeganTimestamp = document.getElementById("miningBeganTimestamp").value
-			breaksFromMining = document.getElementById("breaksFromMining").value
-
-
-			
+			breaksFromMining = document.getElementById("breaksFromMining").value		
 
 			setCookie(varToString({minerAddress}),minerAddress)
+			setCookie(varToString({acceptedHashrate}),acceptedHashrate)
 			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
 			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
 			setCookie(varToString({breaksFromMining}),breaksFromMining)
