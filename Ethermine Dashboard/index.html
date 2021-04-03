@@ -21,6 +21,7 @@
 		width:100%;
 	}
 
+	/*for iphone*/
 	@media only screen 
 	and (min-device-width: 375px) 
 	and (max-device-width: 667px) 
@@ -70,7 +71,7 @@
 				.catch(error => {
 					console.error(error)
 					resolve("failed to get ETH-SGD")
-					});
+				});
 			});
 		}
 
@@ -88,8 +89,6 @@
 			});
 		}
 
-
-
 		function getEthermineCurrentStats(minerAddress) {
 			let apiUrl = "https://api.ethermine.org/miner/" + minerAddress + "/currentStats"
 			return new Promise(resolve => {
@@ -103,15 +102,12 @@
 			});
 		}
 
-
 		function showSample(){
 			document.getElementById("minerAddress").value = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
 			document.getElementById("acceptedHashrate").value = 29
 			document.getElementById("dailyElectrictyCost").value = 0.7955697024000000
 			document.getElementById("miningBeganTimestamp").value = "2021-03-24T18:00:00.000+08:00"
 			document.getElementById("breaksFromMining").value = 40
-
-
 		}
 
 		function showSettings(){
@@ -135,8 +131,6 @@
 			document.getElementById("dailyProfitSgd").innerText = "Fetching"
 			document.getElementById("totalProfitSgd").innerText = "Fetching"
 
-
-
 			minerAddress = document.getElementById("minerAddress").value
 			acceptedHashrate = document.getElementById("acceptedHashrate").value
 			dailyElectrictyCost = document.getElementById("dailyElectrictyCost").value
@@ -153,30 +147,29 @@
 			asyncCall()
 		}
 
-		let minerAddress = getCookie("minerAddress")
-		let acceptedHashrate = getCookie("acceptedHashrate") //long run accepted hashrate from your mining pool
-		let breaksFromMining = getCookie("breaksFromMining")
-		let dailyElectrictyCost = getCookie("dailyElectrictyCost")
-		let miningBeganTimestamp = getCookie("miningBeganTimestamp")
-
-		if (!(minerAddress || acceptedHashrate || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
-			console.log("No cookies set")
-			minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-			acceptedHashrate = 29 //in MH/s
-			breaksFromMining = 40 //in hours
-			dailyElectrictyCost = 0.7955697024000000 //sgd
-			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
-
-			setCookie(varToString({minerAddress}),minerAddress)
-			setCookie(varToString({acceptedHashrate}))
-			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
-			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
-			setCookie(varToString({breaksFromMining}),breaksFromMining)
-
+		function getCookie(cname) {
+			var name = cname + "=";
+			var decodedCookie = decodeURIComponent(document.cookie);
+			var ca = decodedCookie.split(';');
+			for(var i = 0; i <ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') {
+					c = c.substring(1);
+				}
+				if (c.indexOf(name) == 0) {
+					return c.substring(name.length, c.length);
+				}
+			}
+			return "";
 		}
 
-		async function asyncCall() {
+		function setCookie(cname, cvalue) {
+			var expires = "expires="+ "2037-03-24T18:00:00.000+08:00";
+			document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+		}
 
+
+		async function asyncCall() {
 			console.log('calling');
 			let ethermineDashboard = getEthermineDashboard(minerAddress);
 			let ethPrice = getEtherPrice2() //in SGD, using coinbase
@@ -236,31 +229,29 @@
 
 		}
 
-		function getCookie(cname) {
-			var name = cname + "=";
-			var decodedCookie = decodeURIComponent(document.cookie);
-			var ca = decodedCookie.split(';');
-			for(var i = 0; i <ca.length; i++) {
-				var c = ca[i];
-				while (c.charAt(0) == ' ') {
-					c = c.substring(1);
-				}
-				if (c.indexOf(name) == 0) {
-					return c.substring(name.length, c.length);
-				}
-			}
-			return "";
-		}
-		// function writeCookies(minerAddress,dailyElectrictyCost,miningBeganTimestamp,breaksFromMining){
-		// 	document.cookie = "value ="minerAddress + dailyElectrictyCost + miningBeganTimestamp +breaksFromMining + "; expires=Thu, 18 Dec 2013 12:00:00"
-		// }
+		let minerAddress = getCookie("minerAddress")
+		let acceptedHashrate = getCookie("acceptedHashrate") //long run accepted hashrate from your mining pool
+		let breaksFromMining = getCookie("breaksFromMining")
+		let dailyElectrictyCost = getCookie("dailyElectrictyCost")
+		let miningBeganTimestamp = getCookie("miningBeganTimestamp")
 
-		function setCookie(cname, cvalue) {
-		  // var d = new Date();
-		  // d.setTime(d.getTime() + (exdays*24*60*60*1000));
-		  var expires = "expires="+ "2037-03-24T18:00:00.000+08:00";
-		  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+		if (!(minerAddress || acceptedHashrate || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
+			console.log("No cookies set")
+			minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+			acceptedHashrate = 29 //in MH/s
+			breaksFromMining = 40 //in hours
+			dailyElectrictyCost = 0.7955697024000000 //sgd
+			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
+
+			setCookie(varToString({minerAddress}),minerAddress)
+			setCookie(varToString({acceptedHashrate}),acceptedHashrate)
+			setCookie(varToString({dailyElectrictyCost}),dailyElectrictyCost)
+			setCookie(varToString({miningBeganTimestamp}),miningBeganTimestamp)
+			setCookie(varToString({breaksFromMining}),breaksFromMining)
 		}
+
+
+
 
 		asyncCall();
 
