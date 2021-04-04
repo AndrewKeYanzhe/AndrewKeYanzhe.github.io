@@ -102,9 +102,22 @@
 			});
 		}
 
+		function getEthermineWorkerInfo(minerAddress) {
+			let apiUrl = "https://api.ethermine.org/miner/" + minerAddress + "/workers"
+			return new Promise(resolve => {
+				axios
+				.get(apiUrl)
+				.then(response => {
+					// console.log(response.data.data)
+					resolve(response.data.data)
+				})
+				.catch(error => console.error(error));
+			});
+		}
+
 		function showSample(){
 			document.getElementById("minerAddress").value = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-			document.getElementById("acceptedHashrate").value = 29
+			document.getElementById("acceptedHashrate").value = 30.4
 			document.getElementById("dailyElectrictyCost").value = 0.7955697024000000
 			document.getElementById("miningBeganTimestamp").value = "2021-03-24T18:00:00.000+08:00"
 			document.getElementById("breaksFromMining").value = 40
@@ -174,10 +187,12 @@
 			let ethermineDashboard = getEthermineDashboard(minerAddress);
 			let ethPrice = getEtherPrice2() //in SGD, using coinbase
 			let ethermineCurrentStats = getEthermineCurrentStats(minerAddress)
+			let ethermineWorkerInfo = getEthermineWorkerInfo(minerAddress)
 			
 			ethermineDashboard = await ethermineDashboard
 			ethPrice = await ethPrice
 			ethermineCurrentStats = await ethermineCurrentStats
+			ethermineWorkerInfo = await ethermineWorkerInfo
 			// WhatToMineStats = await getWhatToMineStats(29.2)
 
 			// let ethPrice2 = await getEtherPrice2()
@@ -186,12 +201,16 @@
 			console.log(ethermineDashboard);
 			console.log(ethPrice)
 			console.log(ethermineCurrentStats)
-			console.log(ethermineCurrentStats.averageHashrate/10**6)
+			console.log(ethermineWorkerInfo)
+			console.log("unmodified daily payrate : " + ethermineCurrentStats.coinsPerMin*60*24)
+			console.log("avg from currentstats api: " + ethermineCurrentStats.averageHashrate/10**6)
+			console.log("avg from worker api      : " + ethermineWorkerInfo[0].averageHashrate/10**6)
 
 
+			let avgHashrateOverLastDay = ethermineWorkerInfo[0].averageHashrate/10**6
 			let unpaidEth = ethermineDashboard.currentStatistics.unpaid/10**18
 			let unpaidBalSgd = unpaidEth*ethPrice
-			let ethPerDay = ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate*10**6/ethermineCurrentStats.averageHashrate
+			let ethPerDay = ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/avgHashrateOverLastDay
 			// console.log(ethPerDay)
 			/*
 			ethermine provides coinsPerMin as a 24HR moving average based on network rewards/difficulty and your hashrate submitted in the last 24hrs
@@ -239,7 +258,7 @@
 		if (!(minerAddress || acceptedHashrate || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
 			console.log("No cookies set")
 			minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-			acceptedHashrate = 29 //in MH/s
+			acceptedHashrate = 30.4 //in MH/s
 			breaksFromMining = 40 //in hours
 			dailyElectrictyCost = 0.7955697024000000 //sgd
 			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
