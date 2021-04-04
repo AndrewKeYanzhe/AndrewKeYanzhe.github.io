@@ -208,12 +208,16 @@
 			console.log(ethPrice)
 			console.log(ethermineCurrentStats)
 			console.log(ethermineWorkerInfo)
-			console.log("unmodified daily payrate : " + ethermineCurrentStats.coinsPerMin*60*24)
-			console.log("avg from currentstats api: " + ethermineCurrentStats.averageHashrate/10**6)
-			console.log("avg from worker api      : " + ethermineWorkerInfo[0].averageHashrate/10**6)
+			console.log("unmodified daily payrate: " + ethermineCurrentStats.coinsPerMin*60*24)
+			console.log("")
+			console.log("currentstats api avg    : " + ethermineCurrentStats.averageHashrate/10**6)
+			console.log("currentstats api payrate: " + ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/(ethermineCurrentStats.averageHashrate/10**6))
+			console.log("worker       api avg    : " + ethermineWorkerInfo[0].averageHashrate/10**6)
+			console.log("worker       api payrate: " + ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/(ethermineWorkerInfo[0].averageHashrate/10**6))
 
 
-			let avgHashrateOverLastDay = ethermineWorkerInfo[0].averageHashrate/10**6
+			// let avgHashrateOverLastDay = ethermineWorkerInfo[0].averageHashrate/10**6
+			let avgHashrateOverLastDay = ethermineCurrentStats.averageHashrate/10**6
 			let unpaidEth = ethermineDashboard.currentStatistics.unpaid/10**18
 			let unpaidBalSgd = unpaidEth*ethPrice
 			let ethPerDay = ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/avgHashrateOverLastDay
