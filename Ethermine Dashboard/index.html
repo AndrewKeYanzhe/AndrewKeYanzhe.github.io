@@ -40,6 +40,12 @@
 <body>
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
+		let sampleMinerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
+		let sampleAcceptedHashrate = 30.4 //in MH/s, long run accepted hashrate from your mining pool
+		let sampleBreaksFromMining = 40 //in hours
+		let sampleDailyElectrictyCost = 0.7955697024000000 //sgd
+		let sampleMiningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
+
 		const varToString = varObj => Object.keys(varObj)[0]
 
 		function getEtherPrice() {
@@ -116,11 +122,11 @@
 		}
 
 		function showSample(){
-			document.getElementById("minerAddress").value = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-			document.getElementById("acceptedHashrate").value = 30.4
-			document.getElementById("dailyElectrictyCost").value = 0.7955697024000000
-			document.getElementById("miningBeganTimestamp").value = "2021-03-24T18:00:00.000+08:00"
-			document.getElementById("breaksFromMining").value = 40
+			document.getElementById("minerAddress").value = sampleMinerAddress
+			document.getElementById("acceptedHashrate").value = sampleAcceptedHashrate
+			document.getElementById("dailyElectrictyCost").value = sampleDailyElectrictyCost
+			document.getElementById("miningBeganTimestamp").value = sampleMiningBeganTimestamp
+			document.getElementById("breaksFromMining").value = sampleBreaksFromMining
 		}
 
 		function showSettings(){
@@ -257,11 +263,11 @@
 
 		if (!(minerAddress || acceptedHashrate || breaksFromMining || dailyElectrictyCost || miningBeganTimestamp)){
 			console.log("No cookies set")
-			minerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-			acceptedHashrate = 30.4 //in MH/s
-			breaksFromMining = 40 //in hours
-			dailyElectrictyCost = 0.7955697024000000 //sgd
-			miningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
+			minerAddress = sampleMinerAddress
+			acceptedHashrate = sampleAcceptedHashrate
+			breaksFromMining = sampleBreaksFromMining
+			dailyElectrictyCost = sampleDailyElectrictyCost
+			miningBeganTimestamp = sampleMiningBeganTimestamp
 
 			setCookie(varToString({minerAddress}),minerAddress)
 			setCookie(varToString({acceptedHashrate}),acceptedHashrate)
