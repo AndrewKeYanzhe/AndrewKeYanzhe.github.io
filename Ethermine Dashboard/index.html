@@ -41,7 +41,7 @@
 	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 	<script>
 		let sampleMinerAddress = "0x239bb422Cc8254b64838f396555C64c8cB68dcf7"
-		let sampleAcceptedHashrate = 30.4 //in MH/s, long run accepted hashrate from your mining pool
+		let sampleAcceptedHashrate = 30.4 //in MH/s (please deduct fees e.g. 0.75% teamredminer, 1% ethermine, 1% stale rate)
 		let sampleBreaksFromMining = 40 //in hours
 		let sampleDailyElectrictyCost = 0.7955697024000000 //sgd
 		let sampleMiningBeganTimestamp = "2021-03-24T18:00:00.000+08:00"
@@ -79,6 +79,21 @@
 					resolve("failed to get ETH-SGD")
 				});
 			});
+		}
+
+		function getethWalletInfo(minerAddress){
+			let apiUrl = "https://api.ethplorer.io/getAddressInfo/" + minerAddress + "?apiKey=freekey"
+			return new Promise(resolve => {
+				axios
+				.get(apiUrl)
+				.then(response => {
+					// console.log(response.data.data)
+					// console.log(response.data.data.currentStatistics.unpaid);
+					resolve(response.data)
+				})
+				.catch(error => console.error(error));
+			});
+					
 		}
 
 		function getEthermineDashboard(minerAddress) {
@@ -145,10 +160,10 @@
 		}
 
 		function applySettings(){
-			document.getElementById("unpaidEth").innerText = "Fetching"
+			document.getElementById("totalEth").innerText = "Fetching"
 			document.getElementById("dailyEth").innerText = "Fetching"
 			document.getElementById("dailyProfitSgd").innerText = "Fetching"
-			document.getElementById("totalProfitSgd").innerText = "Fetching"
+			document.getElementById("profitSgd").innerText = "Fetching"
 
 			minerAddress = document.getElementById("minerAddress").value
 			acceptedHashrate = document.getElementById("acceptedHashrate").value
@@ -194,43 +209,52 @@
 			let ethPrice = getEtherPrice2() //in SGD, using coinbase
 			let ethermineCurrentStats = getEthermineCurrentStats(minerAddress)
 			let ethermineWorkerInfo = getEthermineWorkerInfo(minerAddress)
+			let ethWalletInfo = getethWalletInfo(minerAddress)
 			
 			ethermineDashboard = await ethermineDashboard
 			ethPrice = await ethPrice
 			ethermineCurrentStats = await ethermineCurrentStats
 			ethermineWorkerInfo = await ethermineWorkerInfo
-			// WhatToMineStats = await getWhatToMineStats(29.2)
+			ethWalletInfo = await ethWalletInfo
 
-			// let ethPrice2 = await getEtherPrice2()
-			// console.log(1/ethPrice2)
-
-			console.log(ethermineDashboard);
-			console.log(ethPrice)
-			console.log(ethermineCurrentStats)
-			console.log(ethermineWorkerInfo)
-			console.log("unmodified daily payrate: " + ethermineCurrentStats.coinsPerMin*60*24)
+			console.log({ethermineDashboard});	//to get unpaid eth value
+			console.log({ethPrice})
+			console.log({ethermineCurrentStats})	//to get coinsPerMin and avgHashrate
+			console.log({ethermineWorkerInfo})	//to get another sample of avgHashrate
+			console.log({ethWalletInfo})
 			console.log("")
+
+
+			let unpaidEth = ethermineDashboard.currentStatistics.unpaid/10**18
+			console.log({unpaidEth})
+			let walletEth = ethWalletInfo.ETH.balance
+			console.log({walletEth})
+			let totalEth = walletEth + unpaidEth
+			console.log({totalEth})
+			console.log("")
+
+
+			/*
+			ethermine provides REWARDS PER UNIT TIME based on your AVERAGE hashrate over the last 24 hours.
+
+			Thus, if you did not mine for a full 24 hours, your AVERAGE hashrate will be lower than your INSTANTANEOUS hashrate
+
+			Your instantaneous REWARDS PER UNIT TIME is estimated here, by multiplying by (instantaneous hashrate)/(last 24hr avg hashrate)
+
+			ethermine provides 2 values for (last 24hr avg hashrate), both are displayed below. currentstats seems to provide the more accurate value.
+			*/
+			console.log("unmodified daily payrate: " + ethermineCurrentStats.coinsPerMin*60*24)			
 			console.log("currentstats api avg    : " + ethermineCurrentStats.averageHashrate/10**6)
 			console.log("currentstats api payrate: " + ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/(ethermineCurrentStats.averageHashrate/10**6))
-			console.log("worker       api avg    : " + ethermineWorkerInfo[0].averageHashrate/10**6)
-			console.log("worker       api payrate: " + ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/(ethermineWorkerInfo[0].averageHashrate/10**6))
-
-
+			console.log("workerinfo   api avg    : " + ethermineWorkerInfo[0].averageHashrate/10**6)
+			console.log("workerinfo   api payrate: " + ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/(ethermineWorkerInfo[0].averageHashrate/10**6))
+			console.log("")
 			// let avgHashrateOverLastDay = ethermineWorkerInfo[0].averageHashrate/10**6
-			let avgHashrateOverLastDay = ethermineCurrentStats.averageHashrate/10**6
-			let unpaidEth = ethermineDashboard.currentStatistics.unpaid/10**18
-			let unpaidBalSgd = unpaidEth*ethPrice
+			let avgHashrateOverLastDay = ethermineCurrentStats.averageHashrate/10**6			
+			let totalBalSgd = totalEth*ethPrice
 			let ethPerDay = ethermineCurrentStats.coinsPerMin*60*24*acceptedHashrate/avgHashrateOverLastDay
 			// console.log(ethPerDay)
-			/*
-			ethermine provides coinsPerMin as a 24HR moving average based on network rewards/difficulty and your hashrate submitted in the last 24hrs
 			
-			Thus, if you have not mined for 24 full hours, you will not know your instantaneous payrate
-
-			this formula provides instantaneous payrate by multiplying your payrate by (long term accepted hashrate)/(hashrate over past 24Hrs) 
-
-			instantaneous payrate should be similar to values obtained from whattomine, minus fees (e.g. 0.75% teamredminer, 1% ethermine, 1% stale rate)
-			*/
 
 			dailyProfitSgd = ethPerDay*ethPrice - dailyElectrictyCost
 
@@ -248,12 +272,11 @@
 			// console.log(daysMined)
 			totalCost = daysMined*dailyElectrictyCost
 			// console.log(totalCost)
-			totalProfitSgd = unpaidBalSgd - totalCost
+			profitSgd = totalBalSgd - totalCost
 
 
-			document.getElementById("unpaidEth").innerText = unpaidEth.toFixed(6);
-			// document.getElementById("unpaidBalSgd").innerText = unpaidBalSgd.toFixed(2);
-			document.getElementById("totalProfitSgd").innerText = totalProfitSgd.toFixed(2);
+			document.getElementById("totalEth").innerText = totalEth.toFixed(6);
+			document.getElementById("profitSgd").innerText = profitSgd.toFixed(2);
 			document.getElementById("dailyEth").innerText = ethPerDay.toFixed(5)
 			document.getElementById("dailyProfitSgd").innerText = dailyProfitSgd.toFixed(2)
 
@@ -302,11 +325,10 @@
 	transform: translate(-50%,0%);
 	width: 80%;">
 
-	Unpaid ETH: <span id="unpaidEth">Fetching</span><br>		
-	<!-- Unpaid SGD: <span id="unpaidBalSgd">Fetching</span><br>		 -->
+	Unpaid ETH: <span id="totalEth">Fetching</span><br>		
 	ETH/day: <span id="dailyEth">Fetching</span><br>	
 	SGD profit/day: <span id="dailyProfitSgd">Fetching</span><br>	
-	Total SGD profit: <span id="totalProfitSgd">Fetching</span><br>	
+	Total SGD profit: <span id="profitSgd">Fetching</span><br>	
 
 	<br>
 	<button onclick="showSettings()">Settings</button>
