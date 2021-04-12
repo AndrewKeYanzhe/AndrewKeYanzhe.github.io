@@ -269,9 +269,6 @@ async function asyncCall() {
 	avgProfitMargin = profitSgd/totalBalSgd*100
 
 
-
-	console.log(reportedHashrate)
-	console.log(hashLosses)
 	if (reportedHashrate=="" || hashLosses ==""){
 		document.getElementById("incompleteSettingsWarning").style.display = "block"
 	}
