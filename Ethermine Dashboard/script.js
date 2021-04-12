@@ -269,20 +269,27 @@ async function asyncCall() {
 	avgProfitMargin = profitSgd/totalBalSgd*100
 
 
-	document.getElementById("totalEth").innerText = totalEth.toFixed(5);
-	document.getElementById("profitSgd").innerText = profitSgd.toFixed(2);
-	document.getElementById("dailyEth").innerText = ethPerDay.toFixed(5)
-	document.getElementById("dailyProfitSgd").innerText = dailyProfitSgd.toFixed(2)
-	document.getElementById("totalCost").innerText = totalCost.toFixed(2)
-	// console.log(dailyElectrictyCost)
-	document.getElementById("dailyCost").innerText = (dailyElectrictyCost*1).toFixed(2) //*1 to convert to number
-	document.getElementById("revenueSgd").innerText = totalBalSgd.toFixed(2)
-	document.getElementById("dailyRevenueSgd").innerText = dailyRevenueSgd.toFixed(2)
-	document.getElementById("avgProfitMargin").innerText = avgProfitMargin.toFixed(0)
-	document.getElementById("currentProfitMargin").innerText = currentProfitMargin.toFixed(0)
-	document.getElementById("currentReportedHashrate").innerText = currentReportedHashrate.toFixed(1)
-	document.getElementById("gpuUsage").innerText = gpuUsage.toFixed(0)
 
+	console.log(reportedHashrate)
+	console.log(hashLosses)
+	if (reportedHashrate=="" || hashLosses ==""){
+		document.getElementById("incompleteSettingsWarning").style.display = "block"
+	}
+	else {
+		document.getElementById("totalEth").innerText = totalEth.toFixed(5);
+		document.getElementById("profitSgd").innerText = profitSgd.toFixed(2);
+		document.getElementById("dailyEth").innerText = ethPerDay.toFixed(5)
+		document.getElementById("dailyProfitSgd").innerText = dailyProfitSgd.toFixed(2)
+		document.getElementById("totalCost").innerText = totalCost.toFixed(2)
+		// console.log(dailyElectrictyCost)
+		document.getElementById("dailyCost").innerText = (dailyElectrictyCost*1).toFixed(2) //*1 to convert to number
+		document.getElementById("revenueSgd").innerText = totalBalSgd.toFixed(2)
+		document.getElementById("dailyRevenueSgd").innerText = dailyRevenueSgd.toFixed(2)
+		document.getElementById("avgProfitMargin").innerText = avgProfitMargin.toFixed(0)
+		document.getElementById("currentProfitMargin").innerText = currentProfitMargin.toFixed(0)
+		document.getElementById("currentReportedHashrate").innerText = currentReportedHashrate.toFixed(1)
+		document.getElementById("gpuUsage").innerText = gpuUsage.toFixed(0)
+	}
 }
 
 let minerAddress = getCookie("minerAddress")
