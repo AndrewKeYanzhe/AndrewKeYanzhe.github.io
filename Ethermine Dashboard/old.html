@@ -1,0 +1,87 @@
+<html><head>  
+	<title>Stats</title>
+	<style type="text/css">
+
+	@media screen and (min-width: 601px) {
+		div, label, input, button {
+			font-size: 25px;
+		}
+	}
+
+	/* If the screen size is 600px wide or less, set the font-size of <div> to 30px */
+	@media screen and (max-width: 600px) {
+		div, button {
+			font-size: 6vw;
+		}
+		label, input{
+			font-size: 3vw;
+		}
+	}
+	input	{
+		width:100%;
+	}
+
+	/*for iphone*/
+	@media only screen 
+	and (min-device-width: 375px) 
+	and (max-device-width: 667px) 
+	and (-webkit-min-device-pixel-ratio: 2) { 
+		div, button {
+			font-size: 6vw;
+		}
+		label, input{
+			font-size: 3vw;
+		}
+
+	}
+
+</style>
+</head>
+<body>
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+	<script src="script.js"></script>
+
+	<div style="margin: auto;
+	text-align:center;
+	font-family: Verdana, Geneva, sans-serif;
+	font-weight: bold;
+	/*font-size: 6vw;*/
+	line-height: 200%;
+	position: absolute;
+	top: 20%;
+	left: 50%;
+	/*transform: translate(-50%, -50%);*/
+	transform: translate(-50%,0%);
+	width: 80%;">
+
+	Total ETH: <span id="totalEth">Fetching</span><br>		
+	ETH/day: <span id="dailyEth">Fetching</span><br>	
+	SGD profit/day: <span id="dailyProfitSgd">Fetching</span><br>	
+	Total SGD profit: <span id="profitSgd">Fetching</span><br>	
+
+	<br>
+	<button onclick="showSettings()">Settings</button>
+	<p></p>	
+	<div id="settings" style="display: none">
+
+		<label for="minerAddress">Ethereum address:</label><br>
+		<input type="text" id="minerAddress" name=""><br>
+		<label for="acceptedHashrate">Average accepted hashrate:</label><br>
+		<input type="text" id="acceptedHashrate" name=""><br>
+		<label for="dailyElectrictyCost">Daily electricity cost in SGD:</label><br>
+		<input type="text" id="dailyElectrictyCost" name=""><br>
+		<label for="miningBeganTimestamp">Time when mining began:</label><br>
+		<input type="text" id="miningBeganTimestamp" name=""><br>
+		<label for="breaksFromMining">Hours of breaks from mining:</label><br>
+		<input type="text" id="breaksFromMining" name=""><br>
+		<br>
+		<button onclick="applySettings()">Save</button>
+		<button onclick="showSample()">Sample</button>
+	</div>
+	<br>
+	<br>
+</div>
+
+
+
+</body></html>
